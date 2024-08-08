@@ -5,8 +5,11 @@ import { getColumns } from './index-helper';
 import { Posts } from 'interfaces/Posts';
 import PostService from 'services/PostsService';
 
+interface PostComponentProps {
+    handleMenuClick: (key: string) => void;
+}
 
-const PostsComponent: React.FC = () => {
+const PostsComponent: React.FC<PostComponentProps> = ({handleMenuClick}) => {
     const [selectedPost, setSelectedPosts] = useState<Posts | null>(null);
     const [errorMsg, setErrorMsg] = useState(false);
     const [postsList, setPostsList] = useState<Posts[]>([]);
@@ -68,7 +71,7 @@ const PostsComponent: React.FC = () => {
                         fontSize: '32px',
                         color: '#CC8D3E',
                     }}
-                    onClick={() => console.log('teste')}
+                    onClick={() => handleMenuClick('PostCreate')}
                 />
             </div>
             <Table

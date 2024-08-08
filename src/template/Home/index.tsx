@@ -4,16 +4,17 @@ import { HomeOutlined } from '@ant-design/icons';
 import Loading from 'components/LoadingComponent';
 import MenuAdmComponent from 'components/MenuAdmComponent';
 import PostsComponent from 'components/PostsComponent';
+import CreatePost from 'components/CreatePostComponent';
 
 const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
-    const [currentView, setCurrentView] = useState<'homeAdm' | 'Posts' | null>(`homeAdm`);
+    const [currentView, setCurrentView] = useState<'homeAdm' | 'Posts' | 'PostCreate' | null>(`homeAdm`);
     const [loading, setLoading] = useState(false);
 
     const handleMenuClick = (key: string) => {
         setLoading(true);
-        setCurrentView(key as 'homeAdm' | 'Posts');
+        setCurrentView(key as 'homeAdm' | 'Posts' | 'PostCreate');
         setLoading(false);
     };
 
@@ -22,7 +23,9 @@ const AdminDashboard: React.FC = () => {
             case 'homeAdm':
                 return <MenuAdmComponent handleMenuClick={handleMenuClick}/>;
             case 'Posts':
-                return <PostsComponent />
+                return <PostsComponent handleMenuClick={handleMenuClick}/>
+            case 'PostCreate':
+                return <CreatePost handleMenuClick={handleMenuClick}/>
             default:
                 return <div>Página não encontrada</div>;
         }

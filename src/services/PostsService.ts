@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { parseCookies } from 'nookies';
-import { Posts } from 'interfaces/Posts';
+import { Posts, IPostRequest } from 'interfaces/Posts';
 import api from './api';
 
 export default class PostService {
@@ -16,6 +16,21 @@ export default class PostService {
             }
         );
 
+        return response.data;
+    }
+
+    static async CreatePost(data: IPostRequest): Promise<Posts> {
+        const cookies = parseCookies();
+        const token = cookies['@app:token'];
+        const response: AxiosResponse<Posts> = await api.post(
+            '/posts/create',
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         return response.data;
     }
 }
