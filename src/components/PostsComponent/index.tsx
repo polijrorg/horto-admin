@@ -44,13 +44,13 @@ const PostsComponent: React.FC<PostComponentProps> = ({handleMenuClick}) => {
     };
 
     const handleDelete = async (id: string) => {
-        // try {
-        //     await UserService.deleteUser(id);
-        //     const updatedUsers = await UserService.getUsers();
-        //     setUsersList(updatedUsers);
-        // } catch (error) {
-        //     console.error('Failed to delete user:', error);
-        // }
+        try {
+            await PostService.deletePost(id);
+            const updatedPosts = await PostService.GetAll();
+            setPostsList(updatedPosts);
+        } catch (error) {
+            console.error('Failed to delete post:', error);
+        }
     };
 
     return (

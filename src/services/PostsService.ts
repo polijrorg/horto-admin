@@ -33,4 +33,15 @@ export default class PostService {
         );
         return response.data;
     }
+
+    static async deletePost(id: string) {
+        const cookies = parseCookies();
+        const token = cookies['@app:token'];
+        const response = await api.delete(`/posts/delete/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    }
 }
