@@ -44,4 +44,22 @@ export default class PostService {
         });
         return response.data;
     }
+
+    static async updatePost(
+        postId: string,
+        data: IPostRequest
+    ): Promise<Posts> {
+        const cookies = parseCookies();
+        const token = cookies['@app:token'];
+        const response: AxiosResponse<Posts> = await api.patch(
+            `/posts/update/${postId}`,
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        return response.data;
+    }
 }

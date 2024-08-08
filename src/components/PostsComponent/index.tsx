@@ -7,10 +7,11 @@ import PostService from 'services/PostsService';
 
 interface PostComponentProps {
     handleMenuClick: (key: string) => void;
+    handleViewWithValues: (key: string, values: Object) => void;
 }
 
-const PostsComponent: React.FC<PostComponentProps> = ({handleMenuClick}) => {
-    const [selectedPost, setSelectedPosts] = useState<Posts | null>(null);
+const PostsComponent: React.FC<PostComponentProps> = ({handleMenuClick, handleViewWithValues}) => {
+    const [selectedPost, setSelectedPost] = useState<Posts | null>(null);
     const [errorMsg, setErrorMsg] = useState(false);
     const [postsList, setPostsList] = useState<Posts[]>([]);
     const [selectedPostId, setSelectedPostId] = useState<string | null>(
@@ -31,16 +32,15 @@ const PostsComponent: React.FC<PostComponentProps> = ({handleMenuClick}) => {
     }, []);
 
     const handleEdit = (post: Posts) => {
-        // setSelectedUser(user);
-        // form.setFieldsValue({
-        //     name: user.name,
-        //     image: user.image,
-        //     score: user.score,
-        //     email: user.email,
-        //     language: user.language
-        //     // Do not set password and confirmPassword for editing
-        // });
-        // setIsModalVisible(true);
+        setSelectedPost(post);
+        handleViewWithValues('PostCreate', {
+            id: post.id,
+            style: post.style,
+            image: post.image,
+            title: post.title,
+            text: post.text,
+            link: post.link
+        })
     };
 
     const handleDelete = async (id: string) => {

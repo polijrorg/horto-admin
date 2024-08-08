@@ -10,22 +10,31 @@ const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
     const [currentView, setCurrentView] = useState<'homeAdm' | 'Posts' | 'PostCreate' | null>(`homeAdm`);
+    const [viewValues, setViewValues] = useState<any>(undefined);
     const [loading, setLoading] = useState(false);
 
     const handleMenuClick = (key: string) => {
         setLoading(true);
+        setViewValues(undefined);
         setCurrentView(key as 'homeAdm' | 'Posts' | 'PostCreate');
         setLoading(false);
     };
+
+    const handleViewWithValues = (key: string, values: any) => {
+        setLoading(true);
+        setViewValues(values);
+        setCurrentView(key as 'homeAdm' | 'Posts' | 'PostCreate');
+        setLoading(false);
+    }
 
     const renderComponent = () => {
         switch (currentView) {
             case 'homeAdm':
                 return <MenuAdmComponent handleMenuClick={handleMenuClick}/>;
             case 'Posts':
-                return <PostsComponent handleMenuClick={handleMenuClick}/>
+                return <PostsComponent handleMenuClick={handleMenuClick} handleViewWithValues={handleViewWithValues}/>
             case 'PostCreate':
-                return <CreatePost handleMenuClick={handleMenuClick}/>
+                return <CreatePost handleMenuClick={handleMenuClick} initialValues={viewValues}/>
             default:
                 return <div>Página não encontrada</div>;
         }

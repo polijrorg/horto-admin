@@ -4,13 +4,23 @@ import { UploadOutlined } from '@ant-design/icons';
 import * as S from './styles';
 import PostService from 'services/PostsService';
 
-interface PostComponentProps {
-    handleMenuClick: (key: string) => void;
+interface InitialValuesProps {
+    id: string;
+    style: string;
+    image: string;
+    title: string;
+    text: string;
+    link: string;
 }
 
-const App: React.FC<PostComponentProps> = ({handleMenuClick}) => {
+interface PostComponentProps {
+    handleMenuClick: (key: string) => void;
+    initialValues?: InitialValuesProps;
+}
+
+const App: React.FC<PostComponentProps> = ({handleMenuClick, initialValues}) => {
   const [form] = Form.useForm();
-  const [selectedValue, setSelectedValue] = React.useState('news');
+  const [selectedValue, setSelectedValue] = React.useState(initialValues?.style !== undefined ? initialValues?.style : 'news');
   const [loading, setLoading] = React.useState(false);
 
   const handleClick = (value: string) => {
@@ -19,18 +29,34 @@ const App: React.FC<PostComponentProps> = ({handleMenuClick}) => {
 
   const onFinish = async (values: any) => {
     console.log('Success:', values);
-    try {
-        const response = await PostService.CreatePost({
-            title: values.title,
-            text: values.text,
-            link: values.link,
-            image: 'www.linkteste.com',
-            style: selectedValue
-        })
-        console.log(response);
-        handleMenuClick('Posts')
-    } catch (error) {
-        console.log(error);
+    if (initialValues !== undefined) {
+        try {
+            const response = await PostService.updatePost(initialValues.id, {
+                title: values.title,
+                text: values.text,
+                link: values.link,
+                image: 'www.linkteste.com',
+                style: selectedValue
+            })
+            console.log(response);
+            handleMenuClick('Posts')
+        } catch (error) {
+            console.log('error')
+        }
+    } else {
+        try {
+            const response = await PostService.CreatePost({
+                title: values.title,
+                text: values.text,
+                link: values.link,
+                image: 'www.linkteste.com',
+                style: selectedValue
+            })
+            console.log(response);
+            handleMenuClick('Posts')
+        } catch (error) {
+            console.log(error);
+        }
     }
   };
 
@@ -49,6 +75,7 @@ const App: React.FC<PostComponentProps> = ({handleMenuClick}) => {
                     <Form.Item
                         name="title"
                         rules={[{ required: true, message: 'Por favor, insira um título' }]}
+                        initialValue={initialValues?.title}
                     >
                         <Input style={{borderRadius: 50}}/>
                     </Form.Item>
@@ -56,6 +83,7 @@ const App: React.FC<PostComponentProps> = ({handleMenuClick}) => {
                     <Form.Item
                         name="text"
                         rules={[{ required: true, message: 'Por favor, insira um texto' }]}
+                        initialValue={initialValues?.text}
                     >
                         <Input.TextArea style={{borderRadius: 16}} rows={10} />
                     </Form.Item>
@@ -63,6 +91,7 @@ const App: React.FC<PostComponentProps> = ({handleMenuClick}) => {
                     <Form.Item
                         name="link"
                         rules={[{ required: true, message: 'Por favor, insira um link' }]}
+                        initialValue={initialValues?.link}
                     >
                         <Input style={{borderRadius: 50}}/>
                     </Form.Item>
@@ -75,18 +104,21 @@ const App: React.FC<PostComponentProps> = ({handleMenuClick}) => {
                     <Form.Item>
                         <S.ButtonGroup>
                             <S.RadioButton
+                                type='button'
                                 selected={selectedValue === 'news'}
                                 onClick={() => handleClick('news')}
                             >
                                 NOTÍCIA
                             </S.RadioButton>
                             <S.RadioButton
+                                type='button'
                                 selected={selectedValue === 'carrousel'}
                                 onClick={() => handleClick('carrousel')}
                             >
                                 CARROSSEL
                             </S.RadioButton>
                             <S.RadioButton
+                                type='button'
                                 selected={selectedValue === 'column'}
                                 onClick={() => handleClick('column')}
                             >
