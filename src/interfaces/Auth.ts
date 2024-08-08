@@ -8,7 +8,7 @@ interface Address {
     cep: string;
     companyId: string;
     userId: string | null;
-  }
+}
 
 interface Company {
     id: string;

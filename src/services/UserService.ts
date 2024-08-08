@@ -18,7 +18,7 @@ export default class UserService {
         );
 
         setCookie(undefined, '@app:token', response.data.token);
-        if (response.data.administrator){
+        if (response.data.administrator) {
             setCookie(undefined, '@app:userId', response.data.administrator.id);
             setCookie(undefined, '@app:userType', 'adm');
         } else if (response.data.company) {

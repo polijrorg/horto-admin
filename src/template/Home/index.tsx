@@ -1,68 +1,74 @@
-import React from 'react';
-import { Layout, Menu, Card } from 'antd';
-import {
-  HomeOutlined,
-  BarChartOutlined,
-  AppstoreOutlined,
-  CalendarOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Layout, Menu } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
+import Loading from 'components/LoadingComponent';
+import MenuAdmComponent from 'components/MenuAdmComponent';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
-  return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider style={{background: '#FCFCFC'}}>
-        <div className="logo" style={{ padding: '20px', color: 'black', fontWeight: 'bold', fontSize: '18px', background: '#F8C687' }}>
-          Horto Club
-        </div>
-        <Menu style={{background: '#F6F6F6'}} mode="inline">
-          <Menu.Item key="1" icon={<HomeOutlined />}>
-            Home
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0, background: 'linear-gradient(90deg, #F8C687 0%, #CC8D3E 100%)', }} />
-        <Content style={{ margin: '16px' }}>
-          <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            <h2>Área do Administrador</h2>
-            <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
-              <Card
-                hoverable
-                style={{ width: 240, textAlign: 'center' }}
-                cover={<BarChartOutlined style={{ fontSize: '64px', margin: '16px 0', color: '#c47f38' }} />}
-              >
-                <Card.Meta title="Análise de Usuário" />
-              </Card>
-              <Card
-                hoverable
-                style={{ width: 240, textAlign: 'center' }}
-                cover={<AppstoreOutlined style={{ fontSize: '64px', margin: '16px 0', color: '#c47f38' }} />}
-              >
-                <Card.Meta title="Gerenciar Empresas" />
-              </Card>
-              <Card
-                hoverable
-                style={{ width: 240, textAlign: 'center' }}
-                cover={<CalendarOutlined style={{ fontSize: '64px', margin: '16px 0', color: '#c47f38' }} />}
-              >
-                <Card.Meta title="Gerenciar Eventos" />
-              </Card>
-              <Card
-                hoverable
-                style={{ width: 240, textAlign: 'center' }}
-                cover={<PlusOutlined style={{ fontSize: '64px', margin: '16px 0', color: '#c47f38' }} />}
-              >
-                <Card.Meta title="Gerenciar Posts" />
-              </Card>
-            </div>
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
-  );
+    const [currentView, setCurrentView] = useState<'homeAdm' | null>(`homeAdm`);
+    const [loading, setLoading] = useState(false);
+
+    const handleMenuClick = (key: string) => {
+        setLoading(true);
+        setCurrentView(key as 'homeAdm');
+        setLoading(false);
+    };
+
+    const renderComponent = () => {
+        switch (currentView) {
+            case 'homeAdm':
+                return <MenuAdmComponent />;
+            default:
+                return <div>Página não encontrada</div>;
+        }
+    };
+
+    return (
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider style={{ background: '#FCFCFC' }}>
+                <div
+                    className="logo"
+                    style={{
+                        padding: '20px',
+                        color: 'black',
+                        fontWeight: 'bold',
+                        fontSize: '18px',
+                        background: '#F8C687'
+                    }}
+                >
+                    Horto Club
+                </div>
+                <Menu
+                    onClick={() => handleMenuClick('homeAdm')}
+                    style={{ background: '#F6F6F6' }}
+                    mode="inline"
+                >
+                    <Menu.Item key="1" icon={<HomeOutlined />}>
+                        Home
+                    </Menu.Item>
+                </Menu>
+            </Sider>
+            <Layout className="site-layout">
+                <Header
+                    className="site-layout-background"
+                    style={{
+                        padding: 0,
+                        background:
+                            'linear-gradient(90deg, #F8C687 0%, #CC8D3E 100%)'
+                    }}
+                />
+                {loading ? (
+                    <Loading />
+                ) : (
+                    <Content style={{ margin: '16px' }}>
+                        {renderComponent()}
+                    </Content>
+                )}
+            </Layout>
+        </Layout>
+    );
 };
 
 export default AdminDashboard;
