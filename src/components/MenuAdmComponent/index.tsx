@@ -7,7 +7,13 @@ import {
     PlusOutlined
 } from '@ant-design/icons';
 
-const MenuAdmComponent: React.FC = () => {
+interface MenuComponentProps {
+    handleMenuClick: (key: string) => void;
+}
+
+const MenuAdmComponent: React.FC<MenuComponentProps> = ({
+    handleMenuClick
+}) => {
     return (
         <div
             className="site-layout-background"
@@ -78,6 +84,7 @@ const MenuAdmComponent: React.FC = () => {
                             }}
                         />
                     }
+                    onClick={() => handleMenuClick('Posts')}
                 >
                     <Card.Meta title="Gerenciar Posts" />
                 </Card>

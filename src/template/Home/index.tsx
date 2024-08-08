@@ -3,23 +3,26 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import Loading from 'components/LoadingComponent';
 import MenuAdmComponent from 'components/MenuAdmComponent';
+import PostsComponent from 'components/PostsComponent';
 
 const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
-    const [currentView, setCurrentView] = useState<'homeAdm' | null>(`homeAdm`);
+    const [currentView, setCurrentView] = useState<'homeAdm' | 'Posts' | null>(`homeAdm`);
     const [loading, setLoading] = useState(false);
 
     const handleMenuClick = (key: string) => {
         setLoading(true);
-        setCurrentView(key as 'homeAdm');
+        setCurrentView(key as 'homeAdm' | 'Posts');
         setLoading(false);
     };
 
     const renderComponent = () => {
         switch (currentView) {
             case 'homeAdm':
-                return <MenuAdmComponent />;
+                return <MenuAdmComponent handleMenuClick={handleMenuClick}/>;
+            case 'Posts':
+                return <PostsComponent />
             default:
                 return <div>Página não encontrada</div>;
         }

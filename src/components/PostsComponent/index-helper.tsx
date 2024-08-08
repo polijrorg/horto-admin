@@ -27,7 +27,7 @@ export const getColumns = (
         key: 'name',
         render: (text: string, record: Posts) => (
             <a onClick={() => handleEdit(record)} key={record.id}>
-                {text}
+                HortoClub
             </a>
         )
     },
