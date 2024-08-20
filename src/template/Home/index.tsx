@@ -5,11 +5,14 @@ import Loading from 'components/LoadingComponent';
 import MenuAdmComponent from 'components/MenuAdmComponent';
 import PostsComponent from 'components/PostsComponent';
 import CreatePost from 'components/CreatePostComponent';
+import CompaniesComponent from 'components/CompaniesComponent';
 
 const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
-    const [currentView, setCurrentView] = useState<'homeAdm' | 'Posts' | 'PostCreate' | null>(`homeAdm`);
+    const [currentView, setCurrentView] = useState<
+        'homeAdm' | 'Posts' | 'PostCreate' | 'Companies' | null
+    >(`homeAdm`);
     const [viewValues, setViewValues] = useState<any>(undefined);
     const [loading, setLoading] = useState(false);
 
@@ -25,16 +28,28 @@ const AdminDashboard: React.FC = () => {
         setViewValues(values);
         setCurrentView(key as 'homeAdm' | 'Posts' | 'PostCreate');
         setLoading(false);
-    }
+    };
 
     const renderComponent = () => {
         switch (currentView) {
             case 'homeAdm':
-                return <MenuAdmComponent handleMenuClick={handleMenuClick}/>;
+                return <MenuAdmComponent handleMenuClick={handleMenuClick} />;
             case 'Posts':
-                return <PostsComponent handleMenuClick={handleMenuClick} handleViewWithValues={handleViewWithValues}/>
+                return (
+                    <PostsComponent
+                        handleMenuClick={handleMenuClick}
+                        handleViewWithValues={handleViewWithValues}
+                    />
+                );
             case 'PostCreate':
-                return <CreatePost handleMenuClick={handleMenuClick} initialValues={viewValues}/>
+                return (
+                    <CreatePost
+                        handleMenuClick={handleMenuClick}
+                        initialValues={viewValues}
+                    />
+                );
+            case 'Companies':
+                return <CompaniesComponent />;
             default:
                 return <div>Página não encontrada</div>;
         }

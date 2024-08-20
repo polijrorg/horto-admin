@@ -54,6 +54,7 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                             }}
                         />
                     }
+                    onClick={() => handleMenuClick('Companies')}
                 >
                     <Card.Meta title="Gerenciar Empresas" />
                 </Card>
