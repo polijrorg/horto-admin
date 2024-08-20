@@ -6,12 +6,18 @@ import MenuAdmComponent from 'components/MenuAdmComponent';
 import PostsComponent from 'components/PostsComponent';
 import CreatePost from 'components/CreatePostComponent';
 import CompaniesComponent from 'components/CompaniesComponent';
+import CreateCompanyComponent from 'components/CreateCompanyComponent';
 
 const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
     const [currentView, setCurrentView] = useState<
-        'homeAdm' | 'Posts' | 'PostCreate' | 'Companies' | null
+        | 'homeAdm'
+        | 'Posts'
+        | 'PostCreate'
+        | 'Companies'
+        | 'CompanyCreate'
+        | null
     >(`homeAdm`);
     const [viewValues, setViewValues] = useState<any>(undefined);
     const [loading, setLoading] = useState(false);
@@ -19,14 +25,28 @@ const AdminDashboard: React.FC = () => {
     const handleMenuClick = (key: string) => {
         setLoading(true);
         setViewValues(undefined);
-        setCurrentView(key as 'homeAdm' | 'Posts' | 'PostCreate');
+        setCurrentView(
+            key as
+                | 'homeAdm'
+                | 'Posts'
+                | 'PostCreate'
+                | 'Companies'
+                | 'CompanyCreate'
+        );
         setLoading(false);
     };
 
     const handleViewWithValues = (key: string, values: any) => {
         setLoading(true);
         setViewValues(values);
-        setCurrentView(key as 'homeAdm' | 'Posts' | 'PostCreate');
+        setCurrentView(
+            key as
+                | 'homeAdm'
+                | 'Posts'
+                | 'PostCreate'
+                | 'Companies'
+                | 'CompanyCreate'
+        );
         setLoading(false);
     };
 
@@ -49,14 +69,16 @@ const AdminDashboard: React.FC = () => {
                     />
                 );
             case 'Companies':
-                return <CompaniesComponent />;
+                return <CompaniesComponent handleMenuClick={handleMenuClick} />;
+            case 'CompanyCreate':
+                return <CreateCompanyComponent />;
             default:
                 return <div>Página não encontrada</div>;
         }
     };
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ height: '100vh' }}>
             <Sider style={{ background: '#FCFCFC' }}>
                 <div
                     className="logo"

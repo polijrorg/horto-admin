@@ -20,3 +20,20 @@ export interface Company {
     branch: string;
     address: Address;
 }
+
+export interface ICompanyRequest {
+    name: string;
+    email: string;
+    password: string;
+    image: string;
+    subscriptionPlan: string;
+    branch: string;
+    address: {
+        street: string;
+        numberHouse: number;
+        neighborhood: string;
+        city: string;
+        state: string;
+        cep: string;
+    };
+}

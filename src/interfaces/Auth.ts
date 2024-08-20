@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 interface Address {
     id: string;
     street: string;

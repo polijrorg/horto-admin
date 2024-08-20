@@ -68,13 +68,13 @@ const CompaniesComponent: React.FC<CompanyComponentProps> = ({
                     marginRight: 16
                 }}
             >
-                <h2>Posts Ativos</h2>
+                <h2>Empresas</h2>
                 <PlusOutlined
                     style={{
                         fontSize: '32px',
                         color: '#CC8D3E'
                     }}
-                    onClick={() => handleMenuClick('PostCreate')}
+                    onClick={() => handleMenuClick('CompanyCreate')}
                 />
             </div>
             <Table
