@@ -51,8 +51,8 @@ export const BannerImg = styled.img`
 `;
 
 export const ContentImg = styled.div`
-    width: 316px;
-    height: 316px;
+    width: 236px;
+    height: 236x;
     margin-bottom: 24px;
     align-self: center;
 `;

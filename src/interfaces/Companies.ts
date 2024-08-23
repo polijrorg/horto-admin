@@ -24,10 +24,10 @@ export interface Company {
 export interface ICompanyRequest {
     name: string;
     email: string;
-    password: string;
     image: string;
     subscriptionPlan: string;
     branch: string;
+    planExpirationDate: string;
     address: {
         street: string;
         numberHouse: number;

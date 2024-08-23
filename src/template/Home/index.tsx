@@ -75,9 +75,9 @@ const AdminDashboard: React.FC = () => {
             case 'Companies':
                 return <CompaniesComponent handleMenuClick={handleMenuClick} />;
             case 'CompanyCreate':
-                return <CreateCompanyComponent />;
+                return <CreateCompanyComponent handleMenuClick={handleMenuClick}/>;
             case 'Events':
-                return <EventsComponent />
+                return <EventsComponent handleMenuClick={handleMenuClick}/>
             default:
                 return <div>Página não encontrada</div>;
         }
