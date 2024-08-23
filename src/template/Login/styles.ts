@@ -15,13 +15,13 @@ export const Container = styled.div`
 
 export const LeftSide = styled.div`
     height: 100%;
-    width: 50%;
+    width: 45%;
     background-color: red;
 `;
 
 export const RightSide = styled.div`
     height: 100%;
-    width: 50%;
+    width: 55%;
     background-color: #f8f9fa;
     display: flex;
     justify-content: center;

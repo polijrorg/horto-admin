@@ -7,6 +7,7 @@ import PostsComponent from 'components/PostsComponent';
 import CreatePost from 'components/CreatePostComponent';
 import CompaniesComponent from 'components/CompaniesComponent';
 import CreateCompanyComponent from 'components/CreateCompanyComponent';
+import EventsComponent from 'components/EventsComponent';
 
 const { Header, Sider, Content } = Layout;
 
@@ -17,6 +18,7 @@ const AdminDashboard: React.FC = () => {
         | 'PostCreate'
         | 'Companies'
         | 'CompanyCreate'
+        | 'Events'
         | null
     >(`homeAdm`);
     const [viewValues, setViewValues] = useState<any>(undefined);
@@ -32,6 +34,7 @@ const AdminDashboard: React.FC = () => {
                 | 'PostCreate'
                 | 'Companies'
                 | 'CompanyCreate'
+                | 'Events'
         );
         setLoading(false);
     };
@@ -46,6 +49,7 @@ const AdminDashboard: React.FC = () => {
                 | 'PostCreate'
                 | 'Companies'
                 | 'CompanyCreate'
+                | 'Events'
         );
         setLoading(false);
     };
@@ -72,6 +76,8 @@ const AdminDashboard: React.FC = () => {
                 return <CompaniesComponent handleMenuClick={handleMenuClick} />;
             case 'CompanyCreate':
                 return <CreateCompanyComponent />;
+            case 'Events':
+                return <EventsComponent />
             default:
                 return <div>Página não encontrada</div>;
         }

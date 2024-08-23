@@ -70,6 +70,7 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                             }}
                         />
                     }
+                    onClick={() => handleMenuClick('Events')}
                 >
                     <Card.Meta title="Gerenciar Eventos" />
                 </Card>

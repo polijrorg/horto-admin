@@ -34,6 +34,7 @@ const Login = () => {
                         onFinish={onFinish}
                         style={{ width: '400px' }}
                     >
+                        <S.Banner src="assets/images/logoclube.png" />
                         <S.FormTitle>Acesse sua conta</S.FormTitle>
                         <Typography.Title level={5}>E-mail</Typography.Title>
                         <Form.Item
