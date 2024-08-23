@@ -39,6 +39,7 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                             }}
                         />
                     }
+                    onClick={() => handleMenuClick('Coupons')}
                 >
                     <Card.Meta title="Análise de Usuário" />
                 </Card>

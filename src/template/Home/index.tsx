@@ -8,6 +8,7 @@ import CreatePost from 'components/CreatePostComponent';
 import CompaniesComponent from 'components/CompaniesComponent';
 import CreateCompanyComponent from 'components/CreateCompanyComponent';
 import EventsComponent from 'components/EventsComponent';
+import CouponsComponent from 'components/CouponsComponent';
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,6 +20,7 @@ const AdminDashboard: React.FC = () => {
         | 'Companies'
         | 'CompanyCreate'
         | 'Events'
+        | 'Coupons'
         | null
     >(`homeAdm`);
     const [viewValues, setViewValues] = useState<any>(undefined);
@@ -35,6 +37,7 @@ const AdminDashboard: React.FC = () => {
                 | 'Companies'
                 | 'CompanyCreate'
                 | 'Events'
+                | 'Coupons'
         );
         setLoading(false);
     };
@@ -50,6 +53,7 @@ const AdminDashboard: React.FC = () => {
                 | 'Companies'
                 | 'CompanyCreate'
                 | 'Events'
+                | 'Coupons'
         );
         setLoading(false);
     };
@@ -73,11 +77,13 @@ const AdminDashboard: React.FC = () => {
                     />
                 );
             case 'Companies':
-                return <CompaniesComponent handleMenuClick={handleMenuClick} />;
+                return <CompaniesComponent handleMenuClick={handleMenuClick}  handleViewWithValues={handleViewWithValues}/>;
             case 'CompanyCreate':
                 return <CreateCompanyComponent handleMenuClick={handleMenuClick}/>;
             case 'Events':
                 return <EventsComponent handleMenuClick={handleMenuClick}/>
+            case 'Coupons':
+                return <CouponsComponent handleMenuClick={handleMenuClick} initialValues={viewValues}/>
             default:
                 return <div>Página não encontrada</div>;
         }

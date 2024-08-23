@@ -7,10 +7,12 @@ import { getColumns } from './index-helper';
 
 interface CompanyComponentProps {
     handleMenuClick: (key: string) => void;
+    handleViewWithValues: (key: string, values: any) => void;
 }
 
 const CompaniesComponent: React.FC<CompanyComponentProps> = ({
-    handleMenuClick
+    handleMenuClick,
+    handleViewWithValues
 }) => {
     const [selectedCompany, setSelectedCompany] = useState<Company | null>(
         null
@@ -35,15 +37,8 @@ const CompaniesComponent: React.FC<CompanyComponentProps> = ({
     }, []);
 
     const handleEdit = (company: Company) => {
-        // setSelectedPost(post);
-        // handleViewWithValues('PostCreate', {
-        //     id: post.id,
-        //     style: post.style,
-        //     image: post.image,
-        //     title: post.title,
-        //     text: post.text,
-        //     link: post.link
-        // });
+        setSelectedCompany(company);
+        handleViewWithValues('Coupons', company);
     };
 
     const handleDelete = async (id: string) => {
