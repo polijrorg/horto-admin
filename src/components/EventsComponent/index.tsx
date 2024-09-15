@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -12,30 +13,23 @@ interface EventComponentProps {
 const EventsComponent: React.FC<EventComponentProps> = ({
     handleMenuClick
 }) => {
-    const [selectedEvent, setSelectedEvent] = useState<Event | null>(
-        null
-    );
-    const [errorMsg, setErrorMsg] = useState(false);
     const [eventsList, setEventsList] = useState<Event[]>([]);
-    const [selectedEventId, setSelectedEventId] = useState<string | null>(
-        null
-    );
 
     useEffect(() => {
-        const getPosts = async () => {
+        const getEvents = async () => {
             try {
                 const response = await EventService.GetAll();
                 setEventsList(response);
             } catch (error) {
-                console.error('Failed to fetch modules:', error);
+                console.error('Failed to fetch events:', error);
             }
         };
 
-        getPosts();
+        getEvents();
     }, []);
 
     const handleEdit = (events: Event) => {
-        // setSelectedPost(post);
+        console.log(events);
         // handleViewWithValues('PostCreate', {
         //     id: post.id,
         //     style: post.style,

@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, Select } from 'antd';
+import { Table } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { getColumns } from './index-helper';
 import { Posts } from 'interfaces/Posts';
 import PostService from 'services/PostsService';
+import { getColumns } from './index-helper';
 
 interface PostComponentProps {
     handleMenuClick: (key: string) => void;
@@ -14,10 +16,7 @@ const PostsComponent: React.FC<PostComponentProps> = ({
     handleMenuClick,
     handleViewWithValues
 }) => {
-    const [selectedPost, setSelectedPost] = useState<Posts | null>(null);
-    const [errorMsg, setErrorMsg] = useState(false);
     const [postsList, setPostsList] = useState<Posts[]>([]);
-    const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
     useEffect(() => {
         const getPosts = async () => {
@@ -33,7 +32,6 @@ const PostsComponent: React.FC<PostComponentProps> = ({
     }, []);
 
     const handleEdit = (post: Posts) => {
-        setSelectedPost(post);
         handleViewWithValues('PostCreate', {
             id: post.id,
             style: post.style,

@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { Form, Input, Button, Upload, Radio, Typography } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Typography } from 'antd';
 import PostService from 'services/PostsService';
 import * as S from './styles';
 
@@ -33,20 +34,17 @@ const CreatePostComponent: React.FC<PostComponentProps> = ({
     };
 
     const onFinish = async (values: any) => {
-        console.log('Success:', values);
         if (initialValues !== undefined) {
             try {
-                const response = await PostService.updatePost(
-                    initialValues.id,
-                    {
-                        title: values.title,
-                        text: values.text,
-                        link: values.link,
-                        image: 'www.linkteste.com',
-                        style: selectedValue
-                    }
-                );
-                console.log(response);
+                setLoading(true);
+                await PostService.updatePost(initialValues.id, {
+                    title: values.title,
+                    text: values.text,
+                    link: values.link,
+                    image: 'www.linkteste.com',
+                    style: selectedValue
+                });
+
                 handleMenuClick('Posts');
             } catch (error) {
                 console.log('error');

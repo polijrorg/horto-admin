@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { Space, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -25,7 +29,7 @@ export const getColumns = (
         title: 'Nome',
         dataIndex: 'name',
         key: 'name',
-        render: (text: string, record: Event) => (
+        render: (_text: string, record: Event) => (
             <a onClick={() => handleEdit(record)} key={record.id}>
                 HortoClub
             </a>
@@ -35,7 +39,7 @@ export const getColumns = (
         title: 'Endereço',
         dataIndex: 'subscriptionPlan',
         key: 'subscriptionPlan',
-        render: (text: string) => <span>Rua HortoClub 123</span>
+        render: (_text: string) => <span>Rua HortoClub 123</span>
     },
     {
         title: 'Tipo',
@@ -47,16 +51,15 @@ export const getColumns = (
         title: 'Data do evento',
         dataIndex: 'created_at',
         key: 'created_at',
-        render: (text: string) => {
-            // const formattedDate = customFormatDate(text);
-            // return <span>{formattedDate}</span>;
-            return <span>01/01/2024</span>;
+        render: (_text: string) => {
+            const formattedDate = customFormatDate(_text);
+            return <span>{formattedDate}</span>;
         }
     },
     {
         title: 'Ação',
         key: 'action',
-        render: (record: Company) => (
+        render: (record: Event) => (
             <Space size="middle">
                 <Popconfirm
                     title="Tem certeza que deseja excluir este usuário?"

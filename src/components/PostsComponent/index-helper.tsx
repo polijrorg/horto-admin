@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { Space, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -25,7 +28,7 @@ export const getColumns = (
         title: 'Nome',
         dataIndex: 'name',
         key: 'name',
-        render: (text: string, record: Posts) => (
+        render: (_text: string, record: Posts) => (
             <a onClick={() => handleEdit(record)} key={record.id}>
                 HortoClub
             </a>
