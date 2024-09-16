@@ -4,14 +4,13 @@ import {
     BarChartOutlined,
     AppstoreOutlined,
     CalendarOutlined,
-    PlusOutlined
 } from '@ant-design/icons';
 
 interface MenuComponentProps {
     handleMenuClick: (key: string) => void;
 }
 
-const MenuAdmComponent: React.FC<MenuComponentProps> = ({
+const MenuCompanyComponent: React.FC<MenuComponentProps> = ({
     handleMenuClick
 }) => {
     return (
@@ -19,7 +18,7 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
             className="site-layout-background"
             style={{ padding: 24, minHeight: 360 }}
         >
-            <h2>Área do Administrador</h2>
+            <h2>Área Empresarial</h2>
             <div
                 style={{
                     display: 'flex',
@@ -29,7 +28,7 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
             >
                 <Card
                     hoverable
-                    style={{ width: 300, textAlign: 'center' }}
+                    style={{ width: 400, textAlign: 'center' }}
                     cover={
                         <div style={{display: 'flex', justifyContent: 'center'}}>
                             <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
@@ -39,53 +38,39 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                     }
                     onClick={() => handleMenuClick('Users')}
                 >
-                    <Card.Meta title="Análise de Usuário" />
+                    <Card.Meta title="Análise de Clientes" />
                 </Card>
                 <Card
                     hoverable
-                    style={{ width: 300, textAlign: 'center' }}
+                    style={{ width: 400, textAlign: 'center' }}
                     cover={
                         <div style={{display: 'flex', justifyContent: 'center'}}>
                             <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
-                                src="assets/icons/management.svg"
+                                src="assets/icons/mdi_coupon.svg"
                             />
                         </div>
                     }
                     onClick={() => handleMenuClick('Companies')}
                 >
-                    <Card.Meta title="Gerenciar Empresas" />
+                    <Card.Meta title="Solicitar inclusão de Novo Cupom" />
                 </Card>
                 <Card
                     hoverable
-                    style={{ width: 300, textAlign: 'center' }}
+                    style={{ width: 400, textAlign: 'center' }}
                     cover={
                         <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
-                                src="assets/icons/events.svg"
-                            />
-                        </div>
+                        <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                            src="assets/icons/benefits-welfare.svg"
+                        />
+                    </div>
                     }
                     onClick={() => handleMenuClick('Events')}
                 >
-                    <Card.Meta title="Gerenciar Eventos" />
-                </Card>
-                <Card
-                    hoverable
-                    style={{ width: 300, textAlign: 'center' }}
-                    cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
-                                src="assets/icons/Story.svg"
-                            />
-                        </div>
-                    }
-                    onClick={() => handleMenuClick('Posts')}
-                >
-                    <Card.Meta title="Gerenciar Posts" />
+                    <Card.Meta title="Plano de Benefícios" />
                 </Card>
             </div>
         </div>
     );
 };
 
-export default MenuAdmComponent;
+export default MenuCompanyComponent;

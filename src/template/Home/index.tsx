@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import Loading from 'components/LoadingComponent';
@@ -11,12 +11,27 @@ import EventsComponent from 'components/EventsComponent';
 import CouponsComponent from 'components/CouponsComponent';
 import UsersComponent from 'components/UsersComponent';
 import ShowUsersComponent from 'components/ShowUsersComponent';
+import { parseCookies } from 'nookies';
+import MenuCompanyComponent from 'components/MenuCompanyComponent';
 
 const { Header, Sider, Content } = Layout;
 
+
+
 const AdminDashboard: React.FC = () => {
+    const [UserType, setUserType] = useState("");
+    useEffect(() => {
+        const setType = () => {
+            const cookies = parseCookies();
+            setUserType(cookies['@app:userType']);
+        };
+
+        setType();
+    }, []);
+
     const [currentView, setCurrentView] = useState<
         | 'homeAdm'
+        | 'homeCompany'
         | 'Posts'
         | 'PostCreate'
         | 'Companies'
@@ -26,7 +41,7 @@ const AdminDashboard: React.FC = () => {
         | 'Users'
         | 'ShowUsers'
         | null
-    >(`homeAdm`);
+    >(UserType === 'adm' ? 'homeAdm' : 'homeCompany');
     const [viewValues, setViewValues] = useState<any>(undefined);
     const [loading, setLoading] = useState(false);
 
@@ -36,6 +51,7 @@ const AdminDashboard: React.FC = () => {
         setCurrentView(
             key as
                 | 'homeAdm'
+                | 'homeCompany'
                 | 'Posts'
                 | 'PostCreate'
                 | 'Companies'
@@ -53,6 +69,7 @@ const AdminDashboard: React.FC = () => {
         setCurrentView(
             key as
                 | 'homeAdm'
+                | 'homeCompany'
                 | 'Posts'
                 | 'PostCreate'
                 | 'Companies'
@@ -69,6 +86,8 @@ const AdminDashboard: React.FC = () => {
         switch (currentView) {
             case 'homeAdm':
                 return <MenuAdmComponent handleMenuClick={handleMenuClick} />;
+            case 'homeCompany':
+                return <MenuCompanyComponent handleMenuClick={handleMenuClick} />;
             case 'Posts':
                 return (
                     <PostsComponent
@@ -121,7 +140,7 @@ const AdminDashboard: React.FC = () => {
                     Horto Club
                 </div>
                 <Menu
-                    onClick={() => handleMenuClick('homeAdm')}
+                    onClick={() => handleMenuClick(UserType === 'adm' ? 'homeAdm' : 'homeCompany')}
                     style={{ background: '#F6F6F6' }}
                     mode="inline"
                 >

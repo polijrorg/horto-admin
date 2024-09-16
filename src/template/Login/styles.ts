@@ -16,7 +16,6 @@ export const Container = styled.div`
 export const LeftSide = styled.div`
     height: 100%;
     width: 45%;
-    background-color: red;
 `;
 
 export const RightSide = styled.div`
@@ -31,6 +30,7 @@ export const RightSide = styled.div`
 export const Banner = styled.img`
     width: 100%;
     height: 100%;
+    object-fit: cover;
 `;
 
 export const FormTitle = styled.h2`
