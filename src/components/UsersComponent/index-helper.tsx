@@ -17,6 +17,7 @@ function customFormatDate(dateString: string): string {
 
 export const getColumns = (
     handleGoTo: (post: User) => void,
+    UserType: string
 ) => [
     {
         title: 'Nome',
@@ -35,13 +36,13 @@ export const getColumns = (
         render: (text: string) => <span>{text}</span>
     },
     {
-        title: 'Preferência',
+        title: UserType === 'adm' ? 'Preferência' : 'Cliente Repetido',
         dataIndex: 'text',
         key: 'text',
         render: (text: string) => <span>{text}</span>
     },
     {
-        title: 'Último acesso',
+        title:  UserType === 'adm' ? 'Último acesso' : 'Última Compra',
         dataIndex: 'created_at',
         key: 'created_at',
         render: (text: string) => {

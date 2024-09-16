@@ -15,33 +15,36 @@ function customFormatDate(dateString: string): string {
     return `${day}/${month}/${year}`;
 }
 
-export const getColumns = () => [
-    {
-        title: 'Cupom Resgatado',
-        dataIndex: 'discount',
-        key: 'discount',
-        render: (text: string) =>  <span>{text}</span>
-    },
-    {
-        title: 'Local',
-        dataIndex: 'location',
-        key: 'location',
-        render: (text: string) => <span>{text}</span>
-    },
-    {
-        title: 'Código do cupom',
-        dataIndex: 'couponCode',
-        key: 'couponCode',
-        render: (text: string) => <span>{text}</span>
-    },
-    {
-        title: 'Data de resgate',
-        dataIndex: 'redemptionDate',
-        key: 'redemptionDate',
-        render: (text: string) => {
-            return <span>{text}</span>
-            //const formattedDate = customFormatDate(text);
-            //return <span>{formattedDate}</span>;
+export const getColumns = (UserType: string) => {
+    const columns = [
+        {
+            title: 'Cupom Resgatado',
+            dataIndex: 'discount',
+            key: 'discount',
+            render: (text: string) => <span>{text}</span>
+        },
+        UserType === 'adm' && {
+            title: 'Local',
+            dataIndex: 'location',
+            key: 'location',
+            render: (text: string) => <span>{text}</span>
+        },
+        {
+            title: 'Código do cupom',
+            dataIndex: 'couponCode',
+            key: 'couponCode',
+            render: (text: string) => <span>{text}</span>
+        },
+        {
+            title: 'Data de resgate',
+            dataIndex: 'redemptionDate',
+            key: 'redemptionDate',
+            render: (text: string) => <span>{text}</span>
+
+            // const formattedDate = customFormatDate(text);
+            // return <span>{formattedDate}</span>;
         }
-    }
-];
+    ];
+
+    return columns.filter(Boolean);
+};

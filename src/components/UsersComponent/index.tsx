@@ -6,14 +6,19 @@ import { User } from 'interfaces/Auth';
 import UserService from 'services/UserService';
 import { getColumns } from './index-helper';
 
+interface InitialValuesProps {
+    UserType: string;
+    CompanyId?: string;
+}
+
 interface UsersComponentProps {
-    handleMenuClick: (key: string) => void;
     handleViewWithValues: (key: string, values: any) => void;
+    initialValues: InitialValuesProps;
 }
 
 const UsersComponent: React.FC<UsersComponentProps> = ({
-    handleMenuClick,
-    handleViewWithValues
+    handleViewWithValues,
+    initialValues
 }) => {
     const [usersList, setUsersList] = useState<User[]>([]);
 
@@ -31,7 +36,7 @@ const UsersComponent: React.FC<UsersComponentProps> = ({
     }, []);
 
     const handleGoTo = (user: User) => {
-        handleViewWithValues('ShowUsers', user);
+        handleViewWithValues('ShowUsers', {User: user, UserType: initialValues.UserType});
     };
 
     return (
@@ -50,7 +55,7 @@ const UsersComponent: React.FC<UsersComponentProps> = ({
             </div>
             <Table
                 style={{ color: 'white' }}
-                columns={getColumns(handleGoTo)}
+                columns={getColumns(handleGoTo, initialValues.UserType)}
                 dataSource={usersList}
                 rowKey="id"
             />

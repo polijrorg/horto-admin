@@ -112,7 +112,12 @@ const AdminDashboard: React.FC = () => {
             case 'Companies':
                 return <CompaniesComponent handleMenuClick={handleMenuClick}  handleViewWithValues={handleViewWithValues}/>;
             case 'Users':
-                return <UsersComponent handleMenuClick={handleMenuClick}  handleViewWithValues={handleViewWithValues}/>;
+                return <UsersComponent
+                    initialValues={{
+                        UserType: UserType
+                    }}
+                    handleViewWithValues={handleViewWithValues}
+                />;
             case 'CompanyCreate':
                 return <CreateCompanyComponent handleMenuClick={handleMenuClick}/>;
             case 'Events':

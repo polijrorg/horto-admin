@@ -6,16 +6,20 @@ import * as S from './styles';
 import { Table } from 'antd';
 import { getColumns } from './index-helper';
 
+interface InitialValuesProps {
+    User: User;
+    UserType: string;
+}
+
 interface UsersComponentProps {
     handleMenuClick: (key: string) => void;
-    handleViewWithValues: (key: string, values: any) => void;
-    initialValues: User;
+    initialValues: InitialValuesProps;
 }
 
 const ShowUsersComponent: React.FC<UsersComponentProps> = ({
     initialValues
 }) => {
-    const [user, setUser] = useState<User>(initialValues);
+    const [user, setUser] = useState<User>(initialValues.User);
 
     const dataSource = [
         {
@@ -126,14 +130,14 @@ const ShowUsersComponent: React.FC<UsersComponentProps> = ({
                     </S.Description>
                     <S.Description>
                         <S.TitleContainer>
-                            <S.Title>Preferências:</S.Title>
+                            <S.Title>{initialValues.UserType === 'adm' ? 'Preferências:' : 'Cliente Repetido?'}</S.Title>
                         </S.TitleContainer>
-                        <span>Vestuário</span>
+                        <span>{initialValues.UserType === 'adm' ? 'Vestúario:' : 'Não'}</span>
                     </S.Description>
                 </S.UserInfoContainer>
                 <Table
                     style={{ color: '#FCFCFC', width: '80%' }}
-                    columns={getColumns()}
+                    columns={getColumns(initialValues.UserType)}
                     dataSource={dataSource}
                     rowKey="id"
                 />
