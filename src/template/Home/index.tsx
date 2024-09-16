@@ -9,6 +9,8 @@ import CompaniesComponent from 'components/CompaniesComponent';
 import CreateCompanyComponent from 'components/CreateCompanyComponent';
 import EventsComponent from 'components/EventsComponent';
 import CouponsComponent from 'components/CouponsComponent';
+import UsersComponent from 'components/UsersComponent';
+import ShowUsersComponent from 'components/ShowUsersComponent';
 
 const { Header, Sider, Content } = Layout;
 
@@ -21,6 +23,8 @@ const AdminDashboard: React.FC = () => {
         | 'CompanyCreate'
         | 'Events'
         | 'Coupons'
+        | 'Users'
+        | 'ShowUsers'
         | null
     >(`homeAdm`);
     const [viewValues, setViewValues] = useState<any>(undefined);
@@ -38,6 +42,7 @@ const AdminDashboard: React.FC = () => {
                 | 'CompanyCreate'
                 | 'Events'
                 | 'Coupons'
+                | 'Users'
         );
         setLoading(false);
     };
@@ -54,6 +59,8 @@ const AdminDashboard: React.FC = () => {
                 | 'CompanyCreate'
                 | 'Events'
                 | 'Coupons'
+                | 'Users'
+                | 'ShowUsers'
         );
         setLoading(false);
     };
@@ -76,8 +83,17 @@ const AdminDashboard: React.FC = () => {
                         initialValues={viewValues}
                     />
                 );
+            case 'ShowUsers':
+                return (
+                    <ShowUsersComponent
+                        handleMenuClick={handleMenuClick}
+                        initialValues={viewValues}
+                    />
+                );
             case 'Companies':
                 return <CompaniesComponent handleMenuClick={handleMenuClick}  handleViewWithValues={handleViewWithValues}/>;
+            case 'Users':
+                return <UsersComponent handleMenuClick={handleMenuClick}  handleViewWithValues={handleViewWithValues}/>;
             case 'CompanyCreate':
                 return <CreateCompanyComponent handleMenuClick={handleMenuClick}/>;
             case 'Events':

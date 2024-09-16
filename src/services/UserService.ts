@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import AuthResponse from 'interfaces/Auth';
+import AuthResponse, { User } from 'interfaces/Auth';
 import { setCookie } from 'nookies';
 
 import api from './api';
@@ -25,6 +25,14 @@ export default class UserService {
             setCookie(undefined, '@app:userId', response.data.company.id);
             setCookie(undefined, '@app:userType', 'company');
         }
+
+        return response.data;
+    }
+
+    static async GetAll(): Promise<User[]> {
+        const response: AxiosResponse<User[]> = await api.get(
+            '/users/getAll'
+        );
 
         return response.data;
     }

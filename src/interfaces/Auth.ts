@@ -36,3 +36,17 @@ export default interface AuthResponse {
     company?: Company;
     token: string;
 }
+
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    age: number;
+    image: string;
+    subscribePlan: string;
+    typeUser: "COMMON" | "ADMIN" | "OTHER";
+    cardsId: string | null;
+    created_at: string;
+    address: Address;
+  }
