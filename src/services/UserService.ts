@@ -30,9 +30,7 @@ export default class UserService {
     }
 
     static async GetAll(): Promise<User[]> {
-        const response: AxiosResponse<User[]> = await api.get(
-            '/users/getAll'
-        );
+        const response: AxiosResponse<User[]> = await api.get('/users/getAll');
 
         return response.data;
     }

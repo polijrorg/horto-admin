@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { User } from 'interfaces/Auth';
-import * as S from './styles';
 import { Table } from 'antd';
+import * as S from './styles';
 import { getColumns } from './index-helper';
 
 interface InitialValuesProps {
@@ -23,34 +24,34 @@ const ShowUsersComponent: React.FC<UsersComponentProps> = ({
 
     const dataSource = [
         {
-          key: '1',
-          discount: '15% OFF',
-          location: 'Restaurante Horto',
-          couponCode: 'XXXXXXX',
-          redemptionDate: '01/01/2024'
+            key: '1',
+            discount: '15% OFF',
+            location: 'Restaurante Horto',
+            couponCode: 'XXXXXXX',
+            redemptionDate: '01/01/2024'
         },
         {
-          key: '2',
-          discount: '15% OFF',
-          location: 'Restaurante Horto',
-          couponCode: 'XXXXXXX',
-          redemptionDate: '01/01/2024'
+            key: '2',
+            discount: '15% OFF',
+            location: 'Restaurante Horto',
+            couponCode: 'XXXXXXX',
+            redemptionDate: '01/01/2024'
         },
         {
-          key: '3',
-          discount: '15% OFF',
-          location: 'Restaurante Horto',
-          couponCode: 'XXXXXXX',
-          redemptionDate: '01/01/2024'
+            key: '3',
+            discount: '15% OFF',
+            location: 'Restaurante Horto',
+            couponCode: 'XXXXXXX',
+            redemptionDate: '01/01/2024'
         },
         {
-          key: '4',
-          discount: '15% OFF',
-          location: 'Restaurante Horto',
-          couponCode: 'XXXXXXX',
-          redemptionDate: '01/01/2024'
+            key: '4',
+            discount: '15% OFF',
+            location: 'Restaurante Horto',
+            couponCode: 'XXXXXXX',
+            redemptionDate: '01/01/2024'
         }
-      ];
+    ];
 
     return (
         <>
@@ -130,9 +131,17 @@ const ShowUsersComponent: React.FC<UsersComponentProps> = ({
                     </S.Description>
                     <S.Description>
                         <S.TitleContainer>
-                            <S.Title>{initialValues.UserType === 'adm' ? 'Preferências:' : 'Cliente Repetido?'}</S.Title>
+                            <S.Title>
+                                {initialValues.UserType === 'adm'
+                                    ? 'Preferências:'
+                                    : 'Cliente Repetido?'}
+                            </S.Title>
                         </S.TitleContainer>
-                        <span>{initialValues.UserType === 'adm' ? 'Vestúario:' : 'Não'}</span>
+                        <span>
+                            {initialValues.UserType === 'adm'
+                                ? 'Vestúario:'
+                                : 'Não'}
+                        </span>
                     </S.Description>
                 </S.UserInfoContainer>
                 <Table

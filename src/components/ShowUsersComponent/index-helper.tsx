@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { User } from 'interfaces/Auth';
 
 function padToTwoDigits(number: number): string {
     return number.toString().padStart(2, '0');

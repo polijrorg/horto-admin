@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Button } from 'antd';
 
 export const ButtonGroup = styled.div`
     display: flex;

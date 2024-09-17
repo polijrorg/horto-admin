@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { Form, Input, Button, Upload, Radio, Typography, Flex } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import CompanyService from 'services/CompanyService';
+import { Form, Input, Button, Typography, Flex } from 'antd';
+import PostService from 'services/PostsService';
 import * as S from './styles';
 
 interface InitialValuesProps {
@@ -33,45 +35,33 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
     };
 
     const onFinish = async (values: any) => {
-        console.log('Success:', values);
-        const todayDate = new Date();
         if (initialValues !== undefined) {
             try {
-                // const response = await CompanyService.updatePost(
-                //     initialValues.id,
-                //     {
-                //         title: values.title,
-                //         text: values.text,
-                //         link: values.link,
-                //         image: 'www.linkteste.com',
-                //         style: selectedValue
-                //     }
-                // );
-                // console.log(response);
-                // handleMenuClick('Posts');
+                const response = await PostService.updatePost(
+                    initialValues.id,
+                    {
+                        title: values.title,
+                        text: values.text,
+                        link: values.link,
+                        image: 'www.linkteste.com',
+                        style: selectedValue
+                    }
+                );
+                handleMenuClick('Posts');
             } catch (error) {
                 console.log('error');
             }
         } else {
             try {
-                const response = await CompanyService.CreateCompany({
-                    name: values.name,
-                    email: values.email,
+                const response = await PostService.CreatePost({
+                    title: values.title,
+                    text: values.text,
+                    link: values.link,
                     image: 'www.linkteste.com',
-                    subscriptionPlan: values.subscriptionPlan,
-                    branch: values.branch,
-                    planExpirationDate: todayDate.toISOString(),
-                    address: {
-                        street: values.street,
-                        numberHouse: parseInt(values.numberHouse),
-                        neighborhood: values.neighborhood,
-                        city: values.city,
-                        state: values.state,
-                        cep: values.cep
-                    }
+                    style: selectedValue
                 });
                 console.log(response);
-                handleMenuClick('Companies');
+                handleMenuClick('Posts');
             } catch (error) {
                 console.log(error);
             }
@@ -105,23 +95,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira o nome da empresa'
-                                }
-                            ]}
-                            initialValue={initialValues?.title}
-                            style={{ marginBottom: 8 }}
-                        >
-                            <Input style={{ borderRadius: 50 }} />
-                        </Form.Item>
-                        <Typography.Title level={5}>
-                            E-mail
-                        </Typography.Title>
-                        <Form.Item
-                            name="email"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, insira um email'
+                                    message: 'Por favor, insira um título'
                                 }
                             ]}
                             initialValue={initialValues?.title}
@@ -137,7 +111,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira o ramo de atuação'
+                                    message: 'Por favor, insira um texto'
                                 }
                             ]}
                             initialValue={initialValues?.text}
@@ -153,7 +127,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira o plano'
+                                    message: 'Por favor, insira um link'
                                 }
                             ]}
                             initialValue={initialValues?.link}
@@ -169,7 +143,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira a rua'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}
@@ -189,7 +163,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira o número'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}
@@ -209,7 +183,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira o bairro'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}
@@ -225,7 +199,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira a cidade'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}
@@ -241,7 +215,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira o estado'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}
@@ -255,7 +229,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira o CEP'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}
@@ -271,7 +245,7 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Por favor, insira o plano'
+                                        message: 'Por favor, insira um texto'
                                     }
                                 ]}
                                 initialValue={initialValues?.text}

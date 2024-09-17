@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
@@ -18,10 +19,8 @@ import CreateCouponComponent from 'components/CreateCouponComponent';
 
 const { Header, Sider, Content } = Layout;
 
-
-
 const AdminDashboard: React.FC = () => {
-    const [UserType, setUserType] = useState("");
+    const [UserType, setUserType] = useState('');
     const [currentView, setCurrentView] = useState<
         | 'homeAdm'
         | 'homeCompany'
@@ -48,7 +47,6 @@ const AdminDashboard: React.FC = () => {
 
         setType();
     }, []);
-    console.log(currentView)
     const [viewValues, setViewValues] = useState<any>(undefined);
     const [loading, setLoading] = useState(false);
 
@@ -98,7 +96,9 @@ const AdminDashboard: React.FC = () => {
             case 'homeAdm':
                 return <MenuAdmComponent handleMenuClick={handleMenuClick} />;
             case 'homeCompany':
-                return <MenuCompanyComponent handleMenuClick={handleMenuClick} />;
+                return (
+                    <MenuCompanyComponent handleMenuClick={handleMenuClick} />
+                );
             case 'Posts':
                 return (
                     <PostsComponent
@@ -121,24 +121,43 @@ const AdminDashboard: React.FC = () => {
                     />
                 );
             case 'Companies':
-                return <CompaniesComponent handleMenuClick={handleMenuClick}  handleViewWithValues={handleViewWithValues}/>;
+                return (
+                    <CompaniesComponent
+                        handleMenuClick={handleMenuClick}
+                        handleViewWithValues={handleViewWithValues}
+                    />
+                );
             case 'Users':
-                return <UsersComponent
-                    initialValues={{
-                        UserType: UserType
-                    }}
-                    handleViewWithValues={handleViewWithValues}
-                />;
+                return (
+                    <UsersComponent
+                        initialValues={{
+                            UserType
+                        }}
+                        handleViewWithValues={handleViewWithValues}
+                    />
+                );
             case 'CompanyCreate':
-                return <CreateCompanyComponent handleMenuClick={handleMenuClick}/>;
+                return (
+                    <CreateCompanyComponent handleMenuClick={handleMenuClick} />
+                );
             case 'Events':
-                return <EventsComponent handleMenuClick={handleMenuClick}/>
+                return <EventsComponent handleMenuClick={handleMenuClick} />;
             case 'Plans':
-                return <PlansComponent handleMenuClick={handleMenuClick}/>
+                return <PlansComponent handleMenuClick={handleMenuClick} />;
             case 'Coupons':
-                return <CouponsComponent handleMenuClick={handleMenuClick} initialValues={viewValues}/>
+                return (
+                    <CouponsComponent
+                        handleMenuClick={handleMenuClick}
+                        initialValues={viewValues}
+                    />
+                );
             case 'CupomCreate':
-                return <CreateCouponComponent handleMenuClick={handleMenuClick} initialValues={viewValues}/>
+                return (
+                    <CreateCouponComponent
+                        handleMenuClick={handleMenuClick}
+                        initialValues={viewValues}
+                    />
+                );
             default:
                 return <div>Página não encontrada</div>;
         }
@@ -160,7 +179,11 @@ const AdminDashboard: React.FC = () => {
                     Horto Club
                 </div>
                 <Menu
-                    onClick={() => handleMenuClick(UserType === 'adm' ? 'homeAdm' : 'homeCompany')}
+                    onClick={() =>
+                        handleMenuClick(
+                            UserType === 'adm' ? 'homeAdm' : 'homeCompany'
+                        )
+                    }
                     style={{ background: '#F6F6F6' }}
                     mode="inline"
                 >

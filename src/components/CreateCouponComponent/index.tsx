@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
@@ -80,11 +81,16 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                         height: '100%',
                         width: '100%',
                         display: 'flex',
-                        alignItems: 'start',
+                        alignItems: 'start'
                     }}
                 >
                     <S.Wrapper>
-                        <Typography.Title style={{color: '#CC8D3E', fontSize: 18}} level={5}>Nome do Cupom:</Typography.Title>
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Nome do Cupom:
+                        </Typography.Title>
                         <Form.Item
                             name="title"
                             rules={[
@@ -95,9 +101,19 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                             ]}
                             initialValue={initialValues?.title}
                         >
-                            <Input style={{ borderRadius: 50, background: '#F8F9FA' }} />
+                            <Input
+                                style={{
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
                         </Form.Item>
-                        <Typography.Title style={{color: '#CC8D3E', fontSize: 18}} level={5}>Tipo do Cupom:</Typography.Title>
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Tipo do Cupom:
+                        </Typography.Title>
                         <Form.Item
                             name="couponType"
                             rules={[
@@ -108,51 +124,89 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                             ]}
                             initialValue={initialValues?.title}
                         >
-                            <Input style={{ borderRadius: 50, background: '#F8F9FA' }} />
+                            <Input
+                                style={{
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
                         </Form.Item>
-                        <Typography.Title style={{color: '#CC8D3E', fontSize: 18}} level={5}>Recompensa do cupom:</Typography.Title>
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Recompensa do cupom:
+                        </Typography.Title>
                         <Form.Item
                             name="reward"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira a recompensa do cupom'
+                                    message:
+                                        'Por favor, insira a recompensa do cupom'
                                 }
                             ]}
                             initialValue={initialValues?.title}
                         >
-                            <Input style={{ borderRadius: 50, background: '#F8F9FA' }} />
+                            <Input
+                                style={{
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
                         </Form.Item>
-                        <Typography.Title style={{color: '#CC8D3E', fontSize: 18}} level={5}>Regras para resgate do cupom:</Typography.Title>
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Regras para resgate do cupom:
+                        </Typography.Title>
                         <Form.Item
                             name="rules"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira as regras para resgate do cupom'
+                                    message:
+                                        'Por favor, insira as regras para resgate do cupom'
                                 }
                             ]}
                             initialValue={initialValues?.title}
                         >
-                            <Input style={{ borderRadius: 50, background: '#F8F9FA' }} />
+                            <Input
+                                style={{
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
                         </Form.Item>
-                        <Typography.Title style={{color: '#CC8D3E', fontSize: 18}} level={5}>Validade do Cupom:</Typography.Title>
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Validade do Cupom:
+                        </Typography.Title>
                         <Form.Item
                             name="expirationDate"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira a data de validade do cupom'
+                                    message:
+                                        'Por favor, insira a data de validade do cupom'
                                 }
                             ]}
                             initialValue={initialValues?.title}
                         >
-                            <Input style={{ borderRadius: 50, background: '#F8F9FA' }} />
+                            <Input
+                                style={{
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
                         </Form.Item>
                     </S.Wrapper>
                     <S.ContentButtons>
                         <Button
-                             style={{
+                            style={{
                                 color: '#000',
                                 backgroundColor: '#F8F9FA',
                                 fontWeight: 'bold',
@@ -160,19 +214,24 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                                 height: 48,
                                 padding: '8px 24px'
                             }}
-                        >Cancelar</Button>
+                        >
+                            Cancelar
+                        </Button>
                         <Button
-                         type="primary"
-                         htmlType="submit"
-                         block
-                         style={{
-                            color: '#000',
-                            backgroundColor: '#CC8D3E',
-                            fontWeight: 'bold',
-                            fontSize: 18,
-                            height: 48,
-                            padding: '8px 24px'
-                        }}>Adicionar</Button>
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            style={{
+                                color: '#000',
+                                backgroundColor: '#CC8D3E',
+                                fontWeight: 'bold',
+                                fontSize: 18,
+                                height: 48,
+                                padding: '8px 24px'
+                            }}
+                        >
+                            Adicionar
+                        </Button>
                     </S.ContentButtons>
                 </Form>
             </S.Container>

@@ -1,11 +1,5 @@
 import React from 'react';
 import { Card } from 'antd';
-import {
-    BarChartOutlined,
-    AppstoreOutlined,
-    CalendarOutlined,
-    PlusOutlined
-} from '@ant-design/icons';
 
 interface MenuComponentProps {
     handleMenuClick: (key: string) => void;
@@ -31,8 +25,20 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 300, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="Icone para aba de clientes"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
                                 src="assets/icons/data_visualiation_graph.svg"
                             />
                         </div>
@@ -45,8 +51,20 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 300, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="Icone para aba de empresas"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
                                 src="assets/icons/management.svg"
                             />
                         </div>
@@ -59,8 +77,20 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 300, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="Icone para a aba de eventos"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
                                 src="assets/icons/events.svg"
                             />
                         </div>
@@ -73,8 +103,20 @@ const MenuAdmComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 300, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="icone para aba de posts"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
                                 src="assets/icons/Story.svg"
                             />
                         </div>

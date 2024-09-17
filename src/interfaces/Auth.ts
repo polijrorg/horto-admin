@@ -45,8 +45,8 @@ export interface User {
     age: number;
     image: string;
     subscribePlan: string;
-    typeUser: "COMMON" | "ADMIN" | "OTHER";
+    typeUser: 'COMMON' | 'ADMIN' | 'OTHER';
     cardsId: string | null;
     created_at: string;
     address: Address;
-  }
+}

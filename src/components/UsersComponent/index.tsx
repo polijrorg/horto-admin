@@ -36,7 +36,10 @@ const UsersComponent: React.FC<UsersComponentProps> = ({
     }, []);
 
     const handleGoTo = (user: User) => {
-        handleViewWithValues('ShowUsers', {User: user, UserType: initialValues.UserType});
+        handleViewWithValues('ShowUsers', {
+            User: user,
+            UserType: initialValues.UserType
+        });
     };
 
     return (

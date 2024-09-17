@@ -1,10 +1,9 @@
 import React from 'react';
-import { Card, Typography, Button, Flex } from 'antd';
-import * as S from './styles';
-import {
-    EditOutlined, PlusOutlined
-} from '@ant-design/icons';
+import { Card, Typography, Button } from 'antd';
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Company } from 'interfaces/Companies';
+import * as S from './styles';
+
 const { Text } = Typography;
 
 interface MenuComponentProps {
@@ -16,14 +15,12 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
     handleMenuClick,
     initialValues
 }) => {
-    console.log(initialValues);
-
     return (
         <div
             className="site-layout-background"
             style={{ padding: 24, minHeight: 360 }}
         >
-             <div
+            <div
                 style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -52,7 +49,7 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
                 {initialValues?.coupons.map((coupon) => (
                     <Card
                         key={coupon.id}
-                        bordered={true}
+                        bordered
                         style={{
                             width: 200,
                             borderRadius: 10,
@@ -69,7 +66,7 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
                                         borderColor: '#CC8D3E',
                                         color: '#fff',
                                         float: 'right',
-                                        margin: '10px',
+                                        margin: '10px'
                                     }}
                                 />
                             </S.IconContainer>
@@ -77,7 +74,13 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
                         bodyStyle={{ backgroundColor: '#2B2F2A' }}
                     >
                         <S.CardContent>
-                            <Text style={{ color: '#CC8D3E', fontWeight: 'bold', fontSize: 18 }}>
+                            <Text
+                                style={{
+                                    color: '#CC8D3E',
+                                    fontWeight: 'bold',
+                                    fontSize: 18
+                                }}
+                            >
                                 {coupon.reward}
                             </Text>
                             <div
@@ -88,9 +91,24 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
                                     alignItems: 'center'
                                 }}
                             >
-                                <Text style={{ color: '#CC8D3E', fontSize: 12 }}>Validade</Text>
-                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18 }}>
-                                    {new Date(coupon.expirationDate).toLocaleDateString('pt-BR', { month: '2-digit', year: '2-digit' })}
+                                <Text
+                                    style={{ color: '#CC8D3E', fontSize: 12 }}
+                                >
+                                    Validade
+                                </Text>
+                                <Text
+                                    style={{
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        fontSize: 18
+                                    }}
+                                >
+                                    {new Date(
+                                        coupon.expirationDate
+                                    ).toLocaleDateString('pt-BR', {
+                                        month: '2-digit',
+                                        year: '2-digit'
+                                    })}
                                 </Text>
                             </div>
                         </S.CardContent>

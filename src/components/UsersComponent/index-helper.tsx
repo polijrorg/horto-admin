@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { User } from 'interfaces/Auth';
 
@@ -39,10 +43,12 @@ export const getColumns = (
         title: UserType === 'adm' ? 'Preferência' : 'Cliente Repetido',
         dataIndex: 'text',
         key: 'text',
-        render: (text: string) => <span>{UserType === 'adm' ? 'Vestúario' : 'não'}</span>
+        render: (text: string) => (
+            <span>{UserType === 'adm' ? 'Vestúario' : 'não'}</span>
+        )
     },
     {
-        title:  UserType === 'adm' ? 'Último acesso' : 'Última Compra',
+        title: UserType === 'adm' ? 'Último acesso' : 'Última Compra',
         dataIndex: 'created_at',
         key: 'created_at',
         render: (text: string) => {

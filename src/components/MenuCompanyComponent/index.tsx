@@ -25,8 +25,20 @@ const MenuCompanyComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 400, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="icone para a aba de usuarios"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
                                 src="assets/icons/data_visualiation_graph.svg"
                             />
                         </div>
@@ -39,8 +51,20 @@ const MenuCompanyComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 400, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="icone para a aba de novo cupom"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
                                 src="assets/icons/mdi_coupon.svg"
                             />
                         </div>
@@ -53,11 +77,23 @@ const MenuCompanyComponent: React.FC<MenuComponentProps> = ({
                     hoverable
                     style={{ width: 400, textAlign: 'center' }}
                     cover={
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <img style={{ width: 64, height: 64, margin: 16, color: '#c47f38'}}
-                            src="assets/icons/benefits-welfare.svg"
-                        />
-                    </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                alt="icone para aba de planos"
+                                style={{
+                                    width: 64,
+                                    height: 64,
+                                    margin: 16,
+                                    color: '#c47f38'
+                                }}
+                                src="assets/icons/benefits-welfare.svg"
+                            />
+                        </div>
                     }
                     onClick={() => handleMenuClick('Plans')}
                 >

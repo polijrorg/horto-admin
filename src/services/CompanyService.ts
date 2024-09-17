@@ -12,9 +12,6 @@ export default class CompanyService {
     }
 
     static async CreateCompany(data: ICompanyRequest): Promise<Company> {
-        console.log('oi');
-        console.log(data)
-        console.log('oi2')
         const response: AxiosResponse<Company> = await api.post(
             '/companies/create',
             data
