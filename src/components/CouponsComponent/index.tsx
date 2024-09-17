@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Typography, Button, Flex } from 'antd';
 import * as S from './styles';
 import {
-    EditOutlined
+    EditOutlined, PlusOutlined
 } from '@ant-design/icons';
 import { Company } from 'interfaces/Companies';
 const { Text } = Typography;
@@ -23,7 +23,25 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
             className="site-layout-background"
             style={{ padding: 24, minHeight: 360 }}
         >
-            <h2>Cupons Ativos</h2>
+             <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 8,
+                    marginTop: 8,
+                    marginRight: 16
+                }}
+            >
+                <h2>Cupons Ativos</h2>
+                <PlusOutlined
+                    style={{
+                        fontSize: '32px',
+                        color: '#CC8D3E'
+                    }}
+                    onClick={() => handleMenuClick('CupomCreate')}
+                />
+            </div>
             <div
                 style={{
                     display: 'flex',

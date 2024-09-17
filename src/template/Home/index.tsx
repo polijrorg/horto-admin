@@ -13,6 +13,8 @@ import UsersComponent from 'components/UsersComponent';
 import ShowUsersComponent from 'components/ShowUsersComponent';
 import { parseCookies } from 'nookies';
 import MenuCompanyComponent from 'components/MenuCompanyComponent';
+import PlansComponent from 'components/PlansComponent';
+import CreateCouponComponent from 'components/CreateCouponComponent';
 
 const { Header, Sider, Content } = Layout;
 
@@ -20,15 +22,6 @@ const { Header, Sider, Content } = Layout;
 
 const AdminDashboard: React.FC = () => {
     const [UserType, setUserType] = useState("");
-    useEffect(() => {
-        const setType = () => {
-            const cookies = parseCookies();
-            setUserType(cookies['@app:userType']);
-        };
-
-        setType();
-    }, []);
-
     const [currentView, setCurrentView] = useState<
         | 'homeAdm'
         | 'homeCompany'
@@ -40,8 +33,22 @@ const AdminDashboard: React.FC = () => {
         | 'Coupons'
         | 'Users'
         | 'ShowUsers'
+        | 'Plans'
+        | 'CupomCreate'
         | null
-    >(UserType === 'adm' ? 'homeAdm' : 'homeCompany');
+    >('homeAdm');
+
+    useEffect(() => {
+        const setType = () => {
+            const cookies = parseCookies();
+            const cookiestype = cookies['@app:userType'];
+            setUserType(cookiestype);
+            setCurrentView(cookiestype === 'adm' ? 'homeAdm' : 'homeCompany');
+        };
+
+        setType();
+    }, []);
+    console.log(currentView)
     const [viewValues, setViewValues] = useState<any>(undefined);
     const [loading, setLoading] = useState(false);
 
@@ -59,6 +66,8 @@ const AdminDashboard: React.FC = () => {
                 | 'Events'
                 | 'Coupons'
                 | 'Users'
+                | 'Plans'
+                | 'CupomCreate'
         );
         setLoading(false);
     };
@@ -78,6 +87,8 @@ const AdminDashboard: React.FC = () => {
                 | 'Coupons'
                 | 'Users'
                 | 'ShowUsers'
+                | 'Plans'
+                | 'CupomCreate'
         );
         setLoading(false);
     };
@@ -122,8 +133,12 @@ const AdminDashboard: React.FC = () => {
                 return <CreateCompanyComponent handleMenuClick={handleMenuClick}/>;
             case 'Events':
                 return <EventsComponent handleMenuClick={handleMenuClick}/>
+            case 'Plans':
+                return <PlansComponent handleMenuClick={handleMenuClick}/>
             case 'Coupons':
                 return <CouponsComponent handleMenuClick={handleMenuClick} initialValues={viewValues}/>
+            case 'CupomCreate':
+                return <CreateCouponComponent handleMenuClick={handleMenuClick} initialValues={viewValues}/>
             default:
                 return <div>Página não encontrada</div>;
         }

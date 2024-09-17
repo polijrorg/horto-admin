@@ -33,13 +33,13 @@ export const getColumns = (
         title: 'Já utilizou Cupons?',
         dataIndex: 'title',
         key: 'title',
-        render: (text: string) => <span>{text}</span>
+        render: (text: string) => <span>Sim</span>
     },
     {
         title: UserType === 'adm' ? 'Preferência' : 'Cliente Repetido',
         dataIndex: 'text',
         key: 'text',
-        render: (text: string) => <span>{text}</span>
+        render: (text: string) => <span>{UserType === 'adm' ? 'Vestúario' : 'não'}</span>
     },
     {
         title:  UserType === 'adm' ? 'Último acesso' : 'Última Compra',

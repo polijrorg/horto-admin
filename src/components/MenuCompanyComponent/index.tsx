@@ -1,10 +1,5 @@
 import React from 'react';
 import { Card } from 'antd';
-import {
-    BarChartOutlined,
-    AppstoreOutlined,
-    CalendarOutlined,
-} from '@ant-design/icons';
 
 interface MenuComponentProps {
     handleMenuClick: (key: string) => void;
@@ -64,7 +59,7 @@ const MenuCompanyComponent: React.FC<MenuComponentProps> = ({
                         />
                     </div>
                     }
-                    onClick={() => handleMenuClick('Events')}
+                    onClick={() => handleMenuClick('Plans')}
                 >
                     <Card.Meta title="Plano de Benefícios" />
                 </Card>
