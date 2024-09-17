@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
@@ -17,14 +16,7 @@ const CompaniesComponent: React.FC<CompanyComponentProps> = ({
     handleMenuClick,
     handleViewWithValues
 }) => {
-    const [selectedCompany, setSelectedCompany] = useState<Company | null>(
-        null
-    );
-    const [errorMsg, setErrorMsg] = useState(false);
     const [companiesList, setCompaniesList] = useState<Company[]>([]);
-    const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(
-        null
-    );
 
     useEffect(() => {
         const getPosts = async () => {
@@ -40,7 +32,6 @@ const CompaniesComponent: React.FC<CompanyComponentProps> = ({
     }, []);
 
     const handleEdit = (company: Company) => {
-        setSelectedCompany(company);
         handleViewWithValues('Coupons', company);
     };
 

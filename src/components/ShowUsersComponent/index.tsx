@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React from 'react';
 import { User } from 'interfaces/Auth';
 import { Table } from 'antd';
 import * as S from './styles';
@@ -20,7 +20,7 @@ interface UsersComponentProps {
 const ShowUsersComponent: React.FC<UsersComponentProps> = ({
     initialValues
 }) => {
-    const [user, setUser] = useState<User>(initialValues.User);
+    const user = initialValues.User;
 
     const dataSource = [
         {

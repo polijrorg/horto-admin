@@ -4,17 +4,15 @@
 import router from 'next/router';
 import { Form, Input, Button, Typography, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { useState } from 'react';
 import UserService from 'services/UserService';
 import * as S from './styles';
 
 const Login = () => {
-    const [loading, setLoading] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
 
     const onFinish = async (values: any) => {
         try {
-            const response = await UserService.login(values);
+            await UserService.login(values);
             router.push('/Home');
         } catch (error) {
             messageApi.open({
@@ -99,7 +97,6 @@ const Login = () => {
                                     backgroundColor: '#CC8D3E',
                                     borderColor: '#CC8D3E'
                                 }}
-                                loading={loading}
                             >
                                 CONTINUAR
                             </Button>

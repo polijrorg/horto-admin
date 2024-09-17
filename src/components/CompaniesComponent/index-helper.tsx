@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -6,20 +5,6 @@ import React from 'react';
 import { Space, Popconfirm } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Company } from 'interfaces/Companies';
-
-function padToTwoDigits(number: number): string {
-    return number.toString().padStart(2, '0');
-}
-
-function customFormatDate(dateString: string): string {
-    const date = new Date(dateString);
-
-    const day = padToTwoDigits(date.getDate());
-    const month = padToTwoDigits(date.getMonth() + 1); // Os meses são baseados em zero
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-}
 
 export const getColumns = (
     handleEdit: (company: Company) => void,
@@ -29,7 +14,7 @@ export const getColumns = (
         title: 'Nome',
         dataIndex: 'name',
         key: 'name',
-        render: (text: string, record: Company) => (
+        render: (_text: string, record: Company) => (
             <a onClick={() => handleEdit(record)} key={record.id}>
                 HortoClub
             </a>
@@ -51,7 +36,7 @@ export const getColumns = (
         title: 'Validade do Plano',
         dataIndex: 'created_at',
         key: 'created_at',
-        render: (text: string) => {
+        render: () => {
             // const formattedDate = customFormatDate(text);
             // return <span>{formattedDate}</span>;
             return <span>01/01/2024</span>;

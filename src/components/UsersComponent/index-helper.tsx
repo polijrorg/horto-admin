@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -37,15 +36,13 @@ export const getColumns = (
         title: 'Já utilizou Cupons?',
         dataIndex: 'title',
         key: 'title',
-        render: (text: string) => <span>Sim</span>
+        render: () => <span>Sim</span>
     },
     {
         title: UserType === 'adm' ? 'Preferência' : 'Cliente Repetido',
         dataIndex: 'text',
         key: 'text',
-        render: (text: string) => (
-            <span>{UserType === 'adm' ? 'Vestúario' : 'não'}</span>
-        )
+        render: () => <span>{UserType === 'adm' ? 'Vestúario' : 'não'}</span>
     },
     {
         title: UserType === 'adm' ? 'Último acesso' : 'Última Compra',

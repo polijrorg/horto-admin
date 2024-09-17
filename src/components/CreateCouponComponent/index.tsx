@@ -28,7 +28,6 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
     const [selectedValue, setSelectedValue] = React.useState(
         initialValues?.style !== undefined ? initialValues?.style : 'news'
     );
-    const [loading, setLoading] = React.useState(false);
 
     const handleClick = (value: string) => {
         setSelectedValue(value);
@@ -37,7 +36,6 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
     const onFinish = async (values: any) => {
         if (initialValues !== undefined) {
             try {
-                setLoading(true);
                 await PostService.updatePost(initialValues.id, {
                     title: values.title,
                     text: values.text,
@@ -61,6 +59,8 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                 });
                 console.log(response);
                 handleMenuClick('Posts');
+                return;
+                handleClick(`none`);
             } catch (error) {
                 console.log(error);
             }

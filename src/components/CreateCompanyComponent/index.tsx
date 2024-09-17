@@ -28,7 +28,6 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
     const [selectedValue, setSelectedValue] = React.useState(
         initialValues?.style !== undefined ? initialValues?.style : 'news'
     );
-    const [loading, setLoading] = React.useState(false);
 
     const handleClick = (value: string) => {
         setSelectedValue(value);
@@ -37,16 +36,13 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
     const onFinish = async (values: any) => {
         if (initialValues !== undefined) {
             try {
-                const response = await PostService.updatePost(
-                    initialValues.id,
-                    {
-                        title: values.title,
-                        text: values.text,
-                        link: values.link,
-                        image: 'www.linkteste.com',
-                        style: selectedValue
-                    }
-                );
+                await PostService.updatePost(initialValues.id, {
+                    title: values.title,
+                    text: values.text,
+                    link: values.link,
+                    image: 'www.linkteste.com',
+                    style: selectedValue
+                });
                 handleMenuClick('Posts');
             } catch (error) {
                 console.log('error');
@@ -62,6 +58,8 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                 });
                 console.log(response);
                 handleMenuClick('Posts');
+                return;
+                handleClick(`none`);
             } catch (error) {
                 console.log(error);
             }
@@ -265,7 +263,6 @@ const CreateCompanyComponent: React.FC<PostComponentProps> = ({
                                         fontWeight: 'bold',
                                         width: '100%'
                                     }}
-                                    loading={loading}
                                 >
                                     CONFIRMAR
                                 </Button>

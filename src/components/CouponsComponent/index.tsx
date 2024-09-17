@@ -1,14 +1,18 @@
 import React from 'react';
 import { Card, Typography, Button } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Company } from 'interfaces/Companies';
+import { Coupon } from 'interfaces/Coupons';
 import * as S from './styles';
 
 const { Text } = Typography;
 
+interface InitialValuesProps {
+    coupons: Coupon[];
+}
+
 interface MenuComponentProps {
     handleMenuClick: (key: string) => void;
-    initialValues?: Company;
+    initialValues?: InitialValuesProps;
 }
 
 const CouponsComponent: React.FC<MenuComponentProps> = ({
