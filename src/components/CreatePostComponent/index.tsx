@@ -1,68 +1,51 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 import PostService from 'services/PostsService';
+import ImagePicker from 'components/RealComponents/ImagePiker';
+import { IPostRequest } from 'interfaces/Posts';
 import * as S from './styles';
 
-interface InitialValuesProps {
-    id: string;
-    style: string;
-    image: string;
-    title: string;
-    text: string;
-    link: string;
+const StylesOpitions = ['noticia', 'carrousel', 'coluna'];
+
+interface CreatePostComponentProps {
+    handleMenuClick: (menu: string) => void;
+    initialValues?: Partial<IPostRequest>;
 }
 
-interface PostComponentProps {
-    handleMenuClick: (key: string) => void;
-    initialValues?: InitialValuesProps;
-}
-
-const CreatePostComponent: React.FC<PostComponentProps> = ({
+const CreatePostComponent: React.FC<CreatePostComponentProps> = ({
     handleMenuClick,
     initialValues
 }) => {
     const [form] = Form.useForm();
-    const [selectedValue, setSelectedValue] = React.useState(
-        initialValues?.style !== undefined ? initialValues?.style : 'news'
+    const [selectedValue, setSelectedValue] = useState(
+        initialValues?.style || StylesOpitions[0]
     );
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleClick = (value: string) => {
-        setSelectedValue(value);
-    };
+    const [selectedImage, setSelectedImage] = useState<File | null>(
+        initialValues?.image || null
+    );
 
-    const onFinish = async (values: any) => {
-        if (initialValues !== undefined) {
-            try {
-                setLoading(true);
-                await PostService.updatePost(initialValues.id, {
-                    title: values.title,
-                    text: values.text,
-                    link: values.link,
-                    image: 'www.linkteste.com',
-                    style: selectedValue
-                });
+    const onFinish = async (values: IPostRequest) => {
+        try {
+            setLoading(true);
+            const postData: IPostRequest = {
+                ...values,
+                image: selectedImage,
+                style: selectedValue
+            };
 
-                handleMenuClick('Posts');
-            } catch (error) {
-                console.log('error');
+            if (initialValues?.id) {
+                await PostService.updatePost(initialValues.id, postData);
+            } else {
+                await PostService.CreatePost(postData);
             }
-        } else {
-            try {
-                const response = await PostService.CreatePost({
-                    title: values.title,
-                    text: values.text,
-                    link: values.link,
-                    image: 'www.linkteste.com',
-                    style: selectedValue
-                });
-                console.log(response);
-                handleMenuClick('Posts');
-            } catch (error) {
-                console.log(error);
-            }
+
+            handleMenuClick('Posts');
+        } catch (error) {
+            console.error('Erro ao salvar o post:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -74,6 +57,7 @@ const CreatePostComponent: React.FC<PostComponentProps> = ({
                     form={form}
                     layout="vertical"
                     onFinish={onFinish}
+                    initialValues={initialValues}
                     style={{
                         backgroundColor: '#fcfcfc',
                         padding: 56,
@@ -85,6 +69,48 @@ const CreatePostComponent: React.FC<PostComponentProps> = ({
                     }}
                 >
                     <S.Wrapper>
+                        {(selectedValue === StylesOpitions[0] ||
+                            selectedValue === StylesOpitions[1]) && (
+                            <>
+                                <Typography.Title level={5}>
+                                    Link
+                                </Typography.Title>
+                                <Form.Item
+                                    name="link"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Por favor, insira um link'
+                                        }
+                                    ]}
+                                >
+                                    <Input style={{ borderRadius: 50 }} />
+                                </Form.Item>
+                            </>
+                        )}
+
+                        {(selectedValue === StylesOpitions[0] ||
+                            selectedValue === StylesOpitions[2]) && (
+                            <ImagePicker onImageSelect={setSelectedImage} />
+                        )}
+                    </S.Wrapper>
+
+                    <S.Wrapper>
+                        <Form.Item>
+                            <S.ButtonGroup>
+                                {StylesOpitions.map((type) => (
+                                    <S.RadioButton
+                                        key={type}
+                                        type="button"
+                                        selected={selectedValue === type}
+                                        onClick={() => setSelectedValue(type)}
+                                    >
+                                        {type.toUpperCase()}
+                                    </S.RadioButton>
+                                ))}
+                            </S.ButtonGroup>
+                        </Form.Item>
+
                         <Typography.Title level={5}>Título</Typography.Title>
                         <Form.Item
                             name="title"
@@ -94,10 +120,10 @@ const CreatePostComponent: React.FC<PostComponentProps> = ({
                                     message: 'Por favor, insira um título'
                                 }
                             ]}
-                            initialValue={initialValues?.title}
                         >
                             <Input style={{ borderRadius: 50 }} />
                         </Form.Item>
+
                         <Typography.Title level={5}>Texto</Typography.Title>
                         <Form.Item
                             name="text"
@@ -107,59 +133,13 @@ const CreatePostComponent: React.FC<PostComponentProps> = ({
                                     message: 'Por favor, insira um texto'
                                 }
                             ]}
-                            initialValue={initialValues?.text}
                         >
                             <Input.TextArea
                                 style={{ borderRadius: 16 }}
                                 rows={10}
                             />
                         </Form.Item>
-                        <Typography.Title level={5}>Link</Typography.Title>
-                        <Form.Item
-                            name="link"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, insira um link'
-                                }
-                            ]}
-                            initialValue={initialValues?.link}
-                        >
-                            <Input style={{ borderRadius: 50 }} />
-                        </Form.Item>
-                    </S.Wrapper>
-                    <S.Wrapper style={{ alignItems: 'center' }}>
-                        <Typography.Title level={5}>
-                            Adicionar Imagem
-                        </Typography.Title>
-                        <S.ContentImg>
-                            <S.BannerImg src="assets/images/photo-camera.png" />
-                        </S.ContentImg>
-                        <Form.Item>
-                            <S.ButtonGroup>
-                                <S.RadioButton
-                                    type="button"
-                                    selected={selectedValue === 'news'}
-                                    onClick={() => handleClick('news')}
-                                >
-                                    NOTÍCIA
-                                </S.RadioButton>
-                                <S.RadioButton
-                                    type="button"
-                                    selected={selectedValue === 'carrousel'}
-                                    onClick={() => handleClick('carrousel')}
-                                >
-                                    CARROSSEL
-                                </S.RadioButton>
-                                <S.RadioButton
-                                    type="button"
-                                    selected={selectedValue === 'column'}
-                                    onClick={() => handleClick('column')}
-                                >
-                                    COLUNA
-                                </S.RadioButton>
-                            </S.ButtonGroup>
-                        </Form.Item>
+
                         <Form.Item>
                             <Button
                                 type="primary"

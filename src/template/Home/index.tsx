@@ -147,7 +147,7 @@ const AdminDashboard: React.FC = () => {
             case 'Coupons':
                 return (
                     <CouponsComponent
-                        handleMenuClick={handleMenuClick}
+                        handleMenuClick={handleViewWithValues}
                         initialValues={viewValues}
                     />
                 );
@@ -176,7 +176,7 @@ const AdminDashboard: React.FC = () => {
                         background: '#F8C687'
                     }}
                 >
-                    Horto Club
+                    O Clube ADM Dashboard
                 </div>
                 <Menu
                     onClick={() =>

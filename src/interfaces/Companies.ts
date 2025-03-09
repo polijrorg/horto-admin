@@ -1,3 +1,5 @@
+import { Coupon } from './Coupons';
+
 export interface Address {
     id: string;
     street: string;
@@ -18,7 +20,10 @@ export interface Company {
     image: string;
     subscriptionPlan: string;
     branch: string;
+    planExpirationDate: string;
     address: Address;
+    coupons: Coupon[];
+    linkImage: string;
 }
 
 export interface ICompanyRequest {

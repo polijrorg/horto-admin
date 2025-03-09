@@ -50,7 +50,7 @@ export const getColumns = (
         title: 'Imagem',
         dataIndex: 'image',
         key: 'image',
-        render: (text: number) => <span>{text}</span>
+        render: (text: string) => <span>{text}</span>
     },
     {
         title: 'Data',
@@ -74,7 +74,7 @@ export const getColumns = (
                     onClick={() => handleEdit(record)}
                 />
                 <Popconfirm
-                    title="Tem certeza que deseja excluir este usuário?"
+                    title="Tem certeza que deseja excluir este Post?"
                     onConfirm={() => handleDelete(record.id)}
                     okText="Sim"
                     cancelText="Cancelar"
