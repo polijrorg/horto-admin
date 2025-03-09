@@ -75,7 +75,7 @@ const Login = () => {
                                 }
                             />
                         </Form.Item>
-                        <Form.Item>
+                        {/* <Form.Item>
                             <a
                                 href="#"
                                 style={{
@@ -86,7 +86,7 @@ const Login = () => {
                             >
                                 Esqueci minha senha
                             </a>
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item>
                             <Button
                                 type="primary"
@@ -100,14 +100,6 @@ const Login = () => {
                             >
                                 CONTINUAR
                             </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <div style={{ textAlign: 'center' }}>
-                                <span>Não tem uma conta? </span>
-                                <a href="#" style={{ color: '#CC8D3E' }}>
-                                    Cadastra-se
-                                </a>
-                            </div>
                         </Form.Item>
                     </Form>
                 </S.RightSide>

@@ -35,7 +35,7 @@ const PostsComponent: React.FC<PostComponentProps> = ({
         handleViewWithValues('PostCreate', {
             id: post.id,
             style: post.style,
-            image: post.image,
+            image: post.linkImage,
             title: post.title,
             text: post.text,
             link: post.link

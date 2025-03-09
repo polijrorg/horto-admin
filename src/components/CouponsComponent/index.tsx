@@ -2,17 +2,14 @@ import React from 'react';
 import { Card, Typography, Button } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Coupon } from 'interfaces/Coupons';
+import { Company } from 'interfaces/Companies';
 import * as S from './styles';
 
 const { Text } = Typography;
 
-interface InitialValuesProps {
-    coupons: Coupon[];
-}
-
 interface MenuComponentProps {
-    handleMenuClick: (key: string) => void;
-    initialValues?: InitialValuesProps;
+    handleMenuClick: (key: string, value: Coupon | string | undefined) => void;
+    initialValues?: Company;
 }
 
 const CouponsComponent: React.FC<MenuComponentProps> = ({
@@ -40,7 +37,9 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
                         fontSize: '32px',
                         color: '#CC8D3E'
                     }}
-                    onClick={() => handleMenuClick('CupomCreate')}
+                    onClick={() =>
+                        handleMenuClick('CupomCreate', initialValues?.id)
+                    }
                 />
             </div>
             <div
@@ -65,6 +64,9 @@ const CouponsComponent: React.FC<MenuComponentProps> = ({
                                 <Button
                                     shape="circle"
                                     icon={<EditOutlined />}
+                                    onClick={() =>
+                                        handleMenuClick('CupomCreate', coupon)
+                                    }
                                     style={{
                                         backgroundColor: '#CC8D3E',
                                         borderColor: '#CC8D3E',

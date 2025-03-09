@@ -2,68 +2,48 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { Form, Input, Button, Typography } from 'antd';
-import PostService from 'services/PostsService';
+import {
+    Form,
+    Input,
+    Button,
+    Typography,
+    Select,
+    DatePicker,
+    Checkbox
+} from 'antd';
+import CouponServices from 'services/CouponServices';
+import { Coupon, ICouponRequest } from 'interfaces/Coupons';
 import * as S from './styles';
 
-interface InitialValuesProps {
-    id: string;
-    style: string;
-    image: string;
-    title: string;
-    text: string;
-    link: string;
-}
+const { Option } = Select;
 
-interface PostComponentProps {
+interface CouponComponentProps {
     handleMenuClick: (key: string) => void;
-    initialValues?: InitialValuesProps;
+    initialValues?: Coupon;
 }
 
-const CreateCouponComponent: React.FC<PostComponentProps> = ({
+const CreateCouponComponent: React.FC<CouponComponentProps> = ({
     handleMenuClick,
     initialValues
 }) => {
     const [form] = Form.useForm();
-    const [selectedValue, setSelectedValue] = React.useState(
-        initialValues?.style !== undefined ? initialValues?.style : 'news'
-    );
-
-    const handleClick = (value: string) => {
-        setSelectedValue(value);
-    };
 
     const onFinish = async (values: any) => {
-        if (initialValues !== undefined) {
-            try {
-                await PostService.updatePost(initialValues.id, {
-                    title: values.title,
-                    text: values.text,
-                    link: values.link,
-                    image: 'www.linkteste.com',
-                    style: selectedValue
-                });
+        const formattedValues: ICouponRequest = {
+            ...values,
+            expirationDate: values.expirationDate.toISOString(),
+            active: values.active ?? true
+        };
 
-                handleMenuClick('Posts');
-            } catch (error) {
-                console.log('error');
+        try {
+            if (initialValues && typeof initialValues === 'object') {
+                await CouponServices.update(formattedValues);
+            } else {
+                await CouponServices.create(formattedValues);
             }
-        } else {
-            try {
-                const response = await PostService.CreatePost({
-                    title: values.title,
-                    text: values.text,
-                    link: values.link,
-                    image: 'www.linkteste.com',
-                    style: selectedValue
-                });
-                console.log(response);
-                handleMenuClick('Posts');
-                return;
-                handleClick(`none`);
-            } catch (error) {
-                console.log(error);
-            }
+            handleMenuClick('Posts');
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -75,6 +55,19 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                     form={form}
                     layout="vertical"
                     onFinish={onFinish}
+                    initialValues={{
+                        ...(typeof initialValues === 'object'
+                            ? initialValues
+                            : {}),
+                        expirationDate:
+                            typeof initialValues === 'object'
+                                ? initialValues.expirationDate
+                                : undefined,
+                        active:
+                            typeof initialValues === 'object'
+                                ? initialValues.active
+                                : true
+                    }}
                     style={{
                         backgroundColor: '#fcfcfc',
                         padding: '24px 0px',
@@ -92,14 +85,13 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                             Nome do Cupom:
                         </Typography.Title>
                         <Form.Item
-                            name="title"
+                            name="name"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira um título'
+                                    message: 'Por favor, insira o nome do cupom'
                                 }
                             ]}
-                            initialValue={initialValues?.title}
                         >
                             <Input
                                 style={{
@@ -108,6 +100,7 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                                 }}
                             />
                         </Form.Item>
+
                         <Typography.Title
                             style={{ color: '#CC8D3E', fontSize: 18 }}
                             level={5}
@@ -119,66 +112,22 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Por favor, insira o tipo do cupom'
-                                }
-                            ]}
-                            initialValue={initialValues?.title}
-                        >
-                            <Input
-                                style={{
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            />
-                        </Form.Item>
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Recompensa do cupom:
-                        </Typography.Title>
-                        <Form.Item
-                            name="reward"
-                            rules={[
-                                {
-                                    required: true,
                                     message:
-                                        'Por favor, insira a recompensa do cupom'
+                                        'Por favor, selecione o tipo do cupom'
                                 }
                             ]}
-                            initialValue={initialValues?.title}
                         >
-                            <Input
+                            <Select
                                 style={{
                                     borderRadius: 50,
                                     background: '#F8F9FA'
                                 }}
-                            />
+                            >
+                                <Option value="BASIC">BASIC</Option>
+                                <Option value="PREMIUM">PREMIUM</Option>
+                            </Select>
                         </Form.Item>
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Regras para resgate do cupom:
-                        </Typography.Title>
-                        <Form.Item
-                            name="rules"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Por favor, insira as regras para resgate do cupom'
-                                }
-                            ]}
-                            initialValue={initialValues?.title}
-                        >
-                            <Input
-                                style={{
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            />
-                        </Form.Item>
+
                         <Typography.Title
                             style={{ color: '#CC8D3E', fontSize: 18 }}
                             level={5}
@@ -194,7 +143,31 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                                         'Por favor, insira a data de validade do cupom'
                                 }
                             ]}
-                            initialValue={initialValues?.title}
+                        >
+                            <DatePicker
+                                style={{
+                                    width: '100%',
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
+                        </Form.Item>
+
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Recompensa do Cupom:
+                        </Typography.Title>
+                        <Form.Item
+                            name="reward"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Por favor, insira a recompensa do cupom'
+                                }
+                            ]}
                         >
                             <Input
                                 style={{
@@ -203,9 +176,64 @@ const CreateCouponComponent: React.FC<PostComponentProps> = ({
                                 }}
                             />
                         </Form.Item>
+
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Pagamento:
+                        </Typography.Title>
+                        <Form.Item
+                            name="payment"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Por favor, insira o valor do pagamento'
+                                }
+                            ]}
+                        >
+                            <Input
+                                style={{
+                                    borderRadius: 50,
+                                    background: '#F8F9FA'
+                                }}
+                            />
+                        </Form.Item>
+
+                        <Typography.Title
+                            style={{ color: '#CC8D3E', fontSize: 18 }}
+                            level={5}
+                        >
+                            Regras para Resgate:
+                        </Typography.Title>
+                        <Form.Item
+                            name="rules"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Por favor, insira as regras para resgate do cupom'
+                                }
+                            ]}
+                        >
+                            <Input.TextArea
+                                style={{
+                                    borderRadius: 20,
+                                    background: '#F8F9FA'
+                                }}
+                                rows={4}
+                            />
+                        </Form.Item>
+
+                        <Form.Item name="active" valuePropName="checked">
+                            <Checkbox defaultChecked>Ativo</Checkbox>
+                        </Form.Item>
                     </S.Wrapper>
+
                     <S.ContentButtons>
                         <Button
+                            onClick={() => handleMenuClick('homeAdm')}
                             style={{
                                 color: '#000',
                                 backgroundColor: '#F8F9FA',

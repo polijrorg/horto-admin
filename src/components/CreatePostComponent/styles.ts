@@ -73,14 +73,3 @@ export const Wrapper = styled.div`
     justify-content: center;
     padding: 0px 100px;
 `;
-
-export const BannerImg = styled.img`
-    width: 100%;
-    height: 100%;
-`;
-
-export const ContentImg = styled.div`
-    width: 304px;
-    height: 304px;
-    margin-bottom: 24px;
-`;
