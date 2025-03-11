@@ -1,216 +1,143 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
-import { Layout, Menu } from 'antd';
-import { HomeOutlined } from '@ant-design/icons';
-import Loading from 'components/LoadingComponent';
-import MenuAdmComponent from 'components/MenuAdmComponent';
-import PostsComponent from 'components/PostsComponent';
-import CreatePost from 'components/CreatePostComponent';
-import CompaniesComponent from 'components/CompaniesComponent';
-import CreateCompanyComponent from 'components/CreateCompanyComponent';
-import EventsComponent from 'components/EventsComponent';
-import CouponsComponent from 'components/CouponsComponent';
-import UsersComponent from 'components/UsersComponent';
-import ShowUsersComponent from 'components/ShowUsersComponent';
+import React from 'react';
+import { Card } from 'antd';
+import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
-import MenuCompanyComponent from 'components/MenuCompanyComponent';
-import PlansComponent from 'components/PlansComponent';
-import CreateCouponComponent from 'components/CreateCouponComponent';
+import * as S from './styles';
 
-const { Header, Sider, Content } = Layout;
+const HomePage = () => {
+    const router = useRouter();
 
-const AdminDashboard: React.FC = () => {
-    const [UserType, setUserType] = useState('');
-    const [currentView, setCurrentView] = useState<
-        | 'homeAdm'
-        | 'homeCompany'
-        | 'Posts'
-        | 'PostCreate'
-        | 'Companies'
-        | 'CompanyCreate'
-        | 'Events'
-        | 'Coupons'
-        | 'Users'
-        | 'ShowUsers'
-        | 'Plans'
-        | 'CupomCreate'
-        | null
-    >('homeAdm');
-
-    useEffect(() => {
-        const setType = () => {
-            const cookies = parseCookies();
-            const cookiestype = cookies['@app:userType'];
-            setUserType(cookiestype);
-            setCurrentView(cookiestype === 'adm' ? 'homeAdm' : 'homeCompany');
-        };
-
-        setType();
-    }, []);
-    const [viewValues, setViewValues] = useState<any>(undefined);
-    const [loading, setLoading] = useState(false);
-
-    const handleMenuClick = (key: string) => {
-        setLoading(true);
-        setViewValues(undefined);
-        setCurrentView(
-            key as
-                | 'homeAdm'
-                | 'homeCompany'
-                | 'Posts'
-                | 'PostCreate'
-                | 'Companies'
-                | 'CompanyCreate'
-                | 'Events'
-                | 'Coupons'
-                | 'Users'
-                | 'Plans'
-                | 'CupomCreate'
-        );
-        setLoading(false);
+    // Função para navegar para outras páginas
+    const navigateToPage = (key: string) => {
+        router.push(key);
     };
 
-    const handleViewWithValues = (key: string, values: any) => {
-        setLoading(true);
-        setViewValues(values);
-        setCurrentView(
-            key as
-                | 'homeAdm'
-                | 'homeCompany'
-                | 'Posts'
-                | 'PostCreate'
-                | 'Companies'
-                | 'CompanyCreate'
-                | 'Events'
-                | 'Coupons'
-                | 'Users'
-                | 'ShowUsers'
-                | 'Plans'
-                | 'CupomCreate'
-        );
-        setLoading(false);
-    };
-
-    const renderComponent = () => {
-        switch (currentView) {
-            case 'homeAdm':
-                return <MenuAdmComponent handleMenuClick={handleMenuClick} />;
-            case 'homeCompany':
-                return (
-                    <MenuCompanyComponent handleMenuClick={handleMenuClick} />
-                );
-            case 'Posts':
-                return (
-                    <PostsComponent
-                        handleMenuClick={handleMenuClick}
-                        handleViewWithValues={handleViewWithValues}
-                    />
-                );
-            case 'PostCreate':
-                return (
-                    <CreatePost
-                        handleMenuClick={handleMenuClick}
-                        initialValues={viewValues}
-                    />
-                );
-            case 'ShowUsers':
-                return (
-                    <ShowUsersComponent
-                        handleMenuClick={handleMenuClick}
-                        initialValues={viewValues}
-                    />
-                );
-            case 'Companies':
-                return (
-                    <CompaniesComponent
-                        handleMenuClick={handleMenuClick}
-                        handleViewWithValues={handleViewWithValues}
-                    />
-                );
-            case 'Users':
-                return (
-                    <UsersComponent
-                        initialValues={{
-                            UserType
-                        }}
-                        handleViewWithValues={handleViewWithValues}
-                    />
-                );
-            case 'CompanyCreate':
-                return (
-                    <CreateCompanyComponent handleMenuClick={handleMenuClick} />
-                );
-            case 'Events':
-                return <EventsComponent handleMenuClick={handleMenuClick} />;
-            case 'Plans':
-                return <PlansComponent handleMenuClick={handleMenuClick} />;
-            case 'Coupons':
-                return (
-                    <CouponsComponent
-                        handleMenuClick={handleViewWithValues}
-                        initialValues={viewValues}
-                    />
-                );
-            case 'CupomCreate':
-                return (
-                    <CreateCouponComponent
-                        handleMenuClick={handleMenuClick}
-                        initialValues={viewValues}
-                    />
-                );
-            default:
-                return <div>Página não encontrada</div>;
-        }
-    };
+    // Verifica se o usuário é um administrador
+    const cookies = parseCookies();
+    const userType = cookies['@app:userType'];
+    const isAdmin = userType && userType === 'adm';
 
     return (
-        <Layout style={{ height: '100vh' }}>
-            <Sider style={{ background: '#FCFCFC' }}>
-                <div
-                    className="logo"
-                    style={{
-                        padding: '20px',
-                        color: 'black',
-                        fontWeight: 'bold',
-                        fontSize: '18px',
-                        background: '#F8C687'
-                    }}
-                >
-                    O Clube ADM Dashboard
-                </div>
-                <Menu
-                    onClick={() =>
-                        handleMenuClick(
-                            UserType === 'adm' ? 'homeAdm' : 'homeCompany'
-                        )
-                    }
-                    style={{ background: '#F6F6F6' }}
-                    mode="inline"
-                >
-                    <Menu.Item key="1" icon={<HomeOutlined />}>
-                        Home
-                    </Menu.Item>
-                </Menu>
-            </Sider>
-            <Layout className="site-layout">
-                <Header
-                    className="site-layout-background"
-                    style={{
-                        padding: 0,
-                        background:
-                            'linear-gradient(90deg, #F8C687 0%, #CC8D3E 100%)'
-                    }}
-                />
-                {loading ? (
-                    <Loading />
+        <S.LayoutBackground>
+            <h2>{isAdmin ? 'Área do Administrador' : 'Área Empresarial'}</h2>
+            <S.CardContainer>
+                {isAdmin ? (
+                    // Cards para administrador
+                    <>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '300px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="Icone para aba de clientes"
+                                        src="assets/icons/data_visualiation_graph.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Users')}
+                        >
+                            <Card.Meta title="Análise de Usuário" />
+                        </S.StyledCard>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '300px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="Icone para aba de empresas"
+                                        src="assets/icons/management.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Companies')}
+                        >
+                            <Card.Meta title="Gerenciar Empresas" />
+                        </S.StyledCard>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '300px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="Icone para a aba de eventos"
+                                        src="assets/icons/events.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Events')}
+                        >
+                            <Card.Meta title="Gerenciar Eventos" />
+                        </S.StyledCard>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '300px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="icone para aba de posts"
+                                        src="assets/icons/Story.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Posts')}
+                        >
+                            <Card.Meta title="Gerenciar Posts" />
+                        </S.StyledCard>
+                    </>
                 ) : (
-                    <Content style={{ margin: '16px' }}>
-                        {renderComponent()}
-                    </Content>
+                    // Cards para empresa
+                    <>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '400px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="icone para a aba de usuarios"
+                                        src="assets/icons/data_visualiation_graph.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Users')}
+                        >
+                            <Card.Meta title="Análise de Clientes" />
+                        </S.StyledCard>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '400px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="icone para a aba de novo cupom"
+                                        src="assets/icons/mdi_coupon.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Companies')}
+                        >
+                            <Card.Meta title="Solicitar inclusão de Novo Cupom" />
+                        </S.StyledCard>
+                        <S.StyledCard
+                            hoverable
+                            style={{ width: '400px' }}
+                            cover={
+                                <S.CardImageContainer>
+                                    <S.CardImage
+                                        alt="icone para aba de planos"
+                                        src="assets/icons/benefits-welfare.svg"
+                                    />
+                                </S.CardImageContainer>
+                            }
+                            onClick={() => navigateToPage('Plans')}
+                        >
+                            <Card.Meta title="Plano de Benefícios" />
+                        </S.StyledCard>
+                    </>
                 )}
-            </Layout>
-        </Layout>
+            </S.CardContainer>
+        </S.LayoutBackground>
     );
 };
 
-export default AdminDashboard;
+export default HomePage;

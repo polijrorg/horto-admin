@@ -4,15 +4,16 @@
 import router from 'next/router';
 import { Form, Input, Button, Typography, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import UserService from 'services/UserService';
+import useAuth from 'hooks/useAuth';
 import * as S from './styles';
 
 const Login = () => {
     const [messageApi, contextHolder] = message.useMessage();
+    const { login } = useAuth();
 
     const onFinish = async (values: any) => {
         try {
-            await UserService.login(values);
+            await login(values);
             router.push('/Home');
         } catch (error) {
             messageApi.open({
