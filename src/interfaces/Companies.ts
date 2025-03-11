@@ -1,16 +1,5 @@
 import { Coupon } from './Coupons';
-
-export interface Address {
-    id: string;
-    street: string;
-    numberHouse: number;
-    neighborhood: string;
-    city: string;
-    state: string;
-    cep: string;
-    companyId: string;
-    userId: string | null;
-}
+import { Address } from './Address';
 
 export interface Company {
     id: string;
@@ -29,7 +18,7 @@ export interface Company {
 export interface ICompanyRequest {
     name: string;
     email: string;
-    image: string;
+    image: File;
     subscriptionPlan: string;
     branch: string;
     planExpirationDate: string;
