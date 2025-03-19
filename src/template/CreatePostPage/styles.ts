@@ -1,12 +1,14 @@
 import styled from 'styled-components';
+import { Button } from 'antd';
 
 export const ButtonGroup = styled.div`
     display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
 `;
 
 export const RadioButton = styled.button<{ selected?: boolean }>`
     border-radius: 30px;
-    margin-right: 16px;
     padding: 0 20px;
     height: 40px;
     display: flex;
@@ -17,17 +19,8 @@ export const RadioButton = styled.button<{ selected?: boolean }>`
     cursor: pointer;
     outline: none;
     width: 120px;
-
-    ${({ selected }) =>
-        selected
-            ? `
-      background-color: #CC8D3E;
-      color: white;
-    `
-            : `
-      background-color: #f5f5f5;
-      color: black;
-    `}
+    background-color: ${({ selected }) => (selected ? '#CC8D3E' : '#f5f5f5')};
+    color: ${({ selected }) => (selected ? 'white' : 'black')};
 
     &:hover {
         opacity: 0.8;
@@ -36,40 +29,44 @@ export const RadioButton = styled.button<{ selected?: boolean }>`
 
 export const Container = styled.div`
     width: 100%;
-    height: 98%;
-    margin: 0 auto;
+    min-height: 100vh;
     padding: 20px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+    background-color: #fcfcfc;
 `;
 
 export const FormContainer = styled.div`
     width: 100%;
-    height: 100%;
+    max-width: 800px;
+    padding: 56px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-export const ImageUploadContainer = styled.div`
-    width: 35%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`;
-
-export const ImageUploadBox = styled.div`
-    width: 100%;
-    height: 200px;
-    border: 2px dashed #ffa940;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
+export const Title = styled.h2`
+    margin-bottom: 24px;
+    font-size: 24px;
 `;
 
 export const Wrapper = styled.div`
-    width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0px 100px;
+`;
+
+export const ConfirmButton = styled(Button)`
+    width: 100%;
+    max-width: 300px;
+    border-radius: 50px;
+    background-color: #cc8d3e;
+    border-color: #cc8d3e;
+    font-weight: bold;
+
+    &:hover {
+        background-color: #b87d35 !important;
+        border-color: #b87d35 !important;
+    }
 `;

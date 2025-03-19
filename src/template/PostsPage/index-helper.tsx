@@ -4,33 +4,20 @@
 import React from 'react';
 import { Space, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { customFormatDate } from 'utils/dateUtil';
 import { Posts } from 'interfaces/Posts';
-
-function padToTwoDigits(number: number): string {
-    return number.toString().padStart(2, '0');
-}
-
-function customFormatDate(dateString: string): string {
-    const date = new Date(dateString);
-
-    const day = padToTwoDigits(date.getDate());
-    const month = padToTwoDigits(date.getMonth() + 1); // Os meses são baseados em zero
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-}
 
 export const getColumns = (
     handleEdit: (post: Posts) => void,
     handleDelete: (postId: string) => void
 ) => [
     {
-        title: 'Nome',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Detalhes',
+        dataIndex: 'id',
+        key: 'id',
         render: (_text: string, record: Posts) => (
             <a onClick={() => handleEdit(record)} key={record.id}>
-                HortoClub
+                Ver detalhes
             </a>
         )
     },
@@ -41,19 +28,26 @@ export const getColumns = (
         render: (text: string) => <span>{text}</span>
     },
     {
-        title: 'Texto',
-        dataIndex: 'text',
-        key: 'text',
+        title: 'Estilo',
+        dataIndex: 'style',
+        key: 'style',
         render: (text: string) => <span>{text}</span>
     },
     {
         title: 'Imagem',
-        dataIndex: 'image',
+        dataIndex: 'linkImage',
         key: 'image',
-        render: (text: string) => <span>{text}</span>
+        render: (text: string) =>
+            text === 'Post sem imagem' ? (
+                <span>Post sem imagem</span>
+            ) : (
+                <a href={text} target="_blank" rel="noopener noreferrer">
+                    link
+                </a>
+            )
     },
     {
-        title: 'Data',
+        title: 'Data de criação',
         dataIndex: 'created_at',
         key: 'created_at',
         render: (text: string) => {
