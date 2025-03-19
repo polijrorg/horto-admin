@@ -28,7 +28,7 @@ const EventsPage = () => {
         // Navega para a página de edição de eventos com os valores do evento
         router.push({
             pathname: 'CreateEvent',
-            query: { initialValues: JSON.stringify(event) }
+            query: { EventId: event.id }
         });
     };
 
