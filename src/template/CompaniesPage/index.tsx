@@ -26,10 +26,10 @@ const CompaniesPage = () => {
     }, []);
 
     const handleEdit = (company: Company) => {
-        // Navega para a página de cupons com os valores da empresa
+        // Navega para a página de cupons com id da empresa
         router.push({
             pathname: 'Coupons',
-            query: { initialValues: JSON.stringify(company) }
+            query: { companyId: company.id }
         });
     };
 

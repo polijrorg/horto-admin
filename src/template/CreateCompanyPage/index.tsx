@@ -29,9 +29,8 @@ const CreateCompanyPage = () => {
           ) as InitialValuesProps)
         : undefined;
 
-    const [selectedValue, setSelectedValue] = useState(
-        initialValues?.style !== undefined ? initialValues?.style : 'news'
-    );
+    const selectedValue =
+        initialValues?.style !== undefined ? initialValues?.style : 'news';
 
     const onFinish = async (values: any) => {
         if (initialValues !== undefined) {

@@ -11,6 +11,13 @@ export default class CompanyService {
         return response.data;
     }
 
+    static async GetCompanyById(companyId: string): Promise<Company> {
+        const response: AxiosResponse<Company> = await api.get(
+            `/companies/getById/${companyId}`
+        );
+        return response.data;
+    }
+
     static async CreateCompany(data: ICompanyRequest): Promise<Company> {
         const response: AxiosResponse<Company> = await api.post(
             '/companies/create',
