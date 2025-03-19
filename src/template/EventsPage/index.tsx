@@ -27,7 +27,7 @@ const EventsPage = () => {
     const handleEdit = (event: Event) => {
         // Navega para a página de edição de eventos com os valores do evento
         router.push({
-            pathname: 'CreateEvent',
+            pathname: 'EditEvent',
             query: { EventId: event.id }
         });
     };

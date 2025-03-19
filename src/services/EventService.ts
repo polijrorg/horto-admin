@@ -11,11 +11,31 @@ export default class EventService {
         return response.data;
     }
 
+    static async GetEventById(EventId: string): Promise<Event> {
+        const response: AxiosResponse<Event> = await api.get(
+            `/events/getById/${EventId}`
+        );
+
+        return response.data;
+    }
+
     static async CreateEvent(data: IEventRequest): Promise<Event> {
         const response: AxiosResponse<Event> = await api.post(
             '/events/create',
             data
         );
+        return response.data;
+    }
+
+    static async UpdateEvent(
+        EventId: string,
+        data: IEventRequest
+    ): Promise<Event> {
+        const response: AxiosResponse<Event> = await api.patch(
+            `/events/update/${EventId}`,
+            data
+        );
+
         return response.data;
     }
 

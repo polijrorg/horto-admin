@@ -12,7 +12,7 @@ export interface Event {
     rules: string;
     link: string;
     active: boolean;
-    address: Address;
+    address?: Address;
 }
 
 export interface IEventRequest {
@@ -25,5 +25,5 @@ export interface IEventRequest {
     rules: string;
     link: string;
     active: boolean;
-    address: AddressRequest;
+    address?: AddressRequest;
 }
