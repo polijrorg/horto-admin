@@ -1,12 +1,27 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { HomeOutlined } from '@ant-design/icons';
+import {
+    HomeOutlined,
+    PoweroffOutlined,
+    TeamOutlined,
+    CompassOutlined,
+    CalendarOutlined,
+    FileAddOutlined
+} from '@ant-design/icons';
 import { useRouter } from 'next/router';
+import useAuth from 'hooks/useAuth';
 
 const { Header, Sider, Content } = Layout;
 
 const AdminLayout: React.FC = ({ children }) => {
     const router = useRouter();
+
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    }
 
     return (
         <Layout style={{ height: '100%' }}>
@@ -30,6 +45,41 @@ const AdminLayout: React.FC = ({ children }) => {
                         onClick={() => router.push('/Home')}
                     >
                         Home
+                    </Menu.Item>
+                    <Menu.Item
+                        key="2"
+                        icon={<TeamOutlined />}
+                        onClick={() => router.push('/Users')}
+                    >
+                        Usuários
+                    </Menu.Item>
+                    <Menu.Item
+                        key="3"
+                        icon={<CompassOutlined />}
+                        onClick={() => router.push('/Companies')}
+                    >
+                        Empresas
+                    </Menu.Item>
+                    <Menu.Item
+                        key="4"
+                        icon={<CalendarOutlined />}
+                        onClick={() => router.push('/Events')}
+                    >
+                        Eventos
+                    </Menu.Item>
+                    <Menu.Item
+                        key="1"
+                        icon={<FileAddOutlined />}
+                        onClick={() => router.push('/Posts')}
+                    >
+                        Posts
+                    </Menu.Item>
+                    <Menu.Item
+                        key="8"
+                        icon={<PoweroffOutlined />}
+                        onClick={handleLogout}
+                    >
+                        Sair
                     </Menu.Item>
                 </Menu>
             </Sider>
