@@ -10,15 +10,19 @@ import { getColumns } from './index-helper';
 
 const PostsPage = () => {
     const [postsList, setPostsList] = useState<Posts[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
 
     useEffect(() => {
         const getPosts = async () => {
             try {
+                setLoading(true);
                 const response = await PostService.GetAll();
                 setPostsList(response);
             } catch (error) {
                 console.error('Failed to fetch posts:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -26,7 +30,6 @@ const PostsPage = () => {
     }, []);
 
     const handleEdit = (post: Posts) => {
-        // Navega para a página de edição de posts com os valores do post
         router.push({
             pathname: 'CreatePost',
             query: {
@@ -44,16 +47,18 @@ const PostsPage = () => {
 
     const handleDelete = async (id: string) => {
         try {
+            setLoading(true);
             await PostService.deletePost(id);
             const updatedPosts = await PostService.GetAll();
             setPostsList(updatedPosts);
         } catch (error) {
             console.error('Failed to delete post:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleCreatePost = () => {
-        // Navega para a página de criação de posts
         router.push('CreatePost');
     };
 
@@ -83,6 +88,7 @@ const PostsPage = () => {
                 columns={getColumns(handleEdit, handleDelete)}
                 dataSource={postsList}
                 rowKey="id"
+                loading={loading}
             />
         </>
     );

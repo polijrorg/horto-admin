@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Typography, Upload } from 'antd';
 import * as S from './styles';
 
 interface ImagePickerProps {
-    onImageSelect: (file: File) => void; // Agora retorna um arquivo em vez de string
+    onImageSelect: (file: File) => void;
+    initialImage?: string | null;
 }
 
-const ImagePicker: React.FC<ImagePickerProps> = ({ onImageSelect }) => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const ImagePicker: React.FC<ImagePickerProps> = ({
+    onImageSelect,
+    initialImage
+}) => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     const handleImageUpload = (info: any) => {
         const { file } = info;
         if (file) {
-            setSelectedFile(file);
             setPreviewUrl(URL.createObjectURL(file)); // Para exibir a imagem
             onImageSelect(file); // Passa o arquivo real, não o objeto com uid
         }
     };
 
-    // Debug para verificar quando o estado muda
-    useEffect(() => {
-        if (selectedFile) {
-            console.log('Novo arquivo armazenado:', selectedFile);
-        }
-    }, [selectedFile]);
-
+    console.log('previewUrl', previewUrl);
     return (
         <div>
             <Typography.Title level={5}>Adicionar Imagem</Typography.Title>
@@ -36,7 +32,11 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ onImageSelect }) => {
             >
                 <S.ContentImg>
                     <S.BannerImg
-                        src={previewUrl || 'assets/images/photo-camera.png'}
+                        src={
+                            previewUrl ||
+                            initialImage ||
+                            'assets/images/photo-camera.png'
+                        }
                     />
                 </S.ContentImg>
             </Upload>

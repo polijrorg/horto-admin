@@ -9,15 +9,19 @@ import { getColumns } from './index-helper';
 
 const EventsPage = () => {
     const [eventsList, setEventsList] = useState<Event[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
 
     useEffect(() => {
         const getEvents = async () => {
             try {
+                setLoading(true);
                 const response = await EventService.GetAll();
                 setEventsList(response);
             } catch (error) {
                 console.error('Failed to fetch events:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -25,7 +29,6 @@ const EventsPage = () => {
     }, []);
 
     const handleEdit = (event: Event) => {
-        // Navega para a página de edição de eventos com os valores do evento
         router.push({
             pathname: 'EditEvent',
             query: { EventId: event.id }
@@ -34,16 +37,18 @@ const EventsPage = () => {
 
     const handleDelete = async (id: string) => {
         try {
+            setLoading(true);
             await EventService.deleteEvent(id);
             const updatedEvents = await EventService.GetAll();
             setEventsList(updatedEvents);
         } catch (error) {
             console.error('Failed to delete event:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleCreateEvent = () => {
-        // Navega para a página de criação de eventos
         router.push('CreateEvent');
     };
 
@@ -73,6 +78,7 @@ const EventsPage = () => {
                 columns={getColumns(handleEdit, handleDelete)}
                 dataSource={eventsList}
                 rowKey="id"
+                loading={loading}
             />
         </>
     );
