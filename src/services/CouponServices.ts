@@ -1,29 +1,25 @@
 import { AxiosResponse } from 'axios';
-import { parseCookies } from 'nookies';
-import { ICouponRequest } from 'interfaces/Coupons';
+import { Coupon, ICouponRequest } from 'interfaces/Coupons';
 import api from './api';
 
 export default class CouponServices {
     static async create(data: ICouponRequest): Promise<ICouponRequest> {
-        const cookies = parseCookies();
-        const token = cookies['@app:token'];
         const response: AxiosResponse<ICouponRequest> = await api.post(
             '/coupons/create',
-            data,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
+            data
         );
         return response.data;
     }
 
-    static async update(data: ICouponRequest): Promise<UpdateRequest> {
-        const cookies = parseCookies();
-        const token = cookies['@app:token'];
-        const response: AxiosResponse<UpdateRequest> = await api.post(
-            `/coupons/update/${data.id}`,
+    static async update({
+        data,
+        couponId
+    }: {
+        data: ICouponRequest;
+        couponId: string;
+    }): Promise<UpdateRequest> {
+        const response: AxiosResponse<UpdateRequest> = await api.patch(
+            `/coupons/update/${couponId}`,
             {
                 name: data.name,
                 couponType: data.couponType,
@@ -32,13 +28,24 @@ export default class CouponServices {
                 payment: data.payment,
                 rules: data.rules,
                 active: data.active
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
             }
         );
         return response.data;
+    }
+
+    static async getCouponById(couponId: string): Promise<Coupon> {
+        try {
+            const response: AxiosResponse<Coupon> = await api.get(
+                `/coupons/getById/${couponId}`
+            );
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    static async delete(couponId: string): Promise<void> {
+        await api.delete(`/coupons/delete/${couponId}`);
     }
 }

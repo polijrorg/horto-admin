@@ -1,47 +1,42 @@
 import { AxiosResponse } from 'axios';
-import { parseCookies } from 'nookies';
 import { Posts, IPostRequest } from 'interfaces/Posts';
 import api from './api';
 
 export default class PostService {
     static async GetAll(): Promise<Posts[]> {
-        const cookies = parseCookies();
-        const token = cookies['@app:token'];
-        const response: AxiosResponse<Posts[]> = await api.get(
-            '/posts/getAll',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+        const response: AxiosResponse<Posts[]> = await api.get('/posts/getAll');
 
         return response.data;
     }
 
     static async CreatePost(data: IPostRequest): Promise<Posts> {
-        const cookies = parseCookies();
-        const token = cookies['@app:token'];
+        const formData = new FormData();
+
+        formData.append('style', data.style);
+        formData.append('title', data.title);
+        formData.append('text', data.text);
+        formData.append('link', data.link);
+
+        // Se houver uma imagem, adiciona ao FormData
+        if (data.image) {
+            formData.append('image', data.image);
+        }
+
         const response: AxiosResponse<Posts> = await api.post(
             '/posts/create',
-            data,
+            formData,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data'
                 }
             }
         );
+
         return response.data;
     }
 
     static async deletePost(id: string) {
-        const cookies = parseCookies();
-        const token = cookies['@app:token'];
-        const response = await api.delete(`/posts/delete/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const response = await api.delete(`/posts/delete/${id}`);
         return response.data;
     }
 
@@ -49,17 +44,26 @@ export default class PostService {
         postId: string,
         data: IPostRequest
     ): Promise<Posts> {
-        const cookies = parseCookies();
-        const token = cookies['@app:token'];
+        const formData = new FormData();
+        formData.append('style', data.style);
+        formData.append('title', data.title);
+        formData.append('text', data.text);
+        formData.append('link', data.link);
+
+        if (data.image) {
+            formData.append('image', data.image);
+        }
+
         const response: AxiosResponse<Posts> = await api.patch(
             `/posts/update/${postId}`,
-            data,
+            formData,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data'
                 }
             }
         );
+
         return response.data;
     }
 }

@@ -44,10 +44,10 @@ export const Container = styled.div`
     justify-content: center;
 `;
 
-export const FormContainer = styled.div`
-    width: 100%;
-    height: 100%;
-`;
+// export const FormContainer = styled.div`
+//     width: 100%;
+//     height: 100%;
+// `;
 
 export const ImageUploadContainer = styled.div`
     width: 35%;
@@ -91,4 +91,17 @@ export const ContentButtons = styled.div`
     bottom: 100px;
     display: flex;
     gap: 12px;
+`;
+
+export const PageContainer = styled.div`
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+`;
+
+export const FormContainer = styled.div`
+    background-color: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;

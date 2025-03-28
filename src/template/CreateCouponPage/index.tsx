@@ -1,19 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-import {
-    Form,
-    Input,
-    Button,
-    Typography,
-    Select,
-    DatePicker,
-    Checkbox
-} from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import CouponServices from 'services/CouponServices';
+import { Button, Form, Input, DatePicker, Select, message, Switch } from 'antd';
 import { Coupon, ICouponRequest } from 'interfaces/Coupons';
+import CouponServices from 'services/CouponServices';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import weekday from 'dayjs/plugin/weekday';
@@ -26,246 +15,190 @@ dayjs.extend(localeData);
 
 const { Option } = Select;
 
-const CreateCouponPage = () => {
-    const [form] = Form.useForm();
+const CreateCoupon = () => {
     const router = useRouter();
+    const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
+    const [initialValues, setInitialValues] = useState<Coupon | null>(null);
 
-    // Obtém os valores iniciais da rota (query parameters)
-    const initialValues = router.query.initialValues
-        ? (JSON.parse(router.query.initialValues as string) as Coupon)
-        : undefined;
+    // Obtém os parâmetros da query
+    const { companyId, couponId } = router.query;
 
-    const onFinish = async (values: any) => {
-        const formattedValues: ICouponRequest = {
-            ...values,
-            expirationDate: values.expirationDate.toISOString(),
-            active: values.active ?? true
-        };
+    // Carrega os dados iniciais se couponId estiver presente
+    useEffect(() => {
+        if (couponId) {
+            const fetchCoupon = async () => {
+                try {
+                    setLoading(true);
+                    const coupon = await CouponServices.getCouponById(
+                        couponId as string
+                    );
 
+                    // Convertendo a data para dayjs
+                    const formattedCoupon = {
+                        ...coupon,
+                        expirationDate: coupon.expirationDate
+                            ? dayjs(coupon.expirationDate)
+                            : null
+                    };
+
+                    setInitialValues(coupon);
+                    form.setFieldsValue(formattedCoupon);
+                } catch (error) {
+                    message.error('Erro ao carregar cupom.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchCoupon();
+        }
+    }, [couponId, form]);
+
+    // Função para lidar com a submissão do formulário
+    const handleSubmit = async (values: ICouponRequest) => {
         try {
-            if (initialValues && typeof initialValues === 'object') {
-                await CouponServices.update(formattedValues);
-            } else {
-                await CouponServices.create(formattedValues);
+            setLoading(true);
+
+            if (couponId) {
+                // Atualiza o cupom existente
+                await CouponServices.update({
+                    data: values,
+                    couponId: couponId as string
+                });
+                message.success('Cupom atualizado com sucesso!');
+            } else if (companyId) {
+                // Cria um novo cupom
+                await CouponServices.create({
+                    ...values,
+                    companyId: companyId as string
+                });
+                message.success('Cupom criado com sucesso!');
             }
-            router.push('Coupons'); // Navega para a página de Cupons após a criação/atualização
+
+            // Redireciona para a página de cupons após a criação/edição
+            router.push('/Companies');
         } catch (error) {
-            console.error(error);
+            message.error('Erro ao salvar cupom.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div style={{ height: '100%' }}>
-            <h2>Adicionar Cupom</h2>
-            <S.Container>
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={onFinish}
-                    initialValues={{
-                        ...(initialValues || {}),
-                        expirationDate: initialValues?.expirationDate
-                            ? dayjs(initialValues.expirationDate) // Converte a data corretamente
-                            : undefined,
-                        active: initialValues?.active ?? true
-                    }}
-                    style={{
-                        backgroundColor: '#fcfcfc',
-                        padding: '24px 0px',
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'start'
-                    }}
+        <S.PageContainer>
+            <h1>{couponId ? 'Editar Cupom' : 'Criar Cupom'}</h1>
+            <Form
+                form={form}
+                layout="vertical"
+                onFinish={handleSubmit}
+                initialValues={initialValues || undefined}
+            >
+                <Form.Item
+                    label="Nome"
+                    name="name"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, insira o nome do cupom!'
+                        }
+                    ]}
                 >
-                    <S.Wrapper>
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Nome do Cupom:
-                        </Typography.Title>
-                        <Form.Item
-                            name="name"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, insira o nome do cupom'
-                                }
-                            ]}
-                        >
-                            <Input
-                                style={{
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            />
-                        </Form.Item>
+                    <Input placeholder="Nome do cupom" />
+                </Form.Item>
 
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Tipo do Cupom:
-                        </Typography.Title>
-                        <Form.Item
-                            name="couponType"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Por favor, selecione o tipo do cupom'
-                                }
-                            ]}
-                        >
-                            <Select
-                                style={{
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            >
-                                <Option value="BASIC">BASIC</Option>
-                                <Option value="PREMIUM">PREMIUM</Option>
-                            </Select>
-                        </Form.Item>
+                <Form.Item
+                    label="Tipo de Cupom"
+                    name="couponType"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, selecione o tipo de cupom!'
+                        }
+                    ]}
+                >
+                    <Select placeholder="Selecione o tipo">
+                        <Option value="BASIC">BASIC</Option>
+                        <Option value="PREMIUM">PREMIUM</Option>
+                    </Select>
+                </Form.Item>
 
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Validade do Cupom:
-                        </Typography.Title>
-                        <Form.Item
-                            name="expirationDate"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Por favor, insira a data de validade do cupom'
-                                }
-                            ]}
-                        >
-                            <DatePicker
-                                style={{
-                                    width: '100%',
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            />
-                        </Form.Item>
+                <Form.Item
+                    label="Data de Expiração"
+                    name="expirationDate"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, selecione a data de expiração!'
+                        }
+                    ]}
+                >
+                    <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
 
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Recompensa do Cupom:
-                        </Typography.Title>
-                        <Form.Item
-                            name="reward"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Por favor, insira a recompensa do cupom'
-                                }
-                            ]}
-                        >
-                            <Input
-                                style={{
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            />
-                        </Form.Item>
+                <Form.Item
+                    label="Recompensa"
+                    name="reward"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, insira a recompensa!'
+                        }
+                    ]}
+                >
+                    <Input placeholder="Recompensa" />
+                </Form.Item>
 
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Pagamento:
-                        </Typography.Title>
-                        <Form.Item
-                            name="payment"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Por favor, insira o valor do pagamento'
-                                }
-                            ]}
-                        >
-                            <Input
-                                style={{
-                                    borderRadius: 50,
-                                    background: '#F8F9FA'
-                                }}
-                            />
-                        </Form.Item>
+                <Form.Item
+                    label="Pagamento"
+                    name="payment"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, insira o pagamento!'
+                        }
+                    ]}
+                >
+                    <Input placeholder="Pagamento" />
+                </Form.Item>
 
-                        <Typography.Title
-                            style={{ color: '#CC8D3E', fontSize: 18 }}
-                            level={5}
-                        >
-                            Regras para Resgate:
-                        </Typography.Title>
-                        <Form.Item
-                            name="rules"
-                            rules={[
-                                {
-                                    required: true,
-                                    message:
-                                        'Por favor, insira as regras para resgate do cupom'
-                                }
-                            ]}
-                        >
-                            <Input.TextArea
-                                style={{
-                                    borderRadius: 20,
-                                    background: '#F8F9FA'
-                                }}
-                                rows={4}
-                            />
-                        </Form.Item>
+                <Form.Item
+                    label="Regras"
+                    name="rules"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, insira as regras!'
+                        }
+                    ]}
+                >
+                    <Input.TextArea placeholder="Regras" />
+                </Form.Item>
 
-                        <Form.Item name="active" valuePropName="checked">
-                            <Checkbox defaultChecked>Ativo</Checkbox>
-                        </Form.Item>
-                    </S.Wrapper>
+                <Form.Item
+                    label="Ativo"
+                    name="active"
+                    valuePropName="checked"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, defina o status do cupom!'
+                        }
+                    ]}
+                >
+                    <Switch
+                        checkedChildren="Ativo"
+                        unCheckedChildren="Inativo"
+                    />
+                </Form.Item>
 
-                    <S.ContentButtons>
-                        <Button
-                            onClick={() => router.push('/Companies')}
-                            style={{
-                                color: '#000',
-                                backgroundColor: '#F8F9FA',
-                                fontWeight: 'bold',
-                                fontSize: 18,
-                                height: 48,
-                                padding: '8px 24px'
-                            }}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            block
-                            style={{
-                                color: '#000',
-                                backgroundColor: '#CC8D3E',
-                                fontWeight: 'bold',
-                                fontSize: 18,
-                                height: 48,
-                                padding: '8px 24px'
-                            }}
-                        >
-                            Adicionar
-                        </Button>
-                    </S.ContentButtons>
-                </Form>
-            </S.Container>
-        </div>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" loading={loading}>
+                        {couponId ? 'Atualizar Cupom' : 'Criar Cupom'}
+                    </Button>
+                </Form.Item>
+            </Form>
+        </S.PageContainer>
     );
 };
 
-export default CreateCouponPage;
+export default CreateCoupon;

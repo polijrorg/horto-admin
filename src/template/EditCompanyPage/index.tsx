@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Form,
     Input,
@@ -20,11 +20,63 @@ import * as S from './styles';
 const { Option } = Select;
 const { Text } = Typography;
 
-const CreateCompanyPage = () => {
+const EditCompanyPage = () => {
     const [form] = Form.useForm();
     const router = useRouter();
+    const { companyId } = router.query;
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
+    const [initialImage, setInitialImage] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchCompanyData = async () => {
+            if (companyId) {
+                setLoading(true);
+                try {
+                    const companylist = await CompanyService.GetAll();
+                    const company = companylist.find(
+                        (comp) => comp.id === companyId
+                    );
+
+                    console.log('company:', company);
+
+                    // Preenche o formulário com os dados da empresa
+                    if (company) {
+                        form.setFieldsValue({
+                            name: company.name,
+                            email: company.email,
+                            branch: company.branch,
+                            subscriptionPlan: company.subscriptionPlan,
+                            planExpirationDate: dayjs(
+                                company.planExpirationDate
+                            ),
+                            address: {
+                                street: company.address.street,
+                                numberHouse: company.address.numberHouse,
+                                neighborhood: company.address.neighborhood,
+                                city: company.address.city,
+                                state: company.address.state,
+                                cep: company.address.cep
+                            }
+                        });
+                    }
+
+                    // Armazena a imagem inicial se existir
+                    if (company?.linkImage) {
+                        setInitialImage(company.linkImage);
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar empresa:', error);
+                    message.error('Erro ao carregar dados da empresa');
+                    router.push('/Companies');
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchCompanyData();
+    }, [companyId, form, router]);
 
     const onFinish = async (values: ICompanyRequest) => {
         setLoading(true);
@@ -32,6 +84,7 @@ const CreateCompanyPage = () => {
             const companyData: ICompanyRequest = {
                 name: values.name,
                 email: values.email,
+                // Só envia a senha se foi alterada
                 password: values.password,
                 branch: values.branch,
                 subscriptionPlan: values.subscriptionPlan,
@@ -46,15 +99,19 @@ const CreateCompanyPage = () => {
                     state: values.address.state,
                     cep: values.address.cep
                 },
-                image: selectedImage
+                // Envia a nova imagem se foi selecionada, senão mantém a original
+                image: selectedImage || null
             };
 
-            await CompanyService.CreateCompany(companyData);
-            message.success('Empresa criada com sucesso!');
+            await CompanyService.UpdateCompany(
+                companyId as string,
+                companyData
+            );
+            message.success('Empresa atualizada com sucesso!');
             router.push('/Companies');
         } catch (error) {
-            console.error('Erro ao criar empresa:', error);
-            message.error('Ocorreu um erro ao criar a empresa');
+            console.error('Erro ao atualizar empresa:', error);
+            message.error('Ocorreu um erro ao atualizar a empresa');
         } finally {
             setLoading(false);
         }
@@ -67,21 +124,11 @@ const CreateCompanyPage = () => {
     return (
         <S.Container>
             <Typography.Title level={2} style={{ marginBottom: 24 }}>
-                Cadastro de Empresa
+                Editar Empresa
             </Typography.Title>
 
             <S.FormContainer>
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={onFinish}
-                    initialValues={{
-                        subscriptionPlan: 'basic',
-                        address: {
-                            state: 'SP'
-                        }
-                    }}
-                >
+                <Form form={form} layout="vertical" onFinish={onFinish}>
                     <Flex gap={40} style={{ width: '100%' }}>
                         {/* Coluna 1 - Dados da Empresa */}
                         <S.FormSection>
@@ -118,16 +165,10 @@ const CreateCompanyPage = () => {
                             </Form.Item>
 
                             <Form.Item
-                                label="Senha"
+                                label="Nova Senha (opcional)"
                                 name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Por favor, insira uma senha'
-                                    }
-                                ]}
                             >
-                                <Input.Password placeholder="Digite uma senha" />
+                                <Input.Password placeholder="Digite uma nova senha" />
                             </Form.Item>
 
                             <Form.Item
@@ -147,6 +188,7 @@ const CreateCompanyPage = () => {
                             <Form.Item label="Logo da Empresa">
                                 <ImagePicker
                                     onImageSelect={handleImageSelect}
+                                    initialImage={initialImage}
                                 />
                                 <Text type="secondary">
                                     Tamanho recomendado: 300x300px
@@ -292,7 +334,7 @@ const CreateCompanyPage = () => {
                             loading={loading}
                             style={{ width: 200 }}
                         >
-                            Cadastrar Empresa
+                            Atualizar Empresa
                         </Button>
                     </Form.Item>
                 </Form>
@@ -301,4 +343,4 @@ const CreateCompanyPage = () => {
     );
 };
 
-export default CreateCompanyPage;
+export default EditCompanyPage;

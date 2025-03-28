@@ -1,5 +1,5 @@
 import { Coupon } from './Coupons';
-import { Address } from './Address';
+import { Address, AddressRequest } from './Address';
 
 export interface Company {
     id: string;
@@ -18,16 +18,10 @@ export interface Company {
 export interface ICompanyRequest {
     name: string;
     email: string;
-    image: File;
+    password: string;
+    image: File | null;
     subscriptionPlan: string;
     branch: string;
     planExpirationDate: string;
-    address: {
-        street: string;
-        numberHouse: number;
-        neighborhood: string;
-        city: string;
-        state: string;
-        cep: string;
-    };
+    address: AddressRequest;
 }

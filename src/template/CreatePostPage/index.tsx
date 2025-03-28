@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Typography } from 'antd';
+import { Form, Input, Button, Typography, Upload, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import PostService from 'services/PostsService';
-import ImagePicker from 'components/ImagePiker';
 import { IPostRequest } from 'interfaces/Posts';
 import * as S from './styles';
 
-const StylesOpitions = ['noticia', 'carrousel', 'coluna'];
+const { TextArea } = Input;
+
+const StylesOptions = ['noticia', 'carrousel', 'coluna'];
 
 const CreatePostPage = () => {
     const [form] = Form.useForm();
@@ -20,18 +22,17 @@ const CreatePostPage = () => {
         : undefined;
 
     const [selectedValue, setSelectedValue] = useState(
-        initialValues?.style || StylesOpitions[0]
+        initialValues?.style || StylesOptions[0]
     );
     const [loading, setLoading] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<File | null>(
-        initialValues?.image || null
-    );
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
     const onFinish = async (values: IPostRequest) => {
         try {
             setLoading(true);
             const postData: IPostRequest = {
                 ...values,
+                text: values.text || '',
                 image: selectedImage,
                 style: selectedValue
             };
@@ -45,33 +46,77 @@ const CreatePostPage = () => {
             router.push('Posts'); // Navega para a página de posts após a criação/atualização
         } catch (error) {
             console.error('Erro ao salvar o post:', error);
+            message.error('Erro ao salvar o post');
         } finally {
             setLoading(false);
         }
     };
 
+    const handleImageChange = (file: File) => {
+        setSelectedImage(file);
+        return false; // Impede o upload automático
+    };
+
     return (
-        <div style={{ height: '100vh' }}>
-            <h2>Posts Ativos</h2>
-            <S.Container>
+        <S.Container>
+            <S.FormContainer>
+                <S.Title>
+                    {initialValues ? 'Editar Post' : 'Criar Novo Post'}
+                </S.Title>
                 <Form
                     form={form}
                     layout="vertical"
                     onFinish={onFinish}
                     initialValues={initialValues}
-                    style={{
-                        backgroundColor: '#fcfcfc',
-                        padding: 56,
-                        height: '100%',
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
                 >
                     <S.Wrapper>
-                        {(selectedValue === StylesOpitions[0] ||
-                            selectedValue === StylesOpitions[1]) && (
+                        <Form.Item>
+                            <S.ButtonGroup>
+                                {StylesOptions.map((type) => (
+                                    <S.RadioButton
+                                        key={type}
+                                        type="button"
+                                        selected={selectedValue === type}
+                                        onClick={() => setSelectedValue(type)}
+                                    >
+                                        {type.toUpperCase()}
+                                    </S.RadioButton>
+                                ))}
+                            </S.ButtonGroup>
+                        </Form.Item>
+                        <Typography.Title level={5}>Título</Typography.Title>
+                        <Form.Item
+                            name="title"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Por favor, insira um título'
+                                }
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        {selectedValue === 'coluna' && (
+                            <>
+                                <Typography.Title level={5}>
+                                    Texto
+                                </Typography.Title>
+                                <Form.Item
+                                    name="text"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Por favor, insira um texto'
+                                        }
+                                    ]}
+                                >
+                                    <TextArea rows={5} />
+                                </Form.Item>
+                            </>
+                        )}
+                        {(selectedValue === 'noticia' ||
+                            selectedValue === 'carrousel') && (
                             <>
                                 <Typography.Title level={5}>
                                     Link
@@ -85,83 +130,46 @@ const CreatePostPage = () => {
                                         }
                                     ]}
                                 >
-                                    <Input style={{ borderRadius: 50 }} />
+                                    <Input />
                                 </Form.Item>
                             </>
                         )}
-
-                        {(selectedValue === StylesOpitions[0] ||
-                            selectedValue === StylesOpitions[2]) && (
-                            <ImagePicker onImageSelect={setSelectedImage} />
-                        )}
-                    </S.Wrapper>
-
-                    <S.Wrapper>
-                        <Form.Item>
-                            <S.ButtonGroup>
-                                {StylesOpitions.map((type) => (
-                                    <S.RadioButton
-                                        key={type}
-                                        type="button"
-                                        selected={selectedValue === type}
-                                        onClick={() => setSelectedValue(type)}
+                        {(selectedValue === 'noticia' ||
+                            selectedValue === 'coluna') && (
+                            <>
+                                <Typography.Title level={5}>
+                                    Imagem
+                                </Typography.Title>
+                                <Form.Item>
+                                    <Upload
+                                        beforeUpload={handleImageChange}
+                                        onRemove={() => setSelectedImage(null)}
+                                        maxCount={1}
                                     >
-                                        {type.toUpperCase()}
-                                    </S.RadioButton>
-                                ))}
-                            </S.ButtonGroup>
-                        </Form.Item>
-
-                        <Typography.Title level={5}>Título</Typography.Title>
-                        <Form.Item
-                            name="title"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, insira um título'
-                                }
-                            ]}
-                        >
-                            <Input style={{ borderRadius: 50 }} />
-                        </Form.Item>
-
-                        <Typography.Title level={5}>Texto</Typography.Title>
-                        <Form.Item
-                            name="text"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Por favor, insira um texto'
-                                }
-                            ]}
-                        >
-                            <Input.TextArea
-                                style={{ borderRadius: 16 }}
-                                rows={10}
-                            />
-                        </Form.Item>
-
+                                        <Button icon={<UploadOutlined />}>
+                                            Selecionar Imagem
+                                        </Button>
+                                    </Upload>
+                                </Form.Item>
+                            </>
+                        )}
                         <Form.Item>
-                            <Button
+                            <S.ConfirmButton
                                 type="primary"
                                 htmlType="submit"
-                                block
-                                style={{
-                                    borderRadius: 50,
-                                    backgroundColor: '#CC8D3E',
-                                    borderColor: '#CC8D3E',
-                                    fontWeight: 'bold',
-                                    width: 300
-                                }}
                                 loading={loading}
+                                style={{
+                                    backgroundColor: '#cc8d3e',
+                                    borderColor: '#cc8d3e'
+                                }}
                             >
                                 CONFIRMAR
-                            </Button>
+                            </S.ConfirmButton>
                         </Form.Item>
                     </S.Wrapper>
                 </Form>
-            </S.Container>
-        </div>
+            </S.FormContainer>
+        </S.Container>
     );
 };
 
