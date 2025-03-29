@@ -1,5 +1,5 @@
-import { destroyCookie, setCookie } from 'nookies';
-import React, { useState, useContext, createContext } from 'react';
+import { destroyCookie, setCookie, parseCookies } from 'nookies';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 
 import api from 'services/api';
 
@@ -25,6 +25,14 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider: React.FC = ({ children }) => {
     const [user, setUser] = useState<Administrator | Company | null>(null);
     const [userType, setUserType] = useState<string | null>(null);
+
+    useEffect(() => {
+        const cookies = parseCookies();
+        const userTypeCookie = cookies['@app:userType'];
+        if (userTypeCookie) {
+            setUserType(userTypeCookie);
+        }
+    }, []);
 
     const login = async (data: ILoginRequest) => {
         try {
