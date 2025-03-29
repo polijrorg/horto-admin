@@ -13,6 +13,7 @@ export interface Event {
     link: string;
     active: boolean;
     address?: Address;
+    linkImage?: string;
 }
 
 export interface IEventRequest {
@@ -23,6 +24,7 @@ export interface IEventRequest {
     eventEndDate: string;
     reward: string;
     rules: string;
+    image: File | null;
     link: string;
     active: boolean;
     address?: AddressRequest;

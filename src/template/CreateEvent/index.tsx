@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import {
     Form,
@@ -7,8 +8,11 @@ import {
     Switch,
     message,
     Select,
-    InputNumber // Importe o InputNumber para campos numéricos
+    InputNumber, // Importe o InputNumber para campos numéricos
+    Upload,
+    Button
 } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import EventService from 'services/EventService';
 import { IEventRequest } from 'interfaces/Events';
@@ -24,9 +28,17 @@ const CreateEventPage = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [eventType, setEventType] = useState<string>('Sorteio'); // Estado para controlar o tipo de evento
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
+    const beforeUpload = (file: File) => {
+        setImageFile(file);
+        return false; // Prevent automatic upload
+    };
 
     const onFinish = async (
-        values: IEventRequest & { eventDateRange: moment.Moment[] }
+        values: Omit<IEventRequest, 'image'> & {
+            eventDateRange: moment.Moment[];
+        }
     ) => {
         try {
             setLoading(true);
@@ -41,15 +53,16 @@ const CreateEventPage = () => {
             const { eventDateRange, ...restValues } = values;
 
             const eventData: IEventRequest = {
-                ...restValues, // Usa o restante dos valores sem eventDateRange
-                eventStartDate, // Data de início no formato ISO 8601
-                eventEndDate, // Data de término no formato ISO 8601
-                active: values.active || true // Inicia como true por padrão
+                ...restValues,
+                eventStartDate,
+                eventEndDate,
+                active: values.active || true,
+                image: imageFile // Adiciona o arquivo de imagem
             };
 
             await EventService.CreateEvent(eventData);
             message.success('Evento criado com sucesso!');
-            router.push('/Events'); // Navega para a página de eventos após a criação
+            router.push('/Events');
         } catch (error) {
             console.error('Erro ao criar o evento:', error);
             message.error('Erro ao criar o evento');
@@ -181,6 +194,31 @@ const CreateEventPage = () => {
                             ]}
                         >
                             <Input />
+                        </Form.Item>
+
+                        <Typography.Title level={5}>
+                            Imagem do Evento
+                        </Typography.Title>
+                        <Form.Item
+                            name="image"
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Por favor, adicione uma imagem para o evento'
+                                }
+                            ]}
+                        >
+                            <Upload
+                                beforeUpload={beforeUpload}
+                                maxCount={1}
+                                accept="image/*"
+                                listType="picture"
+                            >
+                                <Button icon={<UploadOutlined />}>
+                                    Selecionar Imagem
+                                </Button>
+                            </Upload>
                         </Form.Item>
 
                         {/* Mostrar campos de endereço apenas se o tipo de evento for "Presencial" */}
