@@ -7,6 +7,7 @@ import { Company } from 'interfaces/Companies';
 import CouponCard from 'components/CouponCard';
 import CouponServices from 'services/CouponServices';
 import CompanyService from 'services/CompanyService'; // Importando o serviço de empresas
+import useAuth from 'hooks/useAuth';
 import * as S from './styles';
 
 const CouponsPage = () => {
@@ -16,6 +17,8 @@ const CouponsPage = () => {
 
     // Obtém o companyId da query
     const { companyId } = router.query;
+
+    const { userType } = useAuth(); // Obtém os dados do usuário autenticado
 
     // Carrega os dados da empresa e dos cupons quando a página é carregada
     useEffect(() => {
@@ -42,6 +45,10 @@ const CouponsPage = () => {
     // Função para navegar para a página de criação/edição de cupons
     const navigateToCouponCreate = (couponId?: string) => {
         const query: { companyId?: string; couponId?: string } = {};
+
+        if (userType === 'company') {
+            window.location.href = 'https://polijunior.com.br/';
+        }
 
         if (company) {
             query.companyId = company.id; // Passa o companyId da empresa carregada
