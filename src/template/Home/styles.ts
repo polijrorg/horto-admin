@@ -15,6 +15,7 @@ export const CardContainer = styled.div`
 
 export const StyledCard = styled(Card)`
     text-align: center;
+    width: 300px;
 `;
 
 export const CardImageContainer = styled.div`

@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Company, ICompanyRequest } from 'interfaces/Companies';
+import { User } from 'interfaces/Users';
 import api from './api';
 
 export default class CompanyService {
@@ -94,6 +95,14 @@ export default class CompanyService {
 
     static async deleteCompany(id: string) {
         const response = await api.delete(`/companies/delete/${id}`);
+        return response.data;
+    }
+
+    static async GetUserByCompanyId(CompanyId: string): Promise<User[]> {
+        const response: AxiosResponse<User[]> = await api.get(
+            `/companies/users-with-coupons/${CompanyId}`
+        );
+
         return response.data;
     }
 }

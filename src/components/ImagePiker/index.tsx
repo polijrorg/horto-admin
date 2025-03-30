@@ -21,7 +21,6 @@ const ImagePicker: React.FC<ImagePickerProps> = ({
         }
     };
 
-    console.log('previewUrl', previewUrl);
     return (
         <div>
             <Typography.Title level={5}>Adicionar Imagem</Typography.Title>

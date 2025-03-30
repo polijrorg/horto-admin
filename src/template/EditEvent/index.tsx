@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import EventService from 'services/EventService';
 import { IEventRequest } from 'interfaces/Events';
 import moment from 'moment';
+import ImagePicker from 'components/ImagePiker';
 import * as S from './styles';
 
 const { TextArea } = Input;
@@ -22,9 +23,11 @@ const { Option } = Select;
 const EditEventPage = () => {
     const [form] = Form.useForm();
     const router = useRouter();
-    const { EventId } = router.query; // Recupera o ID do evento da URL
+    const { EventId } = router.query;
     const [loading, setLoading] = useState(false);
     const [eventType, setEventType] = useState<string>('Sorteio');
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [initialImage, setInitialImage] = useState<string | null>(null);
 
     useEffect(() => {
         if (EventId) {
@@ -33,6 +36,12 @@ const EditEventPage = () => {
                     const event = await EventService.GetEventById(
                         EventId as string
                     );
+
+                    // Atualiza a imagem inicial se existir
+                    if (event.linkImage) {
+                        setInitialImage(event.linkImage);
+                    }
+
                     form.setFieldsValue({
                         ...event,
                         eventDateRange: [
@@ -53,8 +62,14 @@ const EditEventPage = () => {
         }
     }, [EventId, form]);
 
+    const handleImageSelect = (file: File) => {
+        setImageFile(file);
+    };
+
     const onFinish = async (
-        values: IEventRequest & { eventDateRange: moment.Moment[] }
+        values: Omit<IEventRequest, 'image'> & {
+            eventDateRange: moment.Moment[];
+        }
     ) => {
         try {
             setLoading(true);
@@ -70,7 +85,8 @@ const EditEventPage = () => {
                 ...restValues,
                 eventStartDate,
                 eventEndDate,
-                active: values.active || true
+                active: values.active || true,
+                image: imageFile // Inclui o arquivo de imagem
             };
 
             await EventService.UpdateEvent(EventId as string, eventData);
@@ -207,6 +223,27 @@ const EditEventPage = () => {
                             ]}
                         >
                             <Input />
+                        </Form.Item>
+
+                        <Form.Item
+                            name="image"
+                            rules={[
+                                {
+                                    validator: () =>
+                                        imageFile || initialImage
+                                            ? Promise.resolve()
+                                            : Promise.reject(
+                                                  new Error(
+                                                      'Por favor, adicione uma imagem para o evento'
+                                                  )
+                                              )
+                                }
+                            ]}
+                        >
+                            <ImagePicker
+                                onImageSelect={handleImageSelect}
+                                initialImage={initialImage}
+                            />
                         </Form.Item>
 
                         {eventType === 'Presencial' && (

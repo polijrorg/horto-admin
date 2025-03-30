@@ -1,73 +1,81 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, message } from 'antd';
 import { useRouter } from 'next/router';
-import { User } from 'interfaces/Auth';
+import { User } from 'interfaces/Users';
 import UserService from 'services/UserService';
+import CompanyService from 'services/CompanyService';
+import useAuth from 'hooks/useAuth';
+import { parseCookies } from 'nookies';
 import { getColumns } from './index-helper';
 
-interface InitialValuesProps {
-    UserType: string;
-    CompanyId?: string;
-}
+import * as S from './styles';
 
 const UsersPage = () => {
     const [usersList, setUsersList] = useState<User[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
-
-    // Obtém os valores iniciais da rota (query parameters)
-    const initialValues = router.query.initialValues
-        ? (JSON.parse(
-              router.query.initialValues as string
-          ) as InitialValuesProps)
-        : { UserType: 'default' }; // Valor padrão caso não haja initialValues
+    const { userType, user } = useAuth();
 
     useEffect(() => {
         const getUsers = async () => {
             try {
+                setLoading(true);
                 const response = await UserService.GetAll();
                 setUsersList(response);
             } catch (error) {
                 console.error('Failed to fetch users:', error);
+                message.error('Erro ao buscar usuários');
+            } finally {
+                setLoading(false);
             }
         };
 
-        getUsers();
-    }, []);
+        const getUsersByConpany = async (companyId: string) => {
+            try {
+                setLoading(true);
+                const response = await CompanyService.GetUserByCompanyId(
+                    companyId
+                );
+                setUsersList(response);
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+                message.error('Erro ao buscar usuários');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const handleGoTo = (user: User) => {
-        // Navega para a página de detalhes do usuário com os valores do usuário
+        if (userType === 'adm') {
+            getUsers();
+        } else if (userType === 'company') {
+            const companyId = user?.id || parseCookies()['@app:userId'];
+            getUsersByConpany(companyId);
+        }
+    }, [user?.id, userType]);
+
+    const handleGoTo = (userId: string) => {
         router.push({
             pathname: 'ShowUsers',
             query: {
-                initialValues: JSON.stringify({
-                    User: user,
-                    UserType: initialValues.UserType
-                })
+                userId
             }
         });
     };
 
     return (
         <>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 8,
-                    marginTop: 8,
-                    marginRight: 16
-                }}
-            >
+            <S.HeaderContainer>
                 <h2>Clientes</h2>
-            </div>
+            </S.HeaderContainer>
+
             <Table
                 style={{ color: 'white' }}
-                columns={getColumns(handleGoTo, initialValues.UserType)}
+                columns={getColumns(handleGoTo)}
                 dataSource={usersList}
                 rowKey="id"
+                loading={loading}
             />
         </>
     );

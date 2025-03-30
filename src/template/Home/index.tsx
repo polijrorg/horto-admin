@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 import { useRouter } from 'next/router';
-import { parseCookies } from 'nookies';
+import useAuth from 'hooks/useAuth';
 import * as S from './styles';
 
 const HomePage = () => {
@@ -13,9 +13,8 @@ const HomePage = () => {
     };
 
     // Verifica se o usuário é um administrador
-    const cookies = parseCookies();
-    const userType = cookies['@app:userType'];
-    const isAdmin = userType && userType === 'adm';
+    const { userType, user } = useAuth();
+    const isAdmin = userType === 'adm';
 
     return (
         <S.LayoutBackground>
@@ -26,7 +25,6 @@ const HomePage = () => {
                     <>
                         <S.StyledCard
                             hoverable
-                            style={{ width: '300px' }}
                             cover={
                                 <S.CardImageContainer>
                                     <S.CardImage
@@ -41,7 +39,6 @@ const HomePage = () => {
                         </S.StyledCard>
                         <S.StyledCard
                             hoverable
-                            style={{ width: '300px' }}
                             cover={
                                 <S.CardImageContainer>
                                     <S.CardImage
@@ -56,7 +53,6 @@ const HomePage = () => {
                         </S.StyledCard>
                         <S.StyledCard
                             hoverable
-                            style={{ width: '300px' }}
                             cover={
                                 <S.CardImageContainer>
                                     <S.CardImage
@@ -90,7 +86,6 @@ const HomePage = () => {
                     <>
                         <S.StyledCard
                             hoverable
-                            style={{ width: '400px' }}
                             cover={
                                 <S.CardImageContainer>
                                     <S.CardImage
@@ -105,7 +100,6 @@ const HomePage = () => {
                         </S.StyledCard>
                         <S.StyledCard
                             hoverable
-                            style={{ width: '400px' }}
                             cover={
                                 <S.CardImageContainer>
                                     <S.CardImage
@@ -114,13 +108,17 @@ const HomePage = () => {
                                     />
                                 </S.CardImageContainer>
                             }
-                            onClick={() => navigateToPage('Companies')}
+                            onClick={() =>
+                                router.push({
+                                    pathname: '/Coupons',
+                                    query: { companyId: user?.id }
+                                })
+                            }
                         >
                             <Card.Meta title="Solicitar inclusão de Novo Cupom" />
                         </S.StyledCard>
                         <S.StyledCard
                             hoverable
-                            style={{ width: '400px' }}
                             cover={
                                 <S.CardImageContainer>
                                     <S.CardImage
@@ -131,7 +129,7 @@ const HomePage = () => {
                             }
                             onClick={() => navigateToPage('Plans')}
                         >
-                            <Card.Meta title="Plano de Benefícios" />
+                            <Card.Meta title="Plano e Benefícios" />
                         </S.StyledCard>
                     </>
                 )}
