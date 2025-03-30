@@ -1,0 +1,304 @@
+import React, { useState } from 'react';
+import {
+    Form,
+    Input,
+    Button,
+    Typography,
+    Flex,
+    DatePicker,
+    Select,
+    message
+} from 'antd';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import CompanyService from 'services/CompanyService';
+import { ICompanyRequest } from 'interfaces/Companies';
+import ImagePicker from 'components/ImagePiker';
+import StateSelect from 'components/StateSelect';
+import * as S from './styles';
+
+const { Option } = Select;
+const { Text } = Typography;
+
+const CreateCompanyPage = () => {
+    const [form] = Form.useForm();
+    const router = useRouter();
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    const onFinish = async (values: ICompanyRequest) => {
+        setLoading(true);
+        try {
+            const companyData: ICompanyRequest = {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+                branch: values.branch,
+                subscriptionPlan: values.subscriptionPlan,
+                planExpirationDate: dayjs(
+                    values.planExpirationDate
+                ).toISOString(),
+                address: {
+                    street: values.address.street,
+                    numberHouse: Number(values.address.numberHouse),
+                    neighborhood: values.address.neighborhood,
+                    city: values.address.city,
+                    state: values.address.state,
+                    cep: values.address.cep
+                },
+                image: selectedImage
+            };
+
+            await CompanyService.CreateCompany(companyData);
+            message.success('Empresa criada com sucesso!');
+            router.push('/Companies');
+        } catch (error) {
+            console.error('Erro ao criar empresa:', error);
+            message.error('Ocorreu um erro ao criar a empresa');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleImageSelect = (file: File) => {
+        setSelectedImage(file);
+    };
+
+    return (
+        <S.Container>
+            <Typography.Title level={2} style={{ marginBottom: 24 }}>
+                Cadastro de Empresa
+            </Typography.Title>
+
+            <S.FormContainer>
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={onFinish}
+                    initialValues={{
+                        subscriptionPlan: 'basic',
+                        address: {
+                            state: 'SP'
+                        }
+                    }}
+                >
+                    <Flex gap={40} style={{ width: '100%' }}>
+                        {/* Coluna 1 - Dados da Empresa */}
+                        <S.FormSection>
+                            <Typography.Title level={4}>
+                                Dados da Empresa
+                            </Typography.Title>
+
+                            <Form.Item
+                                label="Nome da Empresa"
+                                name="name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Por favor, insira o nome da empresa'
+                                    }
+                                ]}
+                            >
+                                <Input placeholder="Digite o nome da empresa" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Email"
+                                name="email"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira o email'
+                                    },
+                                    { type: 'email', message: 'Email inválido' }
+                                ]}
+                            >
+                                <Input placeholder="email@empresa.com" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Senha"
+                                name="password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira uma senha'
+                                    }
+                                ]}
+                            >
+                                <Input.Password placeholder="Digite uma senha" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Ramo de Atuação"
+                                name="branch"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Por favor, insira o ramo de atuação'
+                                    }
+                                ]}
+                            >
+                                <Input placeholder="Ex: Tecnologia, Alimentício, etc." />
+                            </Form.Item>
+
+                            <Form.Item label="Logo da Empresa">
+                                <ImagePicker
+                                    onImageSelect={handleImageSelect}
+                                />
+                                <Text type="secondary">
+                                    Tamanho recomendado: 300x300px
+                                </Text>
+                            </Form.Item>
+                        </S.FormSection>
+
+                        {/* Coluna 2 - Plano e Endereço */}
+                        <S.FormSection>
+                            <Typography.Title level={4}>
+                                Plano e Endereço
+                            </Typography.Title>
+
+                            <Form.Item
+                                label="Plano de Assinatura"
+                                name="subscriptionPlan"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, selecione um plano'
+                                    }
+                                ]}
+                            >
+                                <Select>
+                                    <Option value="basic">Básico</Option>
+                                    <Option value="premium">Premium</Option>
+                                    <Option value="enterprise">
+                                        Enterprise
+                                    </Option>
+                                </Select>
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Validade do Plano"
+                                name="planExpirationDate"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message:
+                                            'Por favor, selecione a data de expiração'
+                                    }
+                                ]}
+                            >
+                                <DatePicker
+                                    style={{ width: '100%' }}
+                                    disabledDate={(current) =>
+                                        current &&
+                                        current < dayjs().endOf('day')
+                                    }
+                                />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Rua"
+                                name={['address', 'street']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira a rua'
+                                    }
+                                ]}
+                            >
+                                <Input placeholder="Nome da rua" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Número"
+                                name={['address', 'numberHouse']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira o número'
+                                    }
+                                ]}
+                            >
+                                <Input type="number" placeholder="Número" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Bairro"
+                                name={['address', 'neighborhood']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira o bairro'
+                                    }
+                                ]}
+                            >
+                                <Input placeholder="Nome do bairro" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Cidade"
+                                name={['address', 'city']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira a cidade'
+                                    }
+                                ]}
+                            >
+                                <Input placeholder="Nome da cidade" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Estado"
+                                name={['address', 'state']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, selecione o estado'
+                                    }
+                                ]}
+                            >
+                                <StateSelect />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="CEP"
+                                name={['address', 'cep']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Por favor, insira o CEP'
+                                    },
+                                    {
+                                        pattern: /^\d{5}-\d{3}$/,
+                                        message:
+                                            'CEP deve estar no formato 00000-000'
+                                    }
+                                ]}
+                            >
+                                <Input placeholder="00000-000" maxLength={9} />
+                            </Form.Item>
+                        </S.FormSection>
+                    </Flex>
+
+                    <Form.Item style={{ marginTop: 24 }}>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            size="large"
+                            loading={loading}
+                            style={{ width: 200 }}
+                        >
+                            Cadastrar Empresa
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </S.FormContainer>
+        </S.Container>
+    );
+};
+
+export default CreateCompanyPage;

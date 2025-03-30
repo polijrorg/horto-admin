@@ -1,14 +1,5 @@
-export interface Address {
-    id: string;
-    street: string;
-    numberHouse: number;
-    neighborhood: string;
-    city: string;
-    state: string;
-    cep: string;
-    companyId: string;
-    userId: string | null;
-}
+import { Coupon } from './Coupons';
+import { Address, AddressRequest } from './Address';
 
 export interface Company {
     id: string;
@@ -18,22 +9,19 @@ export interface Company {
     image: string;
     subscriptionPlan: string;
     branch: string;
+    planExpirationDate: string;
     address: Address;
+    coupons: Coupon[];
+    linkImage: string;
 }
 
 export interface ICompanyRequest {
     name: string;
     email: string;
-    image: string;
+    password: string;
+    image: File | null;
     subscriptionPlan: string;
     branch: string;
     planExpirationDate: string;
-    address: {
-        street: string;
-        numberHouse: number;
-        neighborhood: string;
-        city: string;
-        state: string;
-        cep: string;
-    };
+    address: AddressRequest;
 }

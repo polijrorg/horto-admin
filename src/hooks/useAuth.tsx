@@ -1,11 +1,12 @@
-import { destroyCookie } from 'nookies';
-import React, { useContext, createContext } from 'react';
+import { destroyCookie, setCookie, parseCookies } from 'nookies';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 
 import api from 'services/api';
 
 import UserService from 'services/UserService';
 
-import User from 'interfaces/Auth';
+import { AuthResponse, Administrator } from 'interfaces/Auth';
+import { Company } from 'interfaces/Companies';
 
 interface ILoginRequest {
     email: string;
@@ -13,7 +14,9 @@ interface ILoginRequest {
 }
 
 interface AuthContextData {
-    user: User;
+    user: Administrator | Company | null;
+    userType: string | null;
+    userId: string | null;
     login: (data: ILoginRequest) => void;
     logout: () => void;
 }
@@ -21,29 +24,62 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC = ({ children }) => {
-    const user = {} as User;
+    const [user, setUser] = useState<Administrator | Company | null>(null);
+    const [userType, setUserType] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const cookies = parseCookies();
+        const userTypeCookie = cookies['@app:userType'];
+        const userIdCookie = cookies['@app:userId'];
+        if (userTypeCookie) {
+            setUserType(userTypeCookie);
+        }
+        if (userIdCookie) {
+            setUserId(userIdCookie);
+        }
+    }, []);
 
     const login = async (data: ILoginRequest) => {
         try {
-            const response = await UserService.login(data);
+            const response: AuthResponse = await UserService.login(data);
 
+            setCookie(undefined, '@app:token', response.token);
             api.defaults.headers.common = {
                 Authorization: `Bearer ${response.token}`
             };
 
-            // setUser(response.administrator);
+            if (response.administrator) {
+                setUser(response.administrator);
+                setCookie(undefined, '@app:userId', response.administrator.id);
+                setCookie(undefined, '@app:userType', 'adm');
+                setUserType('adm');
+                setUserId(response.administrator.id);
+            }
+            if (response.company) {
+                setUser(response.company);
+                setCookie(undefined, '@app:userId', response.company.id);
+                setCookie(undefined, '@app:userType', 'company');
+                setUserType('company');
+                setUserId(response.company.id);
+            }
         } catch (error) {
-            // Errors handling
+            console.error('Erro ao fazer login:', error);
+            throw error;
         }
     };
 
     const logout = () => {
         destroyCookie(undefined, '@app:token');
-        destroyCookie(undefined, '@app:useId');
+        destroyCookie(undefined, '@app:userId');
+        destroyCookie(undefined, '@app:userType');
+        setUser(null);
+        setUserType(null);
+        setUserId(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, userType, userId, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

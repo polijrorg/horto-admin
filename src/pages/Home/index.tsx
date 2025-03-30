@@ -1,8 +1,8 @@
 import React from 'react';
-import AdminDashboard from 'template/Home';
+import HomePage from 'template/Home';
 
-const Home: React.FC = () => {
-    return <AdminDashboard />;
+const HomeAdmin: React.FC = () => {
+    return <HomePage />;
 };
 
-export default Home;
+export default HomeAdmin;

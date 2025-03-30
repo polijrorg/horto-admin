@@ -4,15 +4,16 @@
 import router from 'next/router';
 import { Form, Input, Button, Typography, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import UserService from 'services/UserService';
+import useAuth from 'hooks/useAuth';
 import * as S from './styles';
 
 const Login = () => {
     const [messageApi, contextHolder] = message.useMessage();
+    const { login } = useAuth();
 
     const onFinish = async (values: any) => {
         try {
-            await UserService.login(values);
+            await login(values);
             router.push('/Home');
         } catch (error) {
             messageApi.open({
@@ -75,7 +76,7 @@ const Login = () => {
                                 }
                             />
                         </Form.Item>
-                        <Form.Item>
+                        {/* <Form.Item>
                             <a
                                 href="#"
                                 style={{
@@ -86,7 +87,7 @@ const Login = () => {
                             >
                                 Esqueci minha senha
                             </a>
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item>
                             <Button
                                 type="primary"
@@ -100,14 +101,6 @@ const Login = () => {
                             >
                                 CONTINUAR
                             </Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <div style={{ textAlign: 'center' }}>
-                                <span>Não tem uma conta? </span>
-                                <a href="#" style={{ color: '#CC8D3E' }}>
-                                    Cadastra-se
-                                </a>
-                            </div>
                         </Form.Item>
                     </Form>
                 </S.RightSide>

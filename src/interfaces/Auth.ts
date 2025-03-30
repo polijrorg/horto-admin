@@ -1,28 +1,9 @@
 /* eslint-disable camelcase */
-interface Address {
-    id: string;
-    street: string;
-    numberHouse: number;
-    neighborhood: string;
-    city: string;
-    state: string;
-    cep: string;
-    companyId: string;
-    userId: string | null;
-}
 
-interface Company {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    image: string;
-    subscriptionPlan: string;
-    branch: string;
-    address: Address;
-}
+import { Address } from './Address';
+import { Company } from './Companies';
 
-interface Administrator {
+export interface Administrator {
     id: string;
     name: string;
     email: string;
@@ -31,7 +12,7 @@ interface Administrator {
     updated_at: string;
 }
 
-export default interface AuthResponse {
+export interface AuthResponse {
     administrator?: Administrator;
     company?: Company;
     token: string;

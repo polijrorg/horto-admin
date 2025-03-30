@@ -1,14 +1,31 @@
 import styled from 'styled-components';
+import { Card } from 'antd';
 
-export const Title = styled.h1`
-    font-size: 2rem;
-    color: black;
+export const LayoutBackground = styled.div`
+    padding: 24px;
+    min-height: 360px;
 `;
 
-export const Container = styled.div`
+export const CardContainer = styled.div`
     display: flex;
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
+    gap: 10px;
+    justify-content: space-around;
+    margin-top: 20px;
+`;
+
+export const StyledCard = styled(Card)`
+    text-align: center;
+    width: 300px;
+`;
+
+export const CardImageContainer = styled.div`
+    display: flex;
     justify-content: center;
+`;
+
+export const CardImage = styled.img`
+    width: 64px;
+    height: 64px;
+    margin: 16px;
+    color: #c47f38;
 `;
