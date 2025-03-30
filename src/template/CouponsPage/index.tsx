@@ -5,32 +5,31 @@ import { useRouter } from 'next/router';
 import { Coupon } from 'interfaces/Coupons';
 import { Company } from 'interfaces/Companies';
 import CouponCard from 'components/CouponCard';
+import CouponModal from 'components/Modals/CouponModal';
 import CouponServices from 'services/CouponServices';
-import CompanyService from 'services/CompanyService'; // Importando o serviço de empresas
+import CompanyService from 'services/CompanyService';
 import useAuth from 'hooks/useAuth';
 import * as S from './styles';
 
 const CouponsPage = () => {
     const router = useRouter();
-    const [company, setCompany] = useState<Company | null>(null); // Estado para armazenar os dados da empresa
-    const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
+    const [company, setCompany] = useState<Company | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // Estado para o cupom selecionado
+    const [modalVisible, setModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
 
-    // Obtém o companyId da query
     const { companyId } = router.query;
+    const { userType } = useAuth();
 
-    const { userType } = useAuth(); // Obtém os dados do usuário autenticado
-
-    // Carrega os dados da empresa e dos cupons quando a página é carregada
     useEffect(() => {
         if (companyId) {
             const fetchCompany = async () => {
                 try {
                     setLoading(true);
-                    const companyData = await CompanyService.GetAll();
-                    const foundCompany = companyData.find(
-                        (comp) => comp.id === companyId
+                    const companyData = await CompanyService.GetCompanyById(
+                        companyId as string
                     );
-                    setCompany(foundCompany || null); // Atualiza o estado com os dados da empresa
+                    setCompany(companyData || null);
                 } catch (error) {
                     console.error('Erro ao carregar empresa:', error);
                     message.error('Erro ao carregar dados da empresa.');
@@ -42,19 +41,19 @@ const CouponsPage = () => {
         }
     }, [companyId]);
 
-    // Função para navegar para a página de criação/edição de cupons
     const navigateToCouponCreate = (couponId?: string) => {
         const query: { companyId?: string; couponId?: string } = {};
 
         if (userType === 'company') {
             window.location.href = 'https://polijunior.com.br/';
+            return;
         }
 
         if (company) {
-            query.companyId = company.id; // Passa o companyId da empresa carregada
+            query.companyId = company.id;
         }
         if (couponId) {
-            query.couponId = couponId; // Passa o couponId se estiver editando
+            query.couponId = couponId;
         }
 
         router.push({
@@ -63,18 +62,16 @@ const CouponsPage = () => {
         });
     };
 
-    // Função para deletar um cupom
     const handleDelete = async (couponId: string) => {
         try {
             await CouponServices.delete(couponId);
             message.success('Cupom deletado com sucesso!');
-            // Recarrega os dados da empresa após deletar o cupom
             if (companyId) {
-                const companyData = await CompanyService.GetAll();
-                const foundCompany = companyData.find(
-                    (comp) => comp.id === companyId
+                const companyData = await CompanyService.GetCompanyById(
+                    companyId as string
                 );
-                setCompany(foundCompany || null); // Atualiza o estado com os dados da empresa
+
+                setCompany(companyData || null);
             }
         } catch (error) {
             console.error('Erro ao deletar cupom:', error);
@@ -82,12 +79,18 @@ const CouponsPage = () => {
         }
     };
 
+    // Função para lidar com o clique no card
+    const handleCardClick = (coupon: Coupon) => {
+        setSelectedCoupon(coupon);
+        setModalVisible(true);
+    };
+
     if (loading) {
-        return <div>Carregando...</div>; // Exibe um loading enquanto os dados são carregados
+        return <div>Carregando...</div>;
     }
 
     if (!company) {
-        return <div>Empresa não encontrada.</div>; // Exibe uma mensagem se a empresa não for encontrada
+        return <div>Empresa não encontrada.</div>;
     }
 
     return (
@@ -105,9 +108,17 @@ const CouponsPage = () => {
                         coupon={coupon}
                         onEdit={() => navigateToCouponCreate(coupon.id)}
                         onDelete={() => handleDelete(coupon.id)}
+                        onClick={handleCardClick} // Adiciona a prop onClick
                     />
                 ))}
             </S.CardsContainer>
+
+            {/* Modal de detalhes do cupom */}
+            <CouponModal
+                coupon={selectedCoupon}
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+            />
         </S.PageContainer>
     );
 };

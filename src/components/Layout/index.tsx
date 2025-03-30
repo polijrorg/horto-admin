@@ -17,7 +17,7 @@ const { Header, Sider, Content } = Layout;
 
 const UnifiedLayout: React.FC = ({ children }) => {
     const router = useRouter();
-    const { logout, userType, user } = useAuth();
+    const { logout, userType, userId } = useAuth();
 
     const handleLogout = () => {
         logout();
@@ -82,7 +82,7 @@ const UnifiedLayout: React.FC = ({ children }) => {
                     label: 'Seus cupons',
                     path: {
                         pathname: '/Coupons',
-                        query: { companyId: user?.id }
+                        query: { companyId: userId }
                     }
                 },
                 {
