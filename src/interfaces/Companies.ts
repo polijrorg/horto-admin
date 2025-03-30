@@ -1,5 +1,5 @@
-import { Coupon } from './Coupons';
-import { Address, AddressRequest } from './Address';
+import { ICoupon } from './Coupons';
+import { IAddress, IAddressRequest } from './Address';
 
 export interface Company {
     id: string;
@@ -10,8 +10,8 @@ export interface Company {
     subscriptionPlan: string;
     branch: string;
     planExpirationDate: string;
-    address: Address;
-    coupons: Coupon[];
+    address: IAddress;
+    coupons: ICoupon[];
     linkImage: string;
 }
 
@@ -23,5 +23,5 @@ export interface ICompanyRequest {
     subscriptionPlan: string;
     branch: string;
     planExpirationDate: string;
-    address: AddressRequest;
+    address: IAddressRequest;
 }

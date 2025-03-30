@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-import { IAddress, defaultAddress } from './Adress';
-import { ICoupons } from './Coupons';
+import { IAddress } from './Address';
+import { ICoupon } from './Coupons';
 
 export interface User {
     id: string;
@@ -14,21 +14,6 @@ export interface User {
     cardsId: any;
     created_at: string;
     address: IAddress;
-    reedemedCoupons: ICoupons[];
-    usedCoupons: ICoupons[];
+    reedemedCoupons: ICoupon[];
+    usedCoupons: ICoupon[];
 }
-
-export const defaultUser: User = {
-    name: '',
-    email: '',
-    password: '',
-    age: 0,
-    image: '',
-    subscribePlan: '',
-    typeUser: 'COMMON',
-    cardsId: null,
-    created_at: '',
-    address: defaultAddress,
-    reedemedCoupons: [],
-    usedCoupons: []
-};

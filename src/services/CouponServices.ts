@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Coupon, ICouponRequest } from 'interfaces/Coupons';
+import { ICoupon, ICouponRequest } from 'interfaces/Coupons';
 import api from './api';
 
 export default class CouponServices {
@@ -17,8 +17,8 @@ export default class CouponServices {
     }: {
         data: ICouponRequest;
         couponId: string;
-    }): Promise<UpdateRequest> {
-        const response: AxiosResponse<UpdateRequest> = await api.patch(
+    }): Promise<ICoupon> {
+        const response: AxiosResponse<ICoupon> = await api.patch(
             `/coupons/update/${couponId}`,
             {
                 name: data.name,
@@ -33,9 +33,9 @@ export default class CouponServices {
         return response.data;
     }
 
-    static async getCouponById(couponId: string): Promise<Coupon> {
+    static async getCouponById(couponId: string): Promise<ICoupon> {
         try {
-            const response: AxiosResponse<Coupon> = await api.get(
+            const response: AxiosResponse<ICoupon> = await api.get(
                 `/coupons/getById/${couponId}`
             );
             return response.data;

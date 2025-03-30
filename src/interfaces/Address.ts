@@ -1,4 +1,4 @@
-export interface Address {
+export interface IAddress {
     id: string;
     street: string;
     numberHouse: number;
@@ -10,7 +10,7 @@ export interface Address {
     userId?: string | null;
 }
 
-export interface AddressRequest {
+export interface IAddressRequest {
     street: string;
     numberHouse: number;
     neighborhood: string;
@@ -18,3 +18,12 @@ export interface AddressRequest {
     state: string;
     cep: string;
 }
+
+export const defaultAddress: IAddressRequest = {
+    street: '',
+    numberHouse: 0,
+    neighborhood: '',
+    city: '',
+    state: '',
+    cep: ''
+};

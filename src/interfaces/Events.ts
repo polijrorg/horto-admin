@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { Address, AddressRequest } from './Address';
+import { IAddress, IAddressRequest } from './Address';
 
 export interface Event {
     id: string;
@@ -12,7 +12,7 @@ export interface Event {
     rules: string;
     link: string;
     active: boolean;
-    address?: Address;
+    address?: IAddress;
     linkImage?: string;
 }
 
@@ -27,5 +27,5 @@ export interface IEventRequest {
     image: File | null;
     link: string;
     active: boolean;
-    address?: AddressRequest;
+    address?: IAddressRequest;
 }
