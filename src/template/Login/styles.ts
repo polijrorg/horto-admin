@@ -1,18 +1,16 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-`;
-
 export const Title = styled.h1`
     font-size: 2rem;
     color: black;
+`;
+
+export const Container = styled.div`
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const LeftSide = styled.div`

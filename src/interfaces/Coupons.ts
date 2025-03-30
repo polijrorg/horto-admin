@@ -2,7 +2,7 @@
 export interface Coupon {
     id: string;
     name: string;
-    couponType: 'BASIC' | 'PREMIUM';
+    couponType: string;
     expirationDate: string;
     reward: string;
     payment: string;
@@ -14,11 +14,10 @@ export interface Coupon {
 
 export interface ICouponRequest {
     name: string;
-    companyId: string;
-    couponType: 'BASIC' | 'PREMIUM';
+    couponType: string;
     expirationDate: string;
     reward: string;
-    payment: string;
     rules: string;
+    payment: string;
     active: boolean;
 }

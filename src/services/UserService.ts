@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import AuthResponse from 'interfaces/Auth';
-import { User } from 'interfaces/Users';
+import AuthResponse, { User } from 'interfaces/Auth';
 import { setCookie } from 'nookies';
 
 import api from './api';
@@ -32,14 +31,6 @@ export default class UserService {
 
     static async GetAll(): Promise<User[]> {
         const response: AxiosResponse<User[]> = await api.get('/users/getAll');
-
-        return response.data;
-    }
-
-    static async GetUserById(userId: string): Promise<User> {
-        const response: AxiosResponse<User> = await api.get(
-            `/users/getById/${userId}`
-        );
 
         return response.data;
     }

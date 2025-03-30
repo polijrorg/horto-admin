@@ -4,16 +4,15 @@ export interface Posts {
     style: string;
     title: string;
     text: string;
-    link?: string;
-    linkImage?: string;
+    link: string;
+    image: string;
     created_at: string;
 }
 
 export interface IPostRequest {
-    id?: string;
     style: string;
     title: string;
     text: string;
     link: string;
-    image: null | File;
+    image: string;
 }
