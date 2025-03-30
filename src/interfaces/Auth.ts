@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { Address } from './Address';
+import { IAddress } from './Address';
 import { Company } from './Companies';
 
 export interface Administrator {
@@ -29,5 +29,5 @@ export interface User {
     typeUser: 'COMMON' | 'ADMIN' | 'OTHER';
     cardsId: string | null;
     created_at: string;
-    address: Address;
+    address: IAddress;
 }

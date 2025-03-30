@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Form, Input, DatePicker, Select, message, Switch } from 'antd';
-import { Coupon, ICouponRequest } from 'interfaces/Coupons';
+import { ICoupon, ICouponRequest } from 'interfaces/Coupons';
 import CouponServices from 'services/CouponServices';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -19,7 +19,7 @@ const CreateCoupon = () => {
     const router = useRouter();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-    const [initialValues, setInitialValues] = useState<Coupon | null>(null);
+    const [initialValues, setInitialValues] = useState<ICoupon | null>(null);
 
     // Obtém os parâmetros da query
     const { companyId, couponId } = router.query;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Modal } from 'antd';
 import { customFormatDate } from 'utils/dateUtil';
-import { Coupon } from 'interfaces/Coupons';
+import { ICoupon } from 'interfaces/Coupons';
 import * as S from './styles';
 
 interface CouponModalProps {
-    coupon: Coupon | null;
+    coupon: ICoupon | null;
     visible: boolean;
     onClose: () => void;
 }
