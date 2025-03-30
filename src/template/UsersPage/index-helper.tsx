@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { User } from 'interfaces/Users';
-import { Coupon } from 'interfaces/Coupons';
+import { ICoupon } from 'interfaces/Coupons';
 import { customFormatDate } from 'utils/dateUtil';
 
 export const getColumns = (handleGoTo: (post: string) => void) => [
@@ -21,7 +21,7 @@ export const getColumns = (handleGoTo: (post: string) => void) => [
         title: 'Quantidade de Cupons Usados',
         dataIndex: 'usedCoupons',
         key: 'usedCoupons',
-        render: (couponsList: Coupon[]) => <span>{couponsList.length}</span>
+        render: (couponsList: ICoupon[]) => <span>{couponsList.length}</span>
     },
     {
         title: 'Idade',

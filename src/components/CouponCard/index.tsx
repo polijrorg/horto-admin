@@ -1,16 +1,16 @@
 import React from 'react';
 import { Card, Button } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Coupon } from 'interfaces/Coupons';
+import { ICoupon } from 'interfaces/Coupons';
 import { customFormatDate } from 'utils/dateUtil';
 import useAuth from 'hooks/useAuth';
 import * as S from './styles';
 
 interface CouponCardProps {
-    coupon: Coupon;
-    onEdit: (coupon: Coupon) => void;
+    coupon: ICoupon;
+    onEdit: (coupon: ICoupon) => void;
     onDelete: (couponId: string) => void;
-    onClick?: (coupon: Coupon) => void;
+    onClick?: (coupon: ICoupon) => void;
 }
 
 const CouponCard: React.FC<CouponCardProps> = ({

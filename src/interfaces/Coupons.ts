@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-export interface Coupon {
+export interface ICoupon {
     id: string;
     name: string;
     couponType: 'BASIC' | 'PREMIUM';

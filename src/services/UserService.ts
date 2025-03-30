@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 
-import AuthResponse from 'interfaces/Auth';
+import { AuthResponse } from 'interfaces/Auth';
 import { User } from 'interfaces/Users';
 import { setCookie } from 'nookies';
 

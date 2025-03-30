@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import { useRouter } from 'next/router';
-import { Coupon } from 'interfaces/Coupons';
+import { ICoupon } from 'interfaces/Coupons';
 import { Company } from 'interfaces/Companies';
 import CouponCard from 'components/CouponCard';
 import CouponModal from 'components/Modals/CouponModal';
@@ -15,7 +15,7 @@ const CouponsPage = () => {
     const router = useRouter();
     const [company, setCompany] = useState<Company | null>(null);
     const [loading, setLoading] = useState(true);
-    const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null); // Estado para o cupom selecionado
+    const [selectedCoupon, setSelectedCoupon] = useState<ICoupon | null>(null); // Estado para o cupom selecionado
     const [modalVisible, setModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
 
     const { companyId } = router.query;
@@ -80,7 +80,7 @@ const CouponsPage = () => {
     };
 
     // Função para lidar com o clique no card
-    const handleCardClick = (coupon: Coupon) => {
+    const handleCardClick = (coupon: ICoupon) => {
         setSelectedCoupon(coupon);
         setModalVisible(true);
     };
@@ -102,7 +102,7 @@ const CouponsPage = () => {
                 </S.PlusIconWrapper>
             </S.HeaderContainer>
             <S.CardsContainer>
-                {company.coupons.map((coupon: Coupon) => (
+                {company.coupons.map((coupon: ICoupon) => (
                     <CouponCard
                         key={coupon.id}
                         coupon={coupon}

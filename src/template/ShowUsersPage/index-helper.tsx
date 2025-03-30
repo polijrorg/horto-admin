@@ -1,9 +1,9 @@
 import { ColumnsType } from 'antd/es/table';
-import { Coupon } from 'interfaces/Coupons';
+import { ICoupon } from 'interfaces/Coupons';
 import { customFormatDateTime } from 'utils/dateUtil';
 
-export const getColumns = (): ColumnsType<Coupon> => {
-    const baseColumns: ColumnsType<Coupon> = [
+export const getColumns = (): ColumnsType<ICoupon> => {
+    const baseColumns: ColumnsType<ICoupon> = [
         {
             title: 'Nome do Cupom',
             dataIndex: ['coupon', 'name'],
