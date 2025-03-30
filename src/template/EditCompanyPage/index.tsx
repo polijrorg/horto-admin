@@ -33,12 +33,9 @@ const EditCompanyPage = () => {
             if (companyId) {
                 setLoading(true);
                 try {
-                    const companylist = await CompanyService.GetAll();
-                    const company = companylist.find(
-                        (comp) => comp.id === companyId
+                    const company = await CompanyService.GetCompanyById(
+                        companyId as string
                     );
-
-                    console.log('company:', company);
 
                     // Preenche o formulário com os dados da empresa
                     if (company) {

@@ -13,7 +13,7 @@ const HomePage = () => {
     };
 
     // Verifica se o usuário é um administrador
-    const { userType, user } = useAuth();
+    const { userType, userId } = useAuth();
     const isAdmin = userType === 'adm';
 
     return (
@@ -111,7 +111,7 @@ const HomePage = () => {
                             onClick={() =>
                                 router.push({
                                     pathname: '/Coupons',
-                                    query: { companyId: user?.id }
+                                    query: { companyId: userId }
                                 })
                             }
                         >
