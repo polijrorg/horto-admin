@@ -1,53 +1,55 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
 import { ColumnsType } from 'antd/es/table';
+import { Coupon } from 'interfaces/Coupons';
+import { customFormatDateTime } from 'utils/dateUtil';
 
-export const getColumns = (
-    UserType: string
-): ColumnsType<{
-    key: string;
-    discount: string;
-    location: string;
-    couponCode: string;
-    redemptionDate: string;
-}> => {
-    const columns: ColumnsType<{
-        key: string;
-        discount: string;
-        location: string;
-        couponCode: string;
-        redemptionDate: string;
-    }> = [
+export const getColumns = (): ColumnsType<Coupon> => {
+    const baseColumns: ColumnsType<Coupon> = [
         {
-            title: 'Cupom Resgatado',
-            dataIndex: 'discount',
-            key: 'discount',
+            title: 'Nome do Cupom',
+            dataIndex: ['coupon', 'name'],
+            key: 'coupon.name',
             render: (text: string) => <span>{text}</span>
         },
         {
-            title: 'Código do cupom',
-            dataIndex: 'couponCode',
-            key: 'couponCode',
+            title: 'Tipo',
+            dataIndex: ['coupon', 'couponType'],
+            key: 'coupon.couponType',
             render: (text: string) => <span>{text}</span>
         },
         {
-            title: 'Data de resgate',
-            dataIndex: 'redemptionDate',
-            key: 'redemptionDate',
+            title: 'Pagamento',
+            dataIndex: ['coupon', 'payment'],
+            key: 'coupon.payment',
             render: (text: string) => <span>{text}</span>
+        },
+        {
+            title: 'Recompensa',
+            dataIndex: ['coupon', 'reward'],
+            key: 'coupon.reward',
+            render: (text: string) => <span>{text}</span>
+        },
+        {
+            title: 'Data de Expiração',
+            dataIndex: ['coupon', 'expirationDate'],
+            key: 'coupon.expirationDate',
+            render: (date: string) => (
+                <span>{new Date(date).toLocaleDateString()}</span>
+            )
+        },
+        {
+            title: 'Status',
+            dataIndex: ['coupon', 'active'],
+            key: 'coupon.active',
+            render: (active: boolean) => (
+                <span>{active ? 'Ativo' : 'Inativo'}</span>
+            )
+        },
+        {
+            title: 'Quando o cupom foi usado',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            render: (text: string) => <span>{customFormatDateTime(text)}</span>
         }
     ];
-
-    // Adiciona a coluna 'Local' se o UserType for 'adm'
-    if (UserType === 'adm') {
-        columns.splice(1, 0, {
-            // Inserindo a coluna na segunda posição
-            title: 'Local',
-            dataIndex: 'location',
-            key: 'location',
-            render: (text: string) => <span>{text}</span>
-        });
-    }
-
-    return columns;
+    return baseColumns;
 };

@@ -2,55 +2,48 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
-import { User } from 'interfaces/Auth';
+import { User } from 'interfaces/Users';
+import { Coupon } from 'interfaces/Coupons';
+import { customFormatDate } from 'utils/dateUtil';
 
-function padToTwoDigits(number: number): string {
-    return number.toString().padStart(2, '0');
-}
-
-function customFormatDate(dateString: string): string {
-    const date = new Date(dateString);
-
-    const day = padToTwoDigits(date.getDate());
-    const month = padToTwoDigits(date.getMonth() + 1); // Os meses são baseados em zero
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-}
-
-export const getColumns = (
-    handleGoTo: (post: User) => void,
-    UserType: string
-) => [
+export const getColumns = (handleGoTo: (post: string) => void) => [
     {
         title: 'Nome',
         dataIndex: 'name',
         key: 'name',
         render: (text: string, record: User) => (
-            <a onClick={() => handleGoTo(record)} key={record.id}>
+            <a onClick={() => handleGoTo(record.id)} key={record.id}>
                 {text}
             </a>
         )
     },
     {
-        title: 'Já utilizou Cupons?',
-        dataIndex: 'title',
-        key: 'title',
-        render: () => <span>Sim</span>
+        title: 'Quantidade de Cupons Usados',
+        dataIndex: 'usedCoupons',
+        key: 'usedCoupons',
+        render: (couponsList: Coupon[]) => <span>{couponsList.length}</span>
     },
     {
-        title: UserType === 'adm' ? 'Preferência' : 'Cliente Repetido',
-        dataIndex: 'text',
-        key: 'text',
-        render: () => <span>{UserType === 'adm' ? 'Vestúario' : 'não'}</span>
+        title: 'Idade',
+        dataIndex: 'age',
+        key: 'age',
+        render: (age: string) => <span>{age}</span>
     },
     {
-        title: UserType === 'adm' ? 'Último acesso' : 'Última Compra',
+        title: 'Planos de Assinatura',
+        dataIndex: 'subscribePlan',
+        key: 'subscribePlan',
+        render: (text: string) => {
+            return <span>{text}</span>;
+        }
+    },
+    {
+        title: 'Data de cadastro',
         dataIndex: 'created_at',
         key: 'created_at',
         render: (text: string) => {
-            const formattedDate = customFormatDate(text);
-            return <span>{formattedDate}</span>;
+            const date = customFormatDate(text);
+            return <span>{date}</span>;
         }
     }
 ];

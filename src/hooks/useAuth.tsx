@@ -34,6 +34,10 @@ export const AuthProvider: React.FC = ({ children }) => {
         }
     }, []);
 
+    useEffect(() => {
+        console.log(userType);
+    }, [userType]);
+
     const login = async (data: ILoginRequest) => {
         try {
             const response: AuthResponse = await UserService.login(data);
@@ -57,6 +61,7 @@ export const AuthProvider: React.FC = ({ children }) => {
             }
         } catch (error) {
             console.error('Erro ao fazer login:', error);
+            throw error;
         }
     };
 
