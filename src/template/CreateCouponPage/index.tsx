@@ -3,10 +3,12 @@ import { useRouter } from 'next/router';
 import { Button, Form, Input, DatePicker, Select, message, Switch } from 'antd';
 import { ICoupon, ICouponRequest } from 'interfaces/Coupons';
 import CouponServices from 'services/CouponServices';
+import PlanService from 'services/PlansService';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import weekday from 'dayjs/plugin/weekday';
 import localeData from 'dayjs/plugin/localeData';
+import { IPlan } from 'interfaces/Plans';
 import * as S from './styles';
 
 dayjs.extend(localizedFormat);
@@ -20,11 +22,24 @@ const CreateCoupon = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const [initialValues, setInitialValues] = useState<ICoupon | null>(null);
+    const [plans, setPlans] = useState<IPlan[]>([]);
 
-    // Obtém os parâmetros da query
     const { companyId, couponId } = router.query;
 
-    // Carrega os dados iniciais se couponId estiver presente
+    // Buscar planos
+    useEffect(() => {
+        const fetchPlans = async () => {
+            try {
+                const data = await PlanService.GetAll();
+                setPlans(data);
+            } catch {
+                message.error('Erro ao carregar planos.');
+            }
+        };
+        fetchPlans();
+    }, []);
+
+    // Buscar cupom para edição
     useEffect(() => {
         if (couponId) {
             const fetchCoupon = async () => {
@@ -34,17 +49,23 @@ const CreateCoupon = () => {
                         couponId as string
                     );
 
-                    // Convertendo a data para dayjs
+                    const acceptedPlanIds =
+                        coupon.acceptedPlans?.map((p) => p.id) || [];
+
                     const formattedCoupon = {
                         ...coupon,
+                        expirationDate: coupon.expirationDate || '',
+                        acceptedPlanIds // agora apenas IDs
+                    };
+
+                    setInitialValues(formattedCoupon);
+                    form.setFieldsValue({
+                        ...formattedCoupon,
                         expirationDate: coupon.expirationDate
                             ? dayjs(coupon.expirationDate)
                             : null
-                    };
-
-                    setInitialValues(coupon);
-                    form.setFieldsValue(formattedCoupon);
-                } catch (error) {
+                    });
+                } catch {
                     message.error('Erro ao carregar cupom.');
                 } finally {
                     setLoading(false);
@@ -54,30 +75,29 @@ const CreateCoupon = () => {
         }
     }, [couponId, form]);
 
-    // Função para lidar com a submissão do formulário
     const handleSubmit = async (values: ICouponRequest) => {
         try {
             setLoading(true);
 
+            const payload: ICouponRequest = {
+                ...values,
+                acceptedPlanIds: values.acceptedPlanIds || [],
+                companyId: companyId as string
+            };
+
             if (couponId) {
-                // Atualiza o cupom existente
                 await CouponServices.update({
-                    data: values,
+                    data: payload,
                     couponId: couponId as string
                 });
                 message.success('Cupom atualizado com sucesso!');
-            } else if (companyId) {
-                // Cria um novo cupom
-                await CouponServices.create({
-                    ...values,
-                    companyId: companyId as string
-                });
+            } else {
+                await CouponServices.create(payload);
                 message.success('Cupom criado com sucesso!');
             }
 
-            // Redireciona para a página de cupons após a criação/edição
             router.push('/Companies');
-        } catch (error) {
+        } catch {
             message.error('Erro ao salvar cupom.');
         } finally {
             setLoading(false);
@@ -119,6 +139,29 @@ const CreateCoupon = () => {
                     <Select placeholder="Selecione o tipo">
                         <Option value="BASIC">BASIC</Option>
                         <Option value="PREMIUM">PREMIUM</Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item
+                    label="Planos Aceitos"
+                    name="acceptedPlanIds"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Selecione ao menos um plano!'
+                        }
+                    ]}
+                >
+                    <Select
+                        mode="multiple"
+                        placeholder="Selecione os planos"
+                        optionFilterProp="children"
+                    >
+                        {plans.map((plan) => (
+                            <Option key={plan.id} value={plan.id}>
+                                {plan.name}
+                            </Option>
+                        ))}
                     </Select>
                 </Form.Item>
 
