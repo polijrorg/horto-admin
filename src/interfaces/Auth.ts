@@ -27,7 +27,6 @@ export interface User {
     image: string;
     subscribePlan: string;
     typeUser: 'COMMON' | 'ADMIN' | 'OTHER';
-    cardsId: string | null;
     created_at: string;
     address: IAddress;
 }

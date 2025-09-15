@@ -33,7 +33,7 @@ const UserInfoTable: React.FC<UserInfoTableProps> = ({ user, userType }) => {
         {
             key: 'subscribePlan',
             label: 'Plano',
-            value: user.subscribePlan || 'Nenhum'
+            value: user.plan?.name || 'Nenhum'
         },
         {
             key: 'created_at',

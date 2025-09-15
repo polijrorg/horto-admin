@@ -34,7 +34,7 @@ export const getColumns = (
         title: 'Plano',
         dataIndex: 'subscriptionPlan',
         key: 'subscriptionPlan',
-        render: (text: string) => <span>{text}</span>
+        render: (text: string) => <span>{text || 'Sem plano ativo'}</span>
     },
     {
         title: 'Ramo de atuação',
