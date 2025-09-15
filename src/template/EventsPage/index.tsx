@@ -35,6 +35,13 @@ const EventsPage = () => {
         });
     };
 
+    const handleEventDetail = (eventId: string) => {
+        router.push({
+            pathname: 'EventDetail',
+            query: { EventId: eventId }
+        });
+    };
+
     const handleDelete = async (id: string) => {
         try {
             setLoading(true);
@@ -75,7 +82,11 @@ const EventsPage = () => {
             </div>
             <Table
                 style={{ color: 'white' }}
-                columns={getColumns(handleEdit, handleDelete)}
+                columns={getColumns(
+                    handleEdit,
+                    handleDelete,
+                    handleEventDetail
+                )}
                 dataSource={eventsList}
                 rowKey="id"
                 loading={loading}
