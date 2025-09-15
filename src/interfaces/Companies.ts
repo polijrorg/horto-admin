@@ -20,8 +20,6 @@ export interface ICompanyRequest {
     email: string;
     password: string;
     image: File | null;
-    subscriptionPlan: string;
     branch: string;
-    planExpirationDate: string;
     address: IAddressRequest;
 }

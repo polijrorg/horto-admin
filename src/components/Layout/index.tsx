@@ -58,6 +58,12 @@ const UnifiedLayout: React.FC = ({ children }) => {
                     icon: <FileAddOutlined />,
                     label: 'Posts',
                     path: '/Posts'
+                },
+                {
+                    key: '6',
+                    icon: <CrownOutlined />,
+                    label: 'Planos',
+                    path: '/PlansManager'
                 }
             ]
         },

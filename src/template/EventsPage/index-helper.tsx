@@ -5,19 +5,20 @@
 import React from 'react';
 import { Space, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Event } from 'interfaces/Events';
+import { Event, GetParticipantsResponse } from 'interfaces/Events';
 import { customFormatDateTime } from 'utils/dateUtil';
 
 export const getColumns = (
     handleEdit: (event: Event) => void,
-    handleDelete: (eventId: string) => void
+    handleDelete: (eventId: string) => void,
+    handleEventDetail: (eventId: string) => void
 ) => [
     {
         title: 'Detalhes',
         dataIndex: 'id',
         key: 'id',
         render: (_text: string, record: Event) => (
-            <a onClick={() => handleEdit(record)} key={record.id}>
+            <a onClick={() => handleEventDetail(record.id)} key={record.id}>
                 Ver detalhes
             </a>
         )
@@ -27,6 +28,14 @@ export const getColumns = (
         dataIndex: 'name',
         key: 'name',
         render: (text: string) => <span>{text}</span>
+    },
+    {
+        title: 'Inscritos',
+        dataIndex: 'participants',
+        key: 'participantsCount',
+        render: (participants: GetParticipantsResponse[]) => (
+            <span>{participants.length}</span>
+        )
     },
     {
         title: 'Tipo',

@@ -101,6 +101,14 @@ const CouponsPage = () => {
                     <PlusOutlined onClick={() => navigateToCouponCreate()} />
                 </S.PlusIconWrapper>
             </S.HeaderContainer>
+            {company.subscriptionPlan ? (
+                <h3>
+                    Plano Atual: {company.subscriptionPlan} - Vencimento em:{' '}
+                    {company.planExpirationDate}
+                </h3>
+            ) : (
+                <h3>Nenhum plano ativo.</h3>
+            )}
             <S.CardsContainer>
                 {company.coupons.map((coupon: ICoupon) => (
                     <CouponCard

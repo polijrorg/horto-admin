@@ -1,28 +1,27 @@
+// pages/Posts/index.tsx
+
 import React, { useState } from 'react';
 import { Form, Input, Button, Typography, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import PostService from 'services/PostsService';
-import { IPostRequest } from 'interfaces/Posts';
+import { IPostRequest, POST_STYLES, PostStyleKey } from 'interfaces/Posts';
 import * as S from './styles';
 
 const { TextArea } = Input;
-
-const StylesOptions = ['noticia', 'carrousel', 'coluna'];
 
 const CreatePostPage = () => {
     const [form] = Form.useForm();
     const router = useRouter();
 
-    // Obtém os valores iniciais da rota (query parameters)
     const initialValues = router.query.initialValues
         ? (JSON.parse(
               router.query.initialValues as string
           ) as Partial<IPostRequest>)
         : undefined;
 
-    const [selectedValue, setSelectedValue] = useState(
-        initialValues?.style || StylesOptions[0]
+    const [selectedValue, setSelectedValue] = useState<PostStyleKey>(
+        (initialValues?.style as PostStyleKey) || POST_STYLES[0].key
     );
     const [loading, setLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -43,7 +42,7 @@ const CreatePostPage = () => {
                 await PostService.CreatePost(postData);
             }
 
-            router.push('Posts'); // Navega para a página de posts após a criação/atualização
+            router.push('Posts');
         } catch (error) {
             console.error('Erro ao salvar o post:', error);
             message.error('Erro ao salvar o post');
@@ -54,8 +53,10 @@ const CreatePostPage = () => {
 
     const handleImageChange = (file: File) => {
         setSelectedImage(file);
-        return false; // Impede o upload automático
+        return false;
     };
+
+    const currentStyle = POST_STYLES.find((s) => s.key === selectedValue);
 
     return (
         <S.Container>
@@ -72,18 +73,21 @@ const CreatePostPage = () => {
                     <S.Wrapper>
                         <Form.Item>
                             <S.ButtonGroup>
-                                {StylesOptions.map((type) => (
+                                {POST_STYLES.map((style) => (
                                     <S.RadioButton
-                                        key={type}
+                                        key={style.key}
                                         type="button"
-                                        selected={selectedValue === type}
-                                        onClick={() => setSelectedValue(type)}
+                                        selected={selectedValue === style.key}
+                                        onClick={() =>
+                                            setSelectedValue(style.key)
+                                        }
                                     >
-                                        {type.toUpperCase()}
+                                        {style.label.toUpperCase()}
                                     </S.RadioButton>
                                 ))}
                             </S.ButtonGroup>
                         </Form.Item>
+
                         <Typography.Title level={5}>Título</Typography.Title>
                         <Form.Item
                             name="title"
@@ -96,7 +100,8 @@ const CreatePostPage = () => {
                         >
                             <Input />
                         </Form.Item>
-                        {selectedValue === 'coluna' && (
+
+                        {currentStyle?.fields.includes('text') && (
                             <>
                                 <Typography.Title level={5}>
                                     Texto
@@ -115,8 +120,8 @@ const CreatePostPage = () => {
                                 </Form.Item>
                             </>
                         )}
-                        {(selectedValue === 'noticia' ||
-                            selectedValue === 'carrousel') && (
+
+                        {currentStyle?.fields.includes('link') && (
                             <>
                                 <Typography.Title level={5}>
                                     Link
@@ -134,8 +139,8 @@ const CreatePostPage = () => {
                                 </Form.Item>
                             </>
                         )}
-                        {(selectedValue === 'noticia' ||
-                            selectedValue === 'coluna') && (
+
+                        {currentStyle?.fields.includes('image') && (
                             <>
                                 <Typography.Title level={5}>
                                     Imagem
@@ -153,6 +158,7 @@ const CreatePostPage = () => {
                                 </Form.Item>
                             </>
                         )}
+
                         <Form.Item>
                             <S.ConfirmButton
                                 type="primary"

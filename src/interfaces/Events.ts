@@ -12,6 +12,7 @@ export interface Event {
     rules: string;
     link: string;
     active: boolean;
+    participants: IParticipants[];
     address?: IAddress;
     linkImage?: string;
 }
@@ -28,4 +29,20 @@ export interface IEventRequest {
     link: string;
     active: boolean;
     address?: IAddressRequest;
+}
+
+interface IParticipants {
+    id: string;
+    userId: string;
+    eventId: string;
+    createdAt: string;
+}
+
+export interface GetParticipantsResponse {
+    userId: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+    };
 }
