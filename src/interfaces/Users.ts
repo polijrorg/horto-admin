@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { IAddress } from './Address';
 import { ICoupon } from './Coupons';
+import { IPlan } from './Plans';
 
 export interface User {
     id: string;
@@ -9,11 +10,13 @@ export interface User {
     password: string;
     age: number;
     userImageLink: string;
-    subscribePlan: string | null;
-    typeUser: string;
-    cardsId: any;
+    typeUser: userTypeList;
+    cardsId: string[];
     created_at: string;
+    planExpirationDate: string | null;
+    planId: string | null;
     address: IAddress;
+    plan: IPlan | null;
     reedemedCoupons: ICoupon[];
     usedCoupons: ICoupon[];
 }
