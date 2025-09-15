@@ -1,3 +1,4 @@
+import { IPlan } from './Plans';
 /* eslint-disable camelcase */
 export interface ICoupon {
     id: string;
@@ -10,6 +11,7 @@ export interface ICoupon {
     active: boolean;
     created_at: string;
     companyId: string;
+    acceptedPlans?: IPlan[];
 }
 
 export interface ICouponRequest {
@@ -21,4 +23,5 @@ export interface ICouponRequest {
     payment: string;
     rules: string;
     active: boolean;
+    acceptedPlanIds?: string[];
 }

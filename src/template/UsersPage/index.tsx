@@ -47,6 +47,8 @@ const UsersPage = () => {
             }
         };
 
+        console.log(userType);
+
         if (userType === 'adm') {
             getUsers();
         } else if (userType === 'company') {

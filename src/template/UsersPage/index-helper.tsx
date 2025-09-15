@@ -31,10 +31,10 @@ export const getColumns = (handleGoTo: (post: string) => void) => [
     },
     {
         title: 'Planos de Assinatura',
-        dataIndex: 'subscribePlan',
-        key: 'subscribePlan',
-        render: (text: string) => {
-            return <span>{text}</span>;
+        dataIndex: 'plan',
+        key: 'plan',
+        render: (plan: { name: string } | null) => {
+            return <span>{plan?.name || 'Nenhum plano'}</span>;
         }
     },
     {

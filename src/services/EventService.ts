@@ -1,5 +1,9 @@
 import { AxiosResponse } from 'axios';
-import { Event, IEventRequest } from 'interfaces/Events';
+import {
+    Event,
+    IEventRequest,
+    GetParticipantsResponse
+} from 'interfaces/Events';
 import api from './api';
 
 export default class EventService {
@@ -98,6 +102,14 @@ export default class EventService {
 
     static async deleteEvent(id: string) {
         const response = await api.delete(`/events/delete/${id}`);
+        return response.data;
+    }
+
+    static async GetParticipantsByEventId(
+        eventId: string
+    ): Promise<GetParticipantsResponse[]> {
+        const response: AxiosResponse<GetParticipantsResponse[]> =
+            await api.get(`/events/participants/${eventId}`);
         return response.data;
     }
 }

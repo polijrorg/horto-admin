@@ -27,9 +27,7 @@ export default class CompanyService {
         formData.append('name', data.name);
         formData.append('email', data.email);
         formData.append('password', data.password);
-        formData.append('subscriptionPlan', data.subscriptionPlan);
         formData.append('branch', data.branch);
-        formData.append('planExpirationDate', data.planExpirationDate);
 
         // Adiciona a imagem se existir
         if (data.image) {

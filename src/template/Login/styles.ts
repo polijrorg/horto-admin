@@ -35,6 +35,12 @@ export const Banner = styled.img`
     object-fit: cover;
 `;
 
+export const Logo = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+`;
+
 export const FormTitle = styled.h2`
     color: #212529;
     font-size: 40px;

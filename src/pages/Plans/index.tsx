@@ -1,5 +1,5 @@
 import React from 'react';
-import PlansPage from 'template/PlansPage';
+import PlansPage from 'template/CompanyPlansPage';
 
 const Plans: React.FC = () => {
     return <PlansPage />;
