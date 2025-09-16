@@ -3,6 +3,8 @@ import { IAddress } from './Address';
 import { ICoupon } from './Coupons';
 import { IPlan } from './Plans';
 
+export type userTypeList = 'COMMON' | 'QRCODE';
+
 export interface User {
     id: string;
     name: string;
