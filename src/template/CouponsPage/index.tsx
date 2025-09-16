@@ -101,9 +101,9 @@ const CouponsPage = () => {
                     <PlusOutlined onClick={() => navigateToCouponCreate()} />
                 </S.PlusIconWrapper>
             </S.HeaderContainer>
-            {company.subscriptionPlan ? (
+            {company.plan?.name ? (
                 <h3>
-                    Plano Atual: {company.subscriptionPlan} - Vencimento em:{' '}
+                    Plano Atual: {company.plan.name} - Vencimento em:{' '}
                     {company.planExpirationDate}
                 </h3>
             ) : (

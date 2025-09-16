@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 
-import { IAddress } from './Address';
 import { Company } from './Companies';
 
 export interface Administrator {
@@ -16,17 +15,4 @@ export interface AuthResponse {
     administrator?: Administrator;
     company?: Company;
     token: string;
-}
-
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    age: number;
-    image: string;
-    subscribePlan: string;
-    typeUser: 'COMMON' | 'ADMIN' | 'OTHER';
-    created_at: string;
-    address: IAddress;
 }
