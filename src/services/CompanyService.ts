@@ -64,11 +64,7 @@ export default class CompanyService {
         if (data.password) {
             formData.append('password', data.password);
         }
-
-        formData.append('subscriptionPlan', data.subscriptionPlan);
         formData.append('branch', data.branch);
-        formData.append('planExpirationDate', data.planExpirationDate);
-
         // Adiciona a imagem apenas se foi fornecida
         if (data.image) {
             formData.append('image', data.image);

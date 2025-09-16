@@ -43,7 +43,7 @@ const EditCompanyPage = () => {
                             name: company.name,
                             email: company.email,
                             branch: company.branch,
-                            subscriptionPlan: company.subscriptionPlan,
+                            subscriptionPlan: company.plan?.name || null,
                             planExpirationDate: dayjs(
                                 company.planExpirationDate
                             ),
@@ -84,10 +84,6 @@ const EditCompanyPage = () => {
                 // Só envia a senha se foi alterada
                 password: values.password,
                 branch: values.branch,
-                subscriptionPlan: values.subscriptionPlan,
-                planExpirationDate: dayjs(
-                    values.planExpirationDate
-                ).toISOString(),
                 address: {
                     street: values.address.street,
                     numberHouse: Number(values.address.numberHouse),
