@@ -20,18 +20,57 @@ export default class PlanService {
         return response.data;
     }
 
-    static async CreatePlan(data: IPlanRequest): Promise<IPlan> {
-        const response: AxiosResponse<IPlan> = await api.post('/plans', data);
+    static async CreatePlan(plan: IPlanRequest): Promise<IPlan> {
+        const formData = new FormData();
+        formData.append('name', plan.name);
+        formData.append('description', plan.description);
+        formData.append('price', plan.price.toString());
+        formData.append('duration', plan.duration.toString());
+
+        // A interface IPlanRequest agora espera um array de strings para o checklist
+        if (Array.isArray(plan.checklist)) {
+            const benefitsString = plan.checklist.join('@#@');
+            formData.append('checklist', benefitsString);
+        }
+
+        if (plan.image) {
+            formData.append('image', plan.image);
+        }
+
+        const response: AxiosResponse<IPlan> = await api.post(
+            '/plans',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
         return response.data;
     }
 
     static async UpdatePlan(
         planId: string,
-        data: IPlanRequest
+        plan: IPlanRequest
     ): Promise<IPlan> {
+        const formData = new FormData();
+        formData.append('name', plan.name);
+        formData.append('description', plan.description);
+        formData.append('price', plan.price.toString());
+        formData.append('duration', plan.duration.toString());
+
+        if (Array.isArray(plan.checklist)) {
+            const benefitsString = plan.checklist.join('@#@');
+            formData.append('checklist', benefitsString);
+        }
+
+        if (plan.image) {
+            formData.append('image', plan.image);
+        }
+
         const response: AxiosResponse<IPlan> = await api.patch(
             `/plans/${planId}`,
-            data
+            formData
         );
         return response.data;
     }
@@ -43,6 +82,7 @@ export default class PlanService {
     static async SubscribeToPlan(
         data: ISubscribeRequest
     ): Promise<ISubscribeResponse> {
+        console.log('Subscribing to plan with data:', data);
         const response: AxiosResponse = await api.post(
             '/payments/subscribe',
             data

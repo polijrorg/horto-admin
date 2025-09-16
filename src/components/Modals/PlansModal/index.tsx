@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useEffect } from 'react';
 import {
     Modal,
@@ -15,106 +16,87 @@ import {
     PictureOutlined
 } from '@ant-design/icons';
 import { IPlan, IPlanRequest } from 'interfaces/Plans';
-import { UploadProps } from 'antd/lib/upload/interface';
+import { UploadChangeParam } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 type PlanModalProps = {
     visible: boolean;
     onClose: () => void;
-    onSave: (plan: IPlanRequest) => void;
-    onUpdate: (planId: string, data: IPlanRequest) => void;
+    onSave: (plan: IPlanRequest) => Promise<void>;
+    onUpdate: (planId: string, data: IPlanRequest) => Promise<void>;
     plan?: IPlan;
 };
 
-const PlanModal = ({
+const PlanModal: React.FC<PlanModalProps> = ({
     visible,
     onClose,
     onSave,
     onUpdate,
     plan
-}: PlanModalProps) => {
+}) => {
     const [form] = Form.useForm();
-
     const isEditMode = !!plan;
 
     useEffect(() => {
         if (plan) {
+            const formattedChecklist = plan.checklist
+                ? plan.checklist.split('@#@')
+                : [];
+            const formattedImage: UploadFile[] = plan.image
+                ? [
+                      {
+                          uid: '-1',
+                          name: 'image',
+                          status: 'done',
+                          url: plan.image
+                      }
+                  ]
+                : [];
             form.setFieldsValue({
-                name: plan.name,
-                description: plan.description,
-                price: plan.price,
-                duration: plan.duration,
-                image: plan.image
-                    ? [
-                          {
-                              uid: '-1',
-                              name: plan.image,
-                              status: 'done',
-                              url: plan.image
-                          }
-                      ]
-                    : [],
-                checklist: plan.checklist ? plan.checklist.split('@#@') : []
+                ...plan,
+                checklist: formattedChecklist,
+                image: formattedImage
             });
         } else {
             form.resetFields();
         }
     }, [form, plan, visible]);
 
-    const handleSubmit = async () => {
+    const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            const benefitsString = values.checklist.join('@#@');
-
-            const imageUrl =
+            const imageFile =
                 values.image && values.image[0]
-                    ? values.image[0].url || values.image[0].response?.url
-                    : '';
+                    ? values.image[0].originFileObj
+                    : undefined;
 
             const planData: IPlanRequest = {
                 name: values.name,
                 description: values.description,
                 price: values.price,
                 duration: values.duration,
-                image: imageUrl,
-                checklist: benefitsString
+                checklist: values.checklist,
+                image: imageFile
             };
 
             if (isEditMode && plan) {
-                onUpdate(plan.id, planData);
+                await onUpdate(plan.id, planData);
             } else {
-                onSave(planData);
+                await onSave(planData);
             }
-
+            form.resetFields();
             onClose();
         } catch (error) {
-            // Erros de validação já são exibidos automaticamente pelo Form
+            message.error('Erro ao salvar o plano. Verifique os campos.');
         }
     };
 
-    const uploadProps: UploadProps = {
-        name: 'file',
-        action: 'https://seuservidor.com/api/upload-image', // Substitua esta URL
-        listType: 'picture',
-        maxCount: 1,
-        onChange(info: any) {
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} uploaded successfully.`);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} upload failed.`);
-            }
-        },
-        beforeUpload: (file: File) => {
-            const isJpgOrPng =
-                file.type === 'image/jpeg' || file.type === 'image/png';
-            if (!isJpgOrPng) {
-                message.error('You can only upload JPG/PNG file!');
-            }
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isLt2M) {
-                message.error('Image must be smaller than 2MB!');
-            }
-            return isJpgOrPng && isLt2M;
+    // Função para tratar o valor do Upload
+    const getValueFromEvent = (e: UploadChangeParam) => {
+        if (Array.isArray(e)) {
+            return e;
         }
+        return e?.fileList;
     };
 
     return (
@@ -122,18 +104,15 @@ const PlanModal = ({
             title={isEditMode ? 'Editar Plano' : 'Criar Plano'}
             open={visible}
             onCancel={onClose}
-            footer={[
-                <Button key="cancel" onClick={onClose}>
-                    Cancelar
-                </Button>,
-                <Button key="submit" type="primary" onClick={handleSubmit}>
-                    {isEditMode ? 'Atualizar Plano' : 'Criar Plano'}
-                </Button>
-            ]}
-            // Adiciona a propriedade bodyStyle para habilitar a rolagem
-            bodyStyle={{ maxHeight: 400, overflowY: 'auto' }}
+            onOk={handleOk}
+            okText={isEditMode ? 'Atualizar' : 'Criar'}
+            cancelText="Cancelar"
         >
-            <Form layout="vertical" form={form}>
+            <Form
+                layout="vertical"
+                form={form}
+                initialValues={{ checklist: [''] }}
+            >
                 <Form.Item
                     label="Nome do Plano"
                     name="name"
@@ -143,7 +122,6 @@ const PlanModal = ({
                 >
                     <Input placeholder="Digite o nome" />
                 </Form.Item>
-
                 <Form.Item
                     label="Descrição"
                     name="description"
@@ -151,7 +129,6 @@ const PlanModal = ({
                 >
                     <Input.TextArea placeholder="Digite a descrição" />
                 </Form.Item>
-
                 <Form.Item
                     label="Preço"
                     name="price"
@@ -163,7 +140,6 @@ const PlanModal = ({
                         placeholder="Digite o preço"
                     />
                 </Form.Item>
-
                 <Form.Item
                     label="Duração (dias)"
                     name="duration"
@@ -175,36 +151,39 @@ const PlanModal = ({
                         placeholder="Digite a duração"
                     />
                 </Form.Item>
-
                 <Form.Item
                     label="Imagem do Plano"
                     name="image"
                     valuePropName="fileList"
-                    getValueFromEvent={(e) =>
-                        Array.isArray(e) ? e : e && e.fileList
-                    }
+                    getValueFromEvent={getValueFromEvent}
                 >
-                    <Upload {...uploadProps}>
+                    <Upload
+                        listType="picture"
+                        beforeUpload={() => false}
+                        maxCount={1}
+                        accept=".png,.jpg,.jpeg"
+                    >
                         <Button icon={<PictureOutlined />}>
                             Selecionar Imagem
                         </Button>
                     </Upload>
                 </Form.Item>
-
                 <Form.List
                     name="checklist"
                     rules={[
                         {
-                            validator: async (_, names) => {
-                                if (!names || names.length === 0) {
+                            validator: async (_, names: string[]) => {
+                                if (
+                                    !names ||
+                                    names.length < 1 ||
+                                    names.every((name) => !name)
+                                ) {
                                     return Promise.reject(
                                         new Error(
                                             'Adicione pelo menos um benefício'
                                         )
                                     );
                                 }
-                                // Fix do erro: Retorne um Promise.resolve() se a validação passar
-                                return Promise.resolve();
                             }
                         }
                     ]}
@@ -226,6 +205,7 @@ const PlanModal = ({
                                                 message: 'Digite o benefício'
                                             }
                                         ]}
+                                        style={{ flex: 1 }}
                                     >
                                         <Input placeholder="Digite um benefício" />
                                     </Form.Item>
@@ -250,10 +230,6 @@ const PlanModal = ({
             </Form>
         </Modal>
     );
-};
-
-PlanModal.defaultProps = {
-    plan: undefined
 };
 
 export default PlanModal;
