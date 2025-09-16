@@ -20,7 +20,7 @@ export interface IPostRequest {
     image: null | File;
 }
 
-export type PostStyleKey = 'noticia' | 'carrousel' | 'coluna';
+export type PostStyleKey = 'noticia' | 'carrousel' | 'coluna' | 'home';
 
 export interface PostStyleConfig {
     key: PostStyleKey;

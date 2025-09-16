@@ -1,5 +1,6 @@
 import { ICoupon } from './Coupons';
 import { IAddress, IAddressRequest } from './Address';
+import { IPlan } from './Plans';
 
 export interface Company {
     id: string;
@@ -7,11 +8,12 @@ export interface Company {
     email: string;
     password: string;
     image: string;
-    subscriptionPlan: string;
     branch: string;
     planExpirationDate: string;
+    planId: string | null;
     address: IAddress;
     coupons: ICoupon[];
+    plan: IPlan | null;
     linkImage: string;
 }
 
