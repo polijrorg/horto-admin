@@ -9,6 +9,7 @@ export interface IPlan {
     checklist: string;
     createdAt: string;
     updatedAt: string;
+    subscriptionScope: 'individual' | 'enterprise';
 }
 
 export interface IPlanRequest {
