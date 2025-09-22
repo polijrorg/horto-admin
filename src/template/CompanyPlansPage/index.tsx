@@ -124,7 +124,15 @@ const PlansPage: React.FC = () => {
         return (
             <S.Container>
                 <S.Title>Seu Plano Atual</S.Title>
-                <div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        marginBottom: '32px',
+                        fontSize: '18px'
+                    }}
+                >
                     <p>
                         <strong>Nome:</strong> {company.plan.name}
                     </p>
@@ -142,6 +150,13 @@ const PlansPage: React.FC = () => {
                     type="button"
                     onClick={handleCancel}
                     disabled={cancelLoading}
+                    style={{
+                        padding: '8px',
+                        border: 'none',
+                        borderRadius: '8px',
+                        color: 'yellow',
+                        backgroundColor: 'blue'
+                    }}
                 >
                     {cancelLoading ? 'Cancelando...' : 'Cancelar Assinatura'}
                 </button>
