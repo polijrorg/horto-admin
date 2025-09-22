@@ -5,6 +5,9 @@ import PlanService from 'services/PlansService';
 import { IPlan, IPlanRequest } from 'interfaces/Plans';
 import PlansCard from 'components/PlansCard';
 import PlanModal from 'components/Modals/PlansModal';
+import SubscriptionScopeFilter, {
+    SubscriptionScope
+} from 'components/SubscriptionScopeFilter';
 import * as S from './styles';
 
 const PlansManager = () => {
@@ -16,6 +19,9 @@ const PlansManager = () => {
     const [selectedPlan, setSelectedPlan] = useState<IPlan | undefined>(
         undefined
     );
+    const [subscriptionScope, setSubscriptionScope] = useState<
+        SubscriptionScope | 'all'
+    >('all');
 
     const fetchPlans = async () => {
         try {
@@ -35,13 +41,28 @@ const PlansManager = () => {
         fetchPlans();
     }, []);
 
-    const handleSearch = (value: string) => {
+    const handleSearch = (value: string, scope?: SubscriptionScope | 'all') => {
         setSearchTerm(value);
-        const filtered = plans.filter((plan) =>
-            plan.name.toLowerCase().includes(value.toLowerCase())
-        );
+        const filtered = plans.filter((plan) => {
+            const matchesName = plan.name
+                .toLowerCase()
+                .includes(value.toLowerCase());
+            const matchesScope =
+                (scope ?? subscriptionScope) === 'all' ||
+                plan.subscriptionScope === (scope ?? subscriptionScope);
+            return matchesName && matchesScope;
+        });
         setFilteredPlans(filtered);
     };
+
+    const handleScopeChange = (scope: SubscriptionScope | 'all') => {
+        setSubscriptionScope(scope);
+        handleSearch(searchTerm, scope);
+    };
+
+    useEffect(() => {
+        handleSearch(searchTerm, subscriptionScope);
+    }, [plans, subscriptionScope, searchTerm]);
 
     const handleDelete = (id: string) => {
         Modal.confirm({
@@ -106,6 +127,11 @@ const PlansManager = () => {
                     <PlusOutlined onClick={handleCreate} />
                 </S.PlusIconWrapper>
             </S.HeaderContainer>
+
+            <SubscriptionScopeFilter
+                value={subscriptionScope}
+                onChange={handleScopeChange}
+            />
 
             <S.SearchWrapper>
                 <Input.Search
