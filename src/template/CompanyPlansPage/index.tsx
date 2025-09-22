@@ -160,6 +160,19 @@ const PlansPage: React.FC = () => {
                 >
                     {cancelLoading ? 'Cancelando...' : 'Cancelar Assinatura'}
                 </button>
+
+                <a
+                    href="https://www.mercadopago.com.br/subscriptions"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                        marginTop: '24px',
+                        textDecoration: 'underline'
+                    }}
+                >
+                    Cancelamento de renovação automática (deve ser feito no
+                    Mercado Pago)
+                </a>
                 {cancelError && <Alert type="error" message={cancelError} />}
             </S.Container>
         );
