@@ -8,7 +8,7 @@ import {
     Button,
     Upload,
     message,
-    Space
+    Select
 } from 'antd';
 import {
     PlusOutlined,
@@ -39,9 +39,6 @@ const PlanModal: React.FC<PlanModalProps> = ({
 
     useEffect(() => {
         if (plan) {
-            const formattedChecklist = plan.checklist
-                ? plan.checklist.split('@#@')
-                : [];
             const formattedImage: UploadFile[] = plan.image
                 ? [
                       {
@@ -54,7 +51,6 @@ const PlanModal: React.FC<PlanModalProps> = ({
                 : [];
             form.setFieldsValue({
                 ...plan,
-                checklist: formattedChecklist,
                 image: formattedImage
             });
         } else {
@@ -76,6 +72,7 @@ const PlanModal: React.FC<PlanModalProps> = ({
                 price: values.price,
                 duration: values.duration,
                 checklist: values.checklist,
+                subscriptionScope: values.subscriptionScope,
                 image: imageFile
             };
 
@@ -168,65 +165,34 @@ const PlanModal: React.FC<PlanModalProps> = ({
                         </Button>
                     </Upload>
                 </Form.Item>
-                <Form.List
+                <Form.Item
+                    label="Checklist de benefícios"
                     name="checklist"
                     rules={[
+                        { required: true, message: 'Checklist de benefícios' }
+                    ]}
+                >
+                    <Input.TextArea placeholder="x Nao tem; v Tem;" />
+                </Form.Item>
+                <Form.Item
+                    label="Escopo do Plano"
+                    name="subscriptionScope"
+                    rules={[
                         {
-                            validator: async (_, names: string[]) => {
-                                if (
-                                    !names ||
-                                    names.length < 1 ||
-                                    names.every((name) => !name)
-                                ) {
-                                    return Promise.reject(
-                                        new Error(
-                                            'Adicione pelo menos um benefício'
-                                        )
-                                    );
-                                }
-                            }
+                            required: true,
+                            message: 'Escopo do Plano é obrigatório'
                         }
                     ]}
                 >
-                    {(fields, { add, remove }) => (
-                        <>
-                            {fields.map(({ key, name, ...restField }) => (
-                                <Space
-                                    key={key}
-                                    style={{ display: 'flex', marginBottom: 8 }}
-                                    align="baseline"
-                                >
-                                    <Form.Item
-                                        {...restField}
-                                        name={name}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Digite o benefício'
-                                            }
-                                        ]}
-                                        style={{ flex: 1 }}
-                                    >
-                                        <Input placeholder="Digite um benefício" />
-                                    </Form.Item>
-                                    <DeleteOutlined
-                                        onClick={() => remove(name)}
-                                    />
-                                </Space>
-                            ))}
-                            <Form.Item>
-                                <Button
-                                    type="dashed"
-                                    onClick={() => add()}
-                                    block
-                                    icon={<PlusOutlined />}
-                                >
-                                    Adicionar Benefício
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form.List>
+                    <Select placeholder="Selecione o Escopo do Plano">
+                        <Select.Option value="enterprise">
+                            Empresa
+                        </Select.Option>
+                        <Select.Option value="individual">
+                            Usuário
+                        </Select.Option>
+                    </Select>
+                </Form.Item>
             </Form>
         </Modal>
     );

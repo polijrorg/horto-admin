@@ -26,13 +26,10 @@ export default class PlanService {
         formData.append('description', plan.description);
         formData.append('price', plan.price.toString());
         formData.append('duration', plan.duration.toString());
+        formData.append('checklist', plan.checklist);
+        formData.append('subscriptionScope', plan.subscriptionScope);
 
         // A interface IPlanRequest agora espera um array de strings para o checklist
-        if (Array.isArray(plan.checklist)) {
-            const benefitsString = plan.checklist.join('@#@');
-            formData.append('checklist', benefitsString);
-        }
-
         if (plan.image) {
             formData.append('image', plan.image);
         }
@@ -58,11 +55,8 @@ export default class PlanService {
         formData.append('description', plan.description);
         formData.append('price', plan.price.toString());
         formData.append('duration', plan.duration.toString());
-
-        if (Array.isArray(plan.checklist)) {
-            const benefitsString = plan.checklist.join('@#@');
-            formData.append('checklist', benefitsString);
-        }
+        formData.append('checklist', plan.checklist);
+        formData.append('subscriptionScope', plan.subscriptionScope);
 
         if (plan.image) {
             formData.append('image', plan.image);
@@ -72,6 +66,7 @@ export default class PlanService {
             `/plans/${planId}`,
             formData
         );
+
         return response.data;
     }
 

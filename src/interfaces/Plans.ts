@@ -18,7 +18,8 @@ export interface IPlanRequest {
     price: number;
     duration: number;
     image?: File;
-    checklist: string[]; // Um array de strings que é passado para o backend como uma string separada por '@#@'
+    subscriptionScope: 'individual' | 'enterprise';
+    checklist: string; // Um array de strings que é passado para o backend como uma string separada por '@#@'
 }
 
 export interface ISubscribeRequest {
