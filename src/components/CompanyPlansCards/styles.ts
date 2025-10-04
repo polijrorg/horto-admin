@@ -50,11 +50,6 @@ export const CardContent = styled.div`
         font-size: 14px;
         color: #555;
         margin-bottom: 8px;
-        &::before {
-            content: '✔️'; /* Adiciona um ícone de "check" */
-            margin-right: 8px;
-            color: #52c41a;
-        }
     }
 `;
 
