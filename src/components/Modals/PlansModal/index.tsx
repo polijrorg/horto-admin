@@ -10,11 +10,7 @@ import {
     message,
     Select
 } from 'antd';
-import {
-    PlusOutlined,
-    DeleteOutlined,
-    PictureOutlined
-} from '@ant-design/icons';
+import { PictureOutlined } from '@ant-design/icons';
 import { IPlan, IPlanRequest } from 'interfaces/Plans';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/lib/upload/interface';
